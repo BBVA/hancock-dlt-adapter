@@ -1,0 +1,45 @@
+{
+  "id": "/omni/REPLACE_FOR_MARATHON_ENV",
+  "apps": [{
+    "id": "ms-blockchain-adapter",
+    "args": ["kst-omni/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV"],
+    "instances": {{key "kst-omni/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/INSTANCES"}},
+    "cpus": {{key "kst-omni/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/CPUS"}},
+    "mem": {{key "kst-omni/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/MEM"}},
+    "dependencies": [],
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "REPLACE_FOR_REGISTRY/kst/omni/ms-blockchain-adapter:REPLACE_FOR_DOCKER_IMAGE_VERSION",
+        "forcePullImage": true,
+        "network": "BRIDGE",
+        "portMappings": [{
+          "containerPort": 3000,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }]
+      }
+    },
+    "labels": {
+      "project": "omni",
+      "subproject": "ms-blockchain-adapter",
+      "tags": "omni,microservice,blockchain,adapter",
+      "elb": "true"
+    },
+    "constraints": [
+      ["hostname", "UNIQUE"]
+    ],
+    "env": {
+      "CONSUL": "consul.service.consul:8500"
+    },
+    "healthChecks": [{
+      "type": "http",
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 5,
+      "path": "/health"
+    }]
+  }]
+}

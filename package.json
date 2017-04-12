@@ -1,0 +1,32 @@
+{
+  "name": "kst-omni-ms-blockchain-adapter",
+  "version": "0.1.0",
+  "description": "Blockchain adapter to interact with DLT networks",
+  "main": "index.js",
+  "author": "Javier Moreno Molina <javier.moreno.molina@bbva.com",
+  "license": "Copyright",
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "express": "^4.14.0",
+    "genesis-lib-log": "^2.0.1",
+    "q": "^1.4.1",
+    "request": "^2.67.0",
+    "uuid": "^2.0.1",
+    "web3": "^0.15.1"
+  },
+  "devDependencies": {
+    "jshint": "2.x",
+    "gulp-jshint": "2.0.0",
+    "gulp-nodemon": "2.0.4"
+  },
+  "publishConfig": {
+    "registry": "http://dev.npm.kickstartteam.es"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "private": true
+}
