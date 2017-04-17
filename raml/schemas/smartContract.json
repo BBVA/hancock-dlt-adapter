@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Smart Contract creation schema",
+  "type": "object",
+  "properties": {
+    "smartContractURL": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "params": {
+      "type": "string"
+    },
+    "from": {
+      "type": "string"
+    }
+  },
+  "required": [ "smartContractURL", "method" ]
+}
+
