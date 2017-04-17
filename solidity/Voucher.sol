@@ -3,6 +3,7 @@
  *
  * @author Javier Moreno Molina <javier.moreno.molina@bbva.com>
  */
+pragma solidity ^0.4.10;
 
 contract BaseContract
 { 
@@ -14,13 +15,20 @@ contract BaseContract
   /// @dev Every contract must have a maturity date
   uint public validityLife; 
 
+  modifier onlyOwner()
+  {
+    if( msg.sender!= owner) throw;
+    _;
+  }
+
+
   /** @dev BaseContract constructor
    *  @param duration validity interval in seconds
    *  @notice Every contract must have an owner, who is the entity that payed
    *  for the instantiation, and a maturity date or explicit validity 
    *  interval.
    */
-  BaseContract(uint duration) 
+  function BaseContract(uint duration) 
   {
     owner = tx.origin;
     validityStart = now;
@@ -32,8 +40,7 @@ contract BaseContract
    * funds to the owner.
    */
   function destroyContract()
-    onlyState(State.cleared)
-    onlyParty(owner)
+    onlyOwner()
   {
     selfdestruct(owner);
   }
@@ -64,75 +71,76 @@ contract Voucher is BaseContract
   address public device;
 
   /// @dev a standardized event to throw at every transaction execution
-  event VoucherEvent(address voucherAddress, uint timestamp, bytes4 function, State newState, string message);
+  event VoucherEvent(address voucherAddress, uint timestamp, bytes4 func, State newState, string message);
 
   enum Operator { less, greater, equal }
 
   struct Condition {
-    operator operator;
+    Operator operator;
     uint value;
   }
 
   Condition condition;
  
-  uint public attestedData;
+  uint public attestedValue;
 
   modifier onlyParty(address _address)
   {
     if(msg.sender!=_address) throw;
-    _
+    _;
   }
     
   modifier onlyState(State _state)
   {
     if(voucherState != _state) throw;
-    _
+    _;
   }
 
   modifier onlyDueTime()
   {
     if(now < validityLife) throw;
-    _
+    _;
   }
     
-  function Voucher(address _beneficiary, address _device, uint _duration, uint _conditionOperator, uint _conditionValue)
+  function Voucher(address _beneficiary, address _device, uint _duration, uint _conditionOperator, uint _conditionValue) 
+    BaseContract (_duration * 1 days)
   {
-    super(_duration * 1 days);
     beneficiary = _beneficiary;
     device = _device;
     duration = _duration;
-    condition.operator = _conditionOperator;
+    condition.operator = Operator(_conditionOperator);
     condition.value = _conditionValue;
   }
     
   /**
    * @dev Attest the feature to the contract
-   * @param _id The  of the contract party
+   * @param _data The attested data
    */
   function attest(uint _data) public
     onlyState(State.created)
     onlyDueTime()
     onlyParty(device)
   { 
-    attestedData = _data;
-    contractState = State.ready;
-    VoucherEvent(this, now, msg.sig, contractState, "Data attestation executed");
+    attestedValue = _data;
+    voucherState = State.ready;
+    VoucherEvent(this, now, msg.sig, voucherState, "Data attestation executed");
   }
 
   /**
    * @dev Claim the reward to the contract
    * @return true in case of success or false otherwise
    */
-  function claim() public returns (bool) 
+  function claim() public
     onlyState(State.ready)
     onlyParty(beneficiary)
+    returns (bool)
   {
     if(condition.operator==Operator.less)
     {
       if(attestedValue < condition.value)
       {
         voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, contractState, "Issued");
+        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
 	return true;
       }
     } else if (condition.operator==Operator.greater) 
@@ -140,7 +148,7 @@ contract Voucher is BaseContract
       if(attestedValue > condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, contractState, "Issued");
+        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
         return true;
       }
     } else if (condition.operator==Operator.equal)
@@ -148,13 +156,13 @@ contract Voucher is BaseContract
       if(attestedValue == condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, contractState, "Issued");
+        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
 	return true;    
       }
     } else 
     {
       voucherState = State.failed;
-      VoucherEvent(this, now, msg.sig, contractState, "Failed");
+      VoucherEvent(this, now, msg.sig, voucherState, "Failed");
     }
   }
 }

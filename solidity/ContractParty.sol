@@ -6,6 +6,8 @@
  * @author Javier Moreno Molina <javier.moreno.molina@bbva.com>
  */
 
+pragma solidity ^0.4.10;
+
 contract ContractParty
 {
     /// @dev The contract party id (address)
@@ -20,16 +22,16 @@ contract ContractParty
     modifier onlyOwner()
     {
         if(msg.sender!=owner) throw;
-        _
+        _;
     }
 
     /** 
      * @dev Creates a participant in a contract
-     * @param lp Legal person becoming contract party
+     * @param adr Legal person becoming contract party
      */   
-    function ContractParty(LegalPerson lp)
+    function ContractParty(address adr)
     {
-        legalPerson = lp;
+        partyAddress = adr;
         signed = false;
 	owner = msg.sender;
     }
