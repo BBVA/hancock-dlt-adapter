@@ -10,7 +10,22 @@
       "type": "string"
     },
     "params": {
-      "type": "string"
+      "type": "array",
+      "items": {
+        "type": "object",
+	"properties": {
+	  "offset": {
+	    "type": "long"
+	  }, 
+	  "value": {
+	    "type": "string"
+	  },
+	  "type": {
+	    "type": "string"
+	  },
+	  "required": [ "offset", "value", "type" ]
+        } 
+      }
     },
     "from": {
       "type": "string"
@@ -18,4 +33,3 @@
   },
   "required": [ "smartContractURL", "method" ]
 }
-

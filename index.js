@@ -14,8 +14,9 @@ global.CONF = require('./app/config');
 global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
 global.WEB3 = new Web3(new Web3.providers.HttpProvider(CONF.ethereum.url));
 
+require('./app/express')(app); 
 require('./app/routes')(app); // config routes in external file
-      
+
 app.use((err, req, res, next) => {
   res.status(err.status || 400).json({
     error: err.message

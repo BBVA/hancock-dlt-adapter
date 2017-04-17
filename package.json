@@ -7,17 +7,28 @@
   "license": "Copyright",
   "dependencies": {
     "body-parser": "1.15.2",
-    "express": "^4.14.0",
+    "compression": "^1.6.2",
+    "cors": "^2.8.3",
+    "errorhandler": "^1.5.0",
+    "express": "^4.15.2",
+    "express-jsonschema": "^1.1.6",
     "genesis-lib-log": "^2.0.1",
+    "method-override": "^2.3.8",
     "q": "^1.4.1",
     "request": "^2.67.0",
+    "solc": "^0.4.10",
     "uuid": "^2.0.1",
     "web3": "^0.15.1"
   },
   "devDependencies": {
-    "jshint": "2.x",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-jasmine": "^2.4.2",
     "gulp-jshint": "2.0.0",
-    "gulp-nodemon": "2.0.4"
+    "gulp-nodemon": "2.0.4",
+    "gulp-raml2html": "^0.3.0",
+    "gulp-sonar": "^3.0.0",
+    "isparta": "^4.0.0",
+    "jshint": "2.x"
   },
   "publishConfig": {
     "registry": "http://dev.npm.kickstartteam.es"

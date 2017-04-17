@@ -1,24 +1,19 @@
 'use strict';
 
+var Solc = require('solc');
 var ResponsesContracts  = require('./contractResponses');
 var Errors          = require('../../components/errors');
 var Utils           = require('../../components/utils');
-var ContractModel   = require('./model/contractModel');
-var Validator       = require('jsonschema').Validator;
 var Q               = require('q');
-var crypto          = require('crypto');
 var fs              = require('fs');
-var _               = require('lodash');
+var path            = require('path');
 
-var CONTRACTS_NAME_COLLECTION = 'contracts';
 var DEFAULT_GAS = 0x50000;
 
 exports.create = function(request, reply, next) {
-
-  var schema = new ContractSchema();
-  contractCompile(request.payload)    // Compiles the source code
+  LOG.debug( LOG.logData(request), 'contract create');
+  contractCompile(request.body)    // Compiles the source code
     .then(contractSubmit)     // Actually creates the contract in the Ethereum blockchain
-    .then(contractInsert)     // Inserts the contract metadata in the database
     .then(function() {
       return Utils.createReply(reply, ResponsesContracts.eth_web3_ok);
     })
@@ -28,113 +23,73 @@ exports.create = function(request, reply, next) {
 
 };
 
-function contractNameExists(data) {
-  var deferred = Q.defer();
-  var colContract = Utils.getCollection(CONTRACTS_NAME_COLLECTION);
-  colContract.findOne({name: data.name}, function(err, result) {
-      if (err) { 
-        deferred.reject(ResponsesContracts.internal_ddbb_error);
-      } else {
-        if (result) {
-          console.log("Contract name exists.")
-          deferred.reject(ResponsesContracts.create_already_exists);
-        } else {
-          deferred.resolve(data);
-        }
-      }
-    });
-  return deferred.promise;
-}
+function contractCompile(body) {
 
-function contractCompile(data) {
+  let deferred = Q.defer();
+  var data = {};
+  data.body = body;
 
-  var deferred = Q.defer();
-  var web3 = Utils.getWeb3();
-
+  LOG.debug('Contract Compile');
   /* Compiles the source code with Solidity */
-  var compiled = web3.eth.compile.solidity(data.source, function(err, result) {
-    if (err) {
-      deferred.reject(ResponsesContracts.compilation_error);
-    } else {      
-      if (result) {      
 
-        data.compiled = result; // Add the "compiled" object to data
+  let solInput = fs.readFileSync(path.join(__dirname, '../../../solidity/'+data.body.smartContractURL), "utf8");
 
-        /* Create the contract object */
-        data.contract = web3.eth.contract(result[data.className].info.abiDefinition);
-        deferred.resolve(data);
-
-      } else {
-        deferred.reject(ResponsesContracts.compilation_error);
-      }
-    }
-  });
+  let output = Solc.compile(solInput, 1);
+  
+  if(output.contracts.length == 0) {
+    LOG.debug('Compilation failed');
+    deferred.reject(ResponsesContracts.compilation_error);
+  } else {      
+    LOG.debug('Compilation succeeded');	  
+    data.abi = JSON.parse(output.contracts[data.body.method].interface); // Add the "compiled" object to data
+    data.bytecode = output.contracts[data.body.method].bytecode;
+    deferred.resolve(data);
+  }
   return deferred.promise;
 }
 
 function contractSubmit(data) {
+  let deferred = Q.defer();
 
-  /* NOTE: As is, the account given by "data.address" must be unlocked in the
-     node receiving the transaction. We should allow for already signed transactions
-     to come in. Meanwhile, we can require all contracts to have an "owner" attribute
-     that is set to the de iure owner of the contract. Modify this when the transaction
-     signing service is available. */
+  LOG.debug('Deploying contract'); 
+  /* Send the contract creation transaction. */
+  console.log(data);
+  let params; 
 
-  var deferred = Q.defer();
-  var contract = data.contract;
-  var compiled = data.compiled;
+  for(var i = 0; i < data.body.params.length; i++) {
+    console.log(i);
+    params[i] = data.body.params[i].value;
+    console.log(params[i]);
+  }
   
-  /* Since the number of parameters passed to the constructor is variable, we 
-     receive them in an array, and have to pass it using Javascript's native 
-     apply method. Consequently, the callback has to be included in the array.
-     NOTE: Probably, there is a more elegant way to do this... */
-  var params = data.params;
-  params.push({ "from": data.address, 
-                "data": compiled[data.className].code, 
-                "gas": data.gas || DEFAULT_GAS 
-              });
-  params.push(function(err, result) {
-    if (err) {
-      console.log(err);
+  params.push({ 'from': data.body.from,
+	        'data': data.bytecode,
+		'gas': DEFAULT_GAS
+	      });
+
+  params.push((err, result) => {
+    if(err) {
+      LOG.info('Contract deployment error: '+err);
       deferred.reject(ResponsesContracts.transaction_error);
     } else {
       if(!result.address) {
-          console.log("Contract transaction sent. TransactionHash: " + result.transactionHash + " waiting to be mined...");
+        LOG.debug('Contract transaction sent. TransactionHash: ' + result.transactionHash + ' waiting to be mined...');
+	deferred.resolve(data);
       } else {
-        console.log("Contract mined! Address: " + result.address);
-        data.contractAddress = result.address;
-        deferred.resolve(data);
+	LOG.debug('Contract mined. Address: ' + result.address);
+	data.contractAddress = result.address;
       }
     }
   });
+  
+  console.log(params);
 
-  /* Send the contract creation transaction. */
+  let contract = WEB3.eth.contract(data.abi);
+
+  console.log(contract);
+
   contract.new.apply(contract, params);
+
   return deferred.promise;
 }
 
-function contractInsert(data) {
-
-  var deferred = Q.defer();
-  var colContract = Utils.getCollection(CONTRACTS_NAME_COLLECTION);
-  colContract.insert({
-                      name: data.name, 
-                      description: data.description, 
-                      className: data.className, 
-                      source: data.source, 
-                      address: data.contractAddress, 
-                      abi: data.compiled[data.className].info.abiDefinition
-                    }, function(err, result) {
-      if (err) { 
-        deferred.reject(ResponsesContracts.internal_ddbb_error);
-      } else {
-        if (result) {
-          deferred.resolve(data);
-        } else {
-          deferred.resolve(ResponsesContracts.internal_ddbb_error);
-        }
-      }
-    });
-  return deferred.promise; 
-
-}

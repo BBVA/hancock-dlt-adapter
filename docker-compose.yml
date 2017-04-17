@@ -1,0 +1,20 @@
+version: "2"
+services: 
+  ethereum-testrpc: 
+    container_name: ba-ethereum-testrpc
+    image: dev.docker.kickstartteam.es:5000/kst/omni/ethereum-testrpc:0.1.0
+    ports: 
+      - "8545:8545"
+    environment:
+      CONSUL: dev.consul.kickstarteam.es:8500
+  blockchain-adapter:
+    container_name: ba-blockchain-adapter
+    image: dev.docker.kickstartteam.es:5000/kst/omni/ms-blockchain-adapter:0.1.0
+    ports: 
+      - "9000:9000"
+    env_file:
+      - $HOME/.genesis/config.list
+    environment:
+      CONSUL: dev.consul.kickstartteam.es:8500
+    depends_on:
+      - ethereum-testrpc
