@@ -16,15 +16,14 @@ exports.create = function(request, reply, next) {
   LOG.debug( LOG.logData(request), 'contract create');
   contractCompile(request.body)    // Compiles the source code
     .then(contractSubmit)     // Actually creates the contract in the Ethereum blockchain
-    .then(function() {
+    .then(function(data) {
       LOG.debug('Returning HTTP response');
-      return res.status(202).json({ result: 'OK' });
+      return Utils.createReply(reply, ResponsesContracts.smartcontract_ok, { transactionID: data.transactionHash });
     })
     .fail(function (err) {
       LOG.debug('Error while processing HTTP request');
-      return Utils.createReply(reply, ResponsesContracts.eth_web3_error);      
+      return Utils.createReply(reply, ResponsesContracts.smartcontract_error);      
     });
-
 };
 
 function contractCompile(body) {

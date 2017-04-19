@@ -26,12 +26,15 @@ exports.createResponseData = function(result, data) {
 
 exports.createReply = function(reply, result, data) {
   var response = {
-    result: result
+    result: {
+      code: result.code,
+      description: result.message
+    }
   };
 
   if (data) response.data = data;
 
-  return reply(response).code(result.statusCode);
+  return reply.status(result.statusCode).json(response);
 }
 
 exports.sendRequest = function (data){

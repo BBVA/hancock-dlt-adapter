@@ -16,16 +16,22 @@ module.exports = {
     message: 'Transactions - Internal ddbb error'
   },
 
-  eth_web3_error: {
+  transaction_error: {
   	statusCode: 512,
-  	code: responses.ksteth512.code,
-  	message: 'Transactions - Ethereum web3 error'
+  	code: responses.ksttransaction512.code,
+  	message: 'Transactions - Blockchain transaction error'
   },
 
-  eth_web3_ok: {
-  	statusCode: 200,
-  	code: responses.ksteth200.code,
-  	message: 'Transactions - Ethereum web3 operation successful'
+  transaction_ok: {
+  	statusCode: 202,
+  	code: responses.ksttransaction202.code,
+  	message: 'Transactions - Blockchain transaction successfully sent. Consensus pending.'
+  },
+
+  transaction_sync_ok: {
+    statusCode: 200,
+    code: responses.ksttransaction200.code,
+    message: 'Transaction - Blockchain transaction successful'
   }
 
 };

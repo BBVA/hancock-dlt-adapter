@@ -3,48 +3,39 @@
 var GeneralResponses       = require('../../components/responses')
 var ResponsesTransaction  = require('./transactionResponses');
 var Errors          = require('../../components/errors');
-var config          = require('../../config/environment');
-var mongo           = require('mongodb');
 var Utils           = require('../../components/utils');
-//var AdminModel   = require('./model/adminModel')
-//var AdminSchema  = require('./model/adminModelJoi')
-var Joi             = require('joi');
 var Q               = require('q');
-var crypto          = require('crypto');
-var w               = require('winston');
 var fs              = require('fs');
-var _               = require('lodash');
+var path            = require('path');
 
-//var DEFAULT_GAS = 0x50000;
+var DEFAULT_GAS = 0x47E7C3;
 
 exports.gasPrice = function(request, reply, next) {
-  var web3 = Utils.getWeb3();
-  web3.eth.getGasPrice(function(err, result) {
+  WEB3.eth.getGasPrice(function(err, result) {
     if(err) {
       console.log("Error getting gas price.");
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_error);
+      return Utils.createReply(reply, ResponsesTransaction.transaction_error);
     } else {
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_ok, result);
+      return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { gasPrice: result});
     }  
   })
 
 };
 
 exports.getTransaction = function(request, reply, next) {
-  var web3 = Utils.getWeb3();
   // XXX @todo parse querystring data!!
-  web3.eth.getTransaction(request.params.txhash, function(err, result) {
+  WEB3.eth.getTransaction(request.params.txhash, function(err, result) {
     if(err) {
       console.log("Error getting transaction.");
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_error);
+      return Utils.createReply(reply, ResponsesTransaction.transaction_error);
     } else {
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_ok, result);
+      return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { transaction: result});
     }  
   })
 
 };
 
-exports.getTransactionFromBlock = function(request, reply, next) {
+/*exports.getTransactionFromBlock = function(request, reply, next) {
   var web3 = Utils.getWeb3();
   // XXX @todo parse querystring data!!
   web3.eth.getTransactionFromBlock(request.params.block, request.query.index, function(err, result) {
@@ -70,23 +61,70 @@ exports.getTransactionReceipt = function(request, reply, next) {
     }  
   })
 
-};
+};*/
 
 exports.sendTransaction = function(request, reply, next) {
-  var web3 = Utils.getWeb3();
-  // XXX @todo parse querystring data!!
-  web3.eth.sendTransaction(request.payload.transaction, function(err, result) {
-    if(err) {
-      console.log("Error sending transaction.");
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_error);
-    } else {
-      return Utils.createReply(reply, ResponsesTransaction.eth_web3_ok, result);
-    }  
-  })
+  
+  LOG.debug('Send Transaction');
 
+  retrieveInterface(request)
+    .then(function(data) {
+      let txHash = '';
+      if(data.body.params)
+      {
+        let params = [];
+        for(var i = 0; i < data.body.params.length; i++) {
+          params[i] = data.body.params[i].value;
+        }
+        params.push({ 'from': data.body.from,
+                      'gas': DEFAULT_GAS
+                    });
+        params.push((err, result) => {
+          if(err) {
+            LOG.info('Transaction error: '+err);
+          } else {
+            LOG.debug('Transaction mined'+result);
+          }
+        });
+	txHash = data.contractInstance[data.body.method].apply(data.contractInstance, params);
+      } else {
+	txHash = data.contractInstance[data.body.method]((err, result) => {
+	  if(err) {
+	    console.log(err);
+	  } else {
+  	    console.log(result);
+	  }
+	});
+      }	      
+      console.log('Transaction sent. Hash: '+txHash);
+      
+      LOG.debug('Returning HTTP response');
+      return Utils.createReply(reply, ResponsesTransaction.transaction_ok, { transactionID: txHash });
+    })
+    .fail(function (err) {
+      LOG.debug('Error while processing HTTP request');
+      return Utils.createReply(reply, ResponsesTransaction.transaction_error);	
+    });
 };
 
-exports.sendRawTransaction = function(request, reply, next) {
+function retrieveInterface(request) {
+  let deferred = Q.defer();
+
+  let data = {};
+  fs.readFile(path.join(__dirname, '../../../solidity/build/Voucher.abi'), "utf8", (err, abi) => {
+    if(err) {
+      deferred.reject(ResponsesContracts.transaction_error);
+    } else {
+      let contract = WEB3.eth.contract(JSON.parse(abi));
+      data.contractInstance = contract.at(request.params.address);
+      data.body = request.body;
+      deferred.resolve(data);
+    }
+  });
+  return deferred.promise;
+}
+
+/*exports.sendRawTransaction = function(request, reply, next) {
   var data = {
     reqData : {
       method: "POST",
@@ -145,4 +183,5 @@ exports.estimateGas = function(request, reply, next) {
       }  
     })
   }
-}
+}*/
+

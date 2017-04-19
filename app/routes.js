@@ -16,7 +16,7 @@ module.exports = (app) => {
   router.use('/smartcontract', require('./api/contract'));
 //  router.use('/admin', require('./api/admin'));
 //  router.use('/util', require('./api/util'));
-//  router.use('/transaction', require('./api/transactions'));
+  router.use('/transaction', require('./api/transactions'));
 //  router.use('/address', require('./api/addresses'));
 //  router.use('/block', require('./api/blocks'));
 

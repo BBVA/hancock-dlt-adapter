@@ -7,25 +7,19 @@ module.exports = {
    bad_request: {
     statusCode: 400,
     code: responses.kstaddresses400.code,
-    message: 'Util - Bad request'
+    message: 'Smart Contract - Bad request'
   },
 
-  internal_ddbb_error: {
-    statusCode: 500,
-    code: responses.kstgeneral500.code,
-    message: 'Util - Internal ddbb error'
-  },
-
-  eth_web3_error: {
+  smartcontract_error: {
     statusCode: 512,
-    code: responses.ksteth512.code,
-    message: 'Util - Ethereum web3 error'
+    code: responses.kstsmartcontract512.code,
+    message: 'Smart Contract - Blockchain request error'
   },
 
-  eth_web3_ok: {
+  smartcontract_ok: {
     statusCode: 202,
-    code: responses.ksteth202.code,
-    message: 'Util - Ethereum web3 operation successful'
+    code: responses.kstsmartcontract202.code,
+    message: 'Smart Contracts - Operation successfully requested. Consensus pending'
   }
 
 };

@@ -7,7 +7,7 @@ exports.createGeneralError = function(message) {
   return {
     result: {
       code: Responses.kstgeneral500.code,
-      message: message
+      description: message
     }
   }
 };
