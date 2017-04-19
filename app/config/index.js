@@ -21,6 +21,10 @@ module.exports = {
 
   ethereum: {
     url: process.env.ETHEREUM_URL || 'http://localhost:8545'
+  },
+
+  smartcontracts: {
+    url: process.env.SMARTCONTRACTS_URL || 'http://localhost:3000'
   }
 
 };

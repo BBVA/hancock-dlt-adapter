@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 const Web3 = require('web3');
 const app = express();
 
-
 global.CONF = require('./app/config');
 global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
 global.WEB3 = new Web3(new Web3.providers.HttpProvider(CONF.ethereum.url));

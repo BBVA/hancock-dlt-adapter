@@ -23,8 +23,8 @@ module.exports = {
   },
 
   eth_web3_ok: {
-    statusCode: 200,
-    code: responses.ksteth200.code,
+    statusCode: 202,
+    code: responses.ksteth202.code,
     message: 'Util - Ethereum web3 operation successful'
   }
 

@@ -102,8 +102,8 @@ module.exports = {
     info: 'Ethereum Web3 error'
   },
 
-  ksteth200: {
-    code: 'KSTETH200',
+  ksteth202: {
+    code: 'KSTETH202',
     info: 'Ethereum Web3 operation successful'
   },
 

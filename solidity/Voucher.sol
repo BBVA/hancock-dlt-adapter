@@ -55,6 +55,7 @@ contract Voucher is BaseContract
    *    cleared: the user has claimed the voucher
    */
   enum State { created, ready, issued, failed }
+  string [4] stateName = [ "created", "ready", "issued", "failed" ];
     
   /// @dev State of the Contract
   State public voucherState;
@@ -71,7 +72,7 @@ contract Voucher is BaseContract
   address public device;
 
   /// @dev a standardized event to throw at every transaction execution
-  event VoucherEvent(address voucherAddress, uint timestamp, bytes4 func, State newState, string message);
+  event VoucherEvent(uint timestamp, string method, string newState, string message);
 
   enum Operator { less, greater, equal }
 
@@ -110,6 +111,7 @@ contract Voucher is BaseContract
     duration = _duration;
     condition.operator = Operator(_conditionOperator);
     condition.value = _conditionValue;
+    VoucherEvent(now, "Voucher", stateName[uint(voucherState)], "constructor");
   }
     
   /**
@@ -123,7 +125,7 @@ contract Voucher is BaseContract
   { 
     attestedValue = _data;
     voucherState = State.ready;
-    VoucherEvent(this, now, msg.sig, voucherState, "Data attestation executed");
+    VoucherEvent(now, "attest", stateName[uint(voucherState)], "Attested");
   }
 
   /**
@@ -140,7 +142,7 @@ contract Voucher is BaseContract
       if(attestedValue < condition.value)
       {
         voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
+        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
 	return true;
       }
     } else if (condition.operator==Operator.greater) 
@@ -148,7 +150,7 @@ contract Voucher is BaseContract
       if(attestedValue > condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
+        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
         return true;
       }
     } else if (condition.operator==Operator.equal)
@@ -156,13 +158,13 @@ contract Voucher is BaseContract
       if(attestedValue == condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(this, now, msg.sig, voucherState, "Issued");
+        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
 	return true;    
       }
     } else 
     {
       voucherState = State.failed;
-      VoucherEvent(this, now, msg.sig, voucherState, "Failed");
+      VoucherEvent(now, "claim", stateName[uint(voucherState)], "Failed");
     }
   }
 }
