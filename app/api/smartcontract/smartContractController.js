@@ -93,7 +93,7 @@ function contractSubmit(data) {
   params.push((err, result) => {
     if(err) {
       LOG.info('Contract deployment error: '+err);
-      deferred.reject(ResponsesSmartContracts.deploy_error);
+      deferred.reject(ResponsesSmartContract.deploy_error);
     } else {
       if(!result.address) {
         LOG.debug('Contract transaction sent. TransactionHash: ' + result.transactionHash + ' waiting to be mined...');
