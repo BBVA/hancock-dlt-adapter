@@ -177,7 +177,7 @@ function retrieveInterface(transaction) {
 
   LOG.debug('Retrieving ABI');
 
-  fs.readFile(path.join(__dirname, '../../../solidity/build/Voucher.abi'), "utf8", (err, abi) => {
+  fs.readFile(path.join(__dirname, '../../../solidity/abi/Voucher.abi'), "utf8", (err, abi) => {
     if(err) {
       deferred.reject(ResponsesContracts.transaction_error);
     } else {

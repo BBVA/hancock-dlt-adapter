@@ -4,7 +4,7 @@ bin: *.sol
 	solc --bin -o build *.sol
 
 abi: *.sol
-	solc --abi -o build *.sol
+	solc --abi -o abi *.sol
 
 clean: 
-	rm -rf ./build/*.bin ./build/*.abi
+	rm -rf ./build/*.bin ./abi/*.abi
