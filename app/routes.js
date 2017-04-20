@@ -13,7 +13,7 @@ module.exports = (app) => {
   
   // Define routes 
 //  router.use('/auth', require('./api/auth'));
-  router.use('/smartcontract', require('./api/contract'));
+  router.use('/smartcontract', require('./api/smartcontract'));
 //  router.use('/admin', require('./api/admin'));
 //  router.use('/util', require('./api/util'));
   router.use('/transaction', require('./api/transactions'));

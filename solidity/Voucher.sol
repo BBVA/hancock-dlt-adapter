@@ -74,6 +74,9 @@ contract Voucher is BaseContract
   /// @dev a standardized event to throw at every transaction execution
   event VoucherEvent(uint timestamp, string method, string newState, string message);
 
+  /// @dev a standardized error event
+  event Error(string method, string message);
+
   enum Operator { less, greater, equal }
 
   struct Condition {
@@ -111,39 +114,74 @@ contract Voucher is BaseContract
     duration = _duration;
     condition.operator = Operator(_conditionOperator);
     condition.value = _conditionValue;
-    VoucherEvent(now, "Voucher", stateName[uint(voucherState)], "constructor");
   }
     
   /**
    * @dev Attest the feature to the contract
    * @param _data The attested data
+   * @return status code:
+   *            0 success
+   *           -1 invalid contract state
+   *           -2 attempt before due time 
+   *           -3 invalid attester device
    */
   function attest(uint _data) public
-    onlyState(State.created)
-    onlyDueTime()
-    onlyParty(device)
+    returns(int)
+    //onlyState(State.created)
+    //onlyDueTime()
+    //onlyParty(device)
   { 
+    if(voucherState != State.created) 
+    {
+      Error("attest", "invalid contract state");
+      return -1;
+    }
+    if(now < validityLife)
+    {
+      Error("attest", "attempt before due time");
+      return -2;
+    }
+    if(msg.sender != device)
+    {
+      Error("attest", "invalid attester device");
+      return -3;
+    }
     attestedValue = _data;
     voucherState = State.ready;
     VoucherEvent(now, "attest", stateName[uint(voucherState)], "Attested");
+    return 0;
   }
 
   /**
    * @dev Claim the reward to the contract
-   * @return true in case of success or false otherwise
+   * @return status code 
+   *            1 success issued
+   *            0 success rejected 
+   *           -1 invalid contract state
+   *           -3 invalid claimer user)
    */
-  function claim() public
-    onlyState(State.ready)
-    onlyParty(beneficiary)
-    returns (bool)
+  function claim() public 
+    //onlyState(State.ready)
+    //onlyParty(beneficiary)
+    returns (int)
   {
+    if(voucherState != State.ready)
+    {
+      Error("attest", "invalid contract state");
+      return -1;
+    }
+    if(msg.sender != beneficiary)
+    {
+      Error("attest", "invalid attester device");
+      return -3;
+    }
     if(condition.operator==Operator.less)
     {
       if(attestedValue < condition.value)
       {
         voucherState = State.issued;
         VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
-	return true;
+	return 1;
       }
     } else if (condition.operator==Operator.greater) 
     {  
@@ -151,7 +189,7 @@ contract Voucher is BaseContract
       {
 	voucherState = State.issued;
         VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
-        return true;
+        return 1;
       }
     } else if (condition.operator==Operator.equal)
     {
@@ -159,12 +197,11 @@ contract Voucher is BaseContract
       {
 	voucherState = State.issued;
         VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
-	return true;    
+	return 1;    
       }
-    } else 
-    {
-      voucherState = State.failed;
-      VoucherEvent(now, "claim", stateName[uint(voucherState)], "Failed");
-    }
+    }  
+    voucherState = State.failed;
+    VoucherEvent(now, "claim", stateName[uint(voucherState)], "Failed");
+    return 0;
   }
 }
