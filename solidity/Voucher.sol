@@ -50,12 +50,13 @@ contract BaseContract
 contract Voucher is BaseContract
 {
   /** @dev State definitions:
-   *    created: the contract is active but attestation is pending 
+   *    created: the contract is deployed but initial attestation is pending 
+   *    active: the initial value has been attested and the attestation window is running
    *    ready: attestation is done and the user can claim the voucher
    *    cleared: the user has claimed the voucher
    */
-  enum State { created, ready, issued, failed }
-  string [4] stateName = [ "created", "ready", "issued", "failed" ];
+  enum State { created, active, ready, issued, failed }
+  string [5] stateName = [ "created", "active", "ready", "issued", "failed" ];
     
   /// @dev State of the Contract
   State public voucherState;
@@ -86,7 +87,8 @@ contract Voucher is BaseContract
 
   Condition condition;
  
-  uint public attestedValue;
+  uint public attestedInitialValue;
+  uint public attestedFinalValue;
 
   modifier onlyParty(address _address)
   {
@@ -131,7 +133,7 @@ contract Voucher is BaseContract
     //onlyDueTime()
     //onlyParty(device)
   { 
-    if(voucherState != State.created) 
+    if(voucherState != State.created || voucherState != State.active) 
     {
       Error("attest", "invalid contract state");
       return -1;
@@ -146,8 +148,14 @@ contract Voucher is BaseContract
       Error("attest", "invalid attester device");
       return -3;
     }
-    attestedValue = _data;
-    voucherState = State.ready;
+    if(voucherState == State.created) 
+    {
+      attestedInitialValue = _data;
+      voucherState = State.active;
+    } else {
+      attestedFinalValue = _data;
+      voucherState = State.ready;
+    }
     VoucherEvent(now, "attest", stateName[uint(voucherState)], "Attested");
     return 0;
   }
@@ -175,6 +183,7 @@ contract Voucher is BaseContract
       Error("attest", "invalid attester device");
       return -3;
     }
+    uint attestedValue = attestedFinalValue - attestedInitialValue;
     if(condition.operator==Operator.less)
     {
       if(attestedValue < condition.value)
