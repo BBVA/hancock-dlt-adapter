@@ -118,10 +118,12 @@ function contractMinedCallback(data, result)
   let ethcontract = WEB3.eth.contract(data.abi);
   let contractInstance = ethcontract.at(result.address);
   contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'}, (error, ev) => { events(data, result, error, ev); });
+  console.log("=============================");
+  console.log(result);
   let req = {
     id: result.transactionHash,
     address: result.address,
-    state: 'MINED'
+    state: 'mined'
   };
   let options = {
     method: 'POST',
@@ -130,14 +132,33 @@ function contractMinedCallback(data, result)
     headers: {
       'content-type': 'application/json'
     },
-    body: JSON.stringify(req)
+    body: req
   }
-  LOG.debug(options);
   request(options, (err, resp, body) => {
     if(err) {
       LOG.info('Error in SmartContract transaction webhook request: '+err);
     } else {
       LOG.info('SmartContract transaction webhook request successful: '+resp);
+      let req2 = {
+        address: result.address,
+        method: data.body.method,
+      }
+      let options2 = {
+        method: 'POST',
+        json: true,
+        url: CONF.smartcontracts.url+'/events',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: req2
+      }
+      request(options2, (err, resp, body) => {
+        if(err) {
+          LOG.info('Error in SmartContract events webhook request: '+err);
+        } else {
+          LOG.info('SmartContract events webhook request successful: '+resp);
+        }
+      });
     }
   });
 }

@@ -21,17 +21,17 @@ function closeTx(ev) {
   let req = {
     id: ev.transactionHash,
     address: ev.address,
-    state: 'MINED'
+    state: 'mined'
   }
 
   let options = {
     method: 'POST',
     json: true,
-    url: CONF.smartcontracts.url+'transactions',
+    url: CONF.smartcontracts.url+'/transactions',
     headers: {
       'content-type': 'application/json'
     },
-    body: JSON.stringify(req)
+    body: req
   }
   request(options, (err, resp, body) => {
     if(err) {
@@ -70,9 +70,8 @@ function sendEvent(ev) {
     headers: {
       'content-type': 'application/json'
     },
-    body: JSON.stringify(req)
+    body: req
   }
-  LOG.debug(options);
   request(options, (err, resp, body) => {
     if(err) {
       LOG.info('Error in SmartContract events webhook request: '+err);

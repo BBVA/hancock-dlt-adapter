@@ -78,6 +78,9 @@ contract Voucher is BaseContract
   /// @dev a standardized error event
   event Error(string method, string message);
 
+  /// @dev event for voucher issuance
+  event VoucherIssuanceEvent(uint timestamp, string method, string newState, uint attestedValue);
+
   enum Operator { less, greater, equal }
 
   struct Condition {
@@ -189,7 +192,7 @@ contract Voucher is BaseContract
       if(attestedValue < condition.value)
       {
         voucherState = State.issued;
-        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
+        VoucherIssuanceEvent(now, "claim", stateName[uint(voucherState)], attestedValue);
 	return 1;
       }
     } else if (condition.operator==Operator.greater) 
@@ -197,7 +200,7 @@ contract Voucher is BaseContract
       if(attestedValue > condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
+        VoucherIssuanceEvent(now, "claim", stateName[uint(voucherState)], attestedValue);
         return 1;
       }
     } else if (condition.operator==Operator.equal)
@@ -205,12 +208,12 @@ contract Voucher is BaseContract
       if(attestedValue == condition.value)
       {
 	voucherState = State.issued;
-        VoucherEvent(now, "claim", stateName[uint(voucherState)], "Issued");
+        VoucherIssuanceEvent(now, "claim", stateName[uint(voucherState)], attestedValue);
 	return 1;    
       }
     }  
     voucherState = State.failed;
-    VoucherEvent(now, "claim", stateName[uint(voucherState)], "Failed");
+    VoucherIssuanceEvent(now, "claim", stateName[uint(voucherState)], attestedValue);
     return 0;
   }
 }

@@ -12,7 +12,7 @@ module.exports = {
   port: 9000,
 
   routes: {
-    prefix: process.env.ROUTES_PREFIX || '/v1/'
+    prefix: process.env.OMNI_ROUTES_PREFIX || '/v1/'
   },
 
   logger: {
@@ -20,11 +20,11 @@ module.exports = {
   },
 
   ethereum: {
-    url: process.env.ETHEREUM_URL || 'http://localhost:8545'
+    url: process.env.OMNI_ETHEREUM_URL || 'http://localhost:8547'
   },
 
   smartcontracts: {
-    url: process.env.SMARTCONTRACTS_URL || 'http://localhost:3000'
+    url: process.env.OMNI_SMARTCONTRACTS_URL || 'http://localhost:3000'
   }
 
 };
