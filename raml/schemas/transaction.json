@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Transactions schema",
+  "type": "object",
+  "properties": {
+    "method": {
+      "type": "string"
+    },
+    "params": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "long"
+          },
+          "value": {
+	    "type": "string"
+	  },
+	  "type": {
+	    "type": "string"
+	  },
+          "required": [ "offset", "value", "type" ]
+        }
+      }
+    },
+    "from": {
+      "type": "string"
+    }
+  },
+  "required": [ "method" ]
+}
+
