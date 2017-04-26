@@ -18,7 +18,7 @@ module.exports = {
 
   transaction_error: {
   	statusCode: 512,
-  	code: responses.ksttransaction512.code,
+  	code: responses.ksttransaction500.code,
   	message: 'Transactions - Blockchain transaction error'
   },
 

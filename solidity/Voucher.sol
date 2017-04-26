@@ -136,7 +136,7 @@ contract Voucher is BaseContract
     //onlyDueTime()
     //onlyParty(device)
   { 
-    if(voucherState != State.created || voucherState != State.active) 
+    if(voucherState != State.created && voucherState != State.active) 
     {
       Error("attest", "invalid contract state");
       return -1;

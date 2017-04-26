@@ -27,7 +27,7 @@ exports.createResponseData = function(result, data) {
 exports.createReply = function(reply, result, data) {
   var response = {
     result: {
-      code: result.code,
+      code: result.statusCode,
       description: result.message
     }
   };

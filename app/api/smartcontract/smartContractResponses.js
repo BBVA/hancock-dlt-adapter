@@ -11,8 +11,8 @@ module.exports = {
   },
 
   smartcontract_error: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contract - Blockchain request error'
   },
 
@@ -23,20 +23,20 @@ module.exports = {
   },
 
   sourcecode_not_found_error: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contracts - Source code not found'
   },
 
   compilation_error: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contract - Compilation error'
   },
 
   deploy_error: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contract - Deployment error'
   },
 
@@ -47,14 +47,14 @@ module.exports = {
   },
 
   transaction_error: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contract - Transaction Error'
   },
 
   invalid_transaction_invokation: {
-    statusCode: 512,
-    code: responses.kstsmartcontract512.code,
+    statusCode: 500,
+    code: responses.kstsmartcontract500.code,
     message: 'Smart Contract - Invalid transaction invokation'
   }
 

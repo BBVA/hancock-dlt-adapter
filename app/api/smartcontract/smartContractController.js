@@ -81,6 +81,8 @@ function contractSubmit(data) {
   /* Send the contract creation transaction. */
   let params = []; 
 
+  console.log(data.body.params);
+
   for(var i = 0; i < data.body.params.length; i++) {
     params[i] = data.body.params[i].value;
   }

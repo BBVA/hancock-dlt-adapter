@@ -22,7 +22,7 @@ function closeTx(ev) {
     address: ev.address,
     state: 'mined',
     method: ev.args.method,
-    blockchainTimestamp: ev.args.timestamp.toNumber(),
+    blockchainTimestamp: ev.args.timestamp.toString(),
     params: []
   }
   
@@ -32,7 +32,7 @@ function closeTx(ev) {
   {
     let param = {
       offset: i-2,
-      value: argsArray[i],
+      value: `${argsArray[i]}`,
       type: 'string'
     };
     req.params.push(param);

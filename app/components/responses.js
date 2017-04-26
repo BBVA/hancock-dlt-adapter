@@ -114,8 +114,8 @@ module.exports = {
   },
 
   // SMART CONTRACT
-  kstsmartcontract512: {
-    code: 'KSTSMARTCONTRACT512',
+  kstsmartcontract500: {
+    code: 'KSTSMARTCONTRACT500',
     description: 'Smart Contract blockchain error'
   },
 
@@ -125,8 +125,8 @@ module.exports = {
   },
 
   // TRANSACTION
-  ksttransaction512: {
-    code: 'KSTTRANSACTION512',
+  ksttransaction500: {
+    code: 'KSTTRANSACTION500',
     description: 'Blockchain transaction error'
   },
 
