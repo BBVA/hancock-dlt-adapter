@@ -21,7 +21,7 @@ module.exports = (app) => {
 //  router.use('/block', require('./api/blocks'));
 
   // Healthcheck
-  router.get('/', (req, res) => {
+  app.get('/', (req, res) => {
     res.json({
       status: 'OK',
       app: CONF.application
