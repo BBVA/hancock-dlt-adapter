@@ -9,7 +9,7 @@ module.exports = {
   application: 'omni:ms-blockchain-adapter',
 
   host: 'localhost',
-  port: 3000,
+  port: process.env.OMNI_PORT || 3000,
 
   routes: {
     prefix: process.env.OMNI_ROUTES_PREFIX || '/v1/'

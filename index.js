@@ -20,6 +20,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 400).json({
     error: err.message
   });
+  console.log(err);
   next();
 });
 
