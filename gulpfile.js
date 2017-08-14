@@ -74,8 +74,8 @@ gulp.task('sonar', function() {
       host: {
         url: 'http://dev-kst-sonarqube.kickstartteam.es:19000/'
       },
-      projectKey: 'sonar:omni-ms-blockchain-adapter',
-      projectName: 'omni-ms-blockchain-adapter',
+      projectKey: 'sonar:archer-ms-blockchain-adapter',
+      projectName: 'archer-ms-blockchain-adapter',
       projectVersion: '0.1.0',
       // comma-delimited string of source directories
       sources: 'index.js,app/',

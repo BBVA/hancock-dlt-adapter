@@ -2,15 +2,15 @@ version: "2"
 services: 
   ethereum-testrpc: 
     container_name: ba-ethereum-testrpc
-    image: dev.docker.kickstartteam.es:5000/kst/omni/ethereum-testrpc:0.1.0
+    image: dev.docker.kickstartteam.es:5000/kst/archer/ethereum-testrpc:0.1.0
     ports: 
       - "8545:8545"
     environment:
       CONSUL: dev.consul.kickstarteam.es:8500
   blockchain-adapter:
     container_name: ba-blockchain-adapter
-    command: "kst-omni/ms-blockchain-adapter/loc"
-    image: dev.docker.kickstartteam.es:5000/kst/omni/ms-blockchain-adapter:0.1.0
+    command: "kst-archer/ms-blockchain-adapter/loc"
+    image: dev.docker.kickstartteam.es:5000/kst/archer/ms-blockchain-adapter:0.1.0
     ports: 
       - "9000:9000"
     env_file:

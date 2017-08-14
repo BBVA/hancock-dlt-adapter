@@ -6,25 +6,25 @@ module.exports = {
 
   env: process.env.NODE_ENV || 'local',
 
-  application: 'omni:ms-blockchain-adapter',
+  application: 'archer:ms-blockchain-adapter',
 
   host: 'localhost',
-  port: process.env.OMNI_PORT || 3000,
+  port: process.env.ARCHER_PORT || 3000,
 
   routes: {
-    prefix: process.env.OMNI_ROUTES_PREFIX || '/v1/'
+    prefix: process.env.ARCHER_ROUTES_PREFIX || '/v1/'
   },
 
   logger: {
-    logLevel: process.env.OMNI_LOG_LEVEL || 'debug'
+    logLevel: process.env.ARCHER_LOG_LEVEL || 'debug'
   },
 
   ethereum: {
-    url: process.env.OMNI_ETHEREUM_URL || 'http://localhost:8547'
+    url: process.env.ARCHER_ETHEREUM_URL || 'http://localhost:8547'
   },
 
   smartcontracts: {
-    url: process.env.OMNI_SMARTCONTRACTS_URL || 'http://localhost:3000'
+    url: process.env.ARCHER_SMARTCONTRACTS_URL || 'http://localhost:3000'
   }
 
 };

@@ -1,5 +1,5 @@
 {
-  "name": "kst-omni-ms-blockchain-adapter",
+  "name": "kst-archer-ms-blockchain-adapter",
   "version": "0.1.0",
   "description": "Blockchain adapter to interact with DLT networks",
   "main": "index.js",
