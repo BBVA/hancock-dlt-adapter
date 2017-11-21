@@ -15,31 +15,63 @@ types:
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
 
-/smartcontract:
-  displayName: Smart Contract Entity
-  description: Smart Contract Entity description
+/{dlt_type}:
+  uriParameters:
+    dlt_type:
+      type: string
 
-  post:
-    description: Create a new Smart Contract
-    securedBy: [ oauth_2_0 ]
-    headers:
-    body:
-      application/json:
-        type: SmartContract
-    responses:
-      202:
-
-  /{address}:
-    uriParameters:
-      address:
-        type: string
+  /smartcontract:
+    displayName: Smart Contract  
 
     post:
-      description: execute transaction in a Smart Contract
+      description: Create a new Smart Contract
       securedBy: [ oauth_2_0 ]
       headers:
       body:
         application/json:
-          type: Transaction
+          type: SmartContract
       responses:
         202:
+
+    /{address}:
+      uriParameters:
+        address:
+          type: string
+
+      post:
+        description: execute write transaction in a Smart Contract
+        securedBy: [ oauth_2_0 ]
+        headers:
+        body:
+          application/json:
+            type: Transaction
+        responses:
+          202:
+      get:
+        description: synchronous read from a Smart Contract
+        securedBy: [ oauth_2_0 ]
+        queryParameters:
+          method: 
+            type: string
+            description: the name of the public method to call 
+
+  /transfers:
+    post:
+      description: transfer dlt native cryptocurrency
+  /notarizations:
+    post:
+      description: write metadata in blockchain
+  /balance:
+    get:
+      description: obtain the native cryptocurrency balance of a dlt address
+      queryParameters:
+        address:
+          type: string
+  /incentive:
+    /average:
+      get:
+        description: obtain the current average payed as mining incentive e.g. bitcoin fee or ethereum gas
+        
+  /receipt:
+    get:
+

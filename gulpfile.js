@@ -39,27 +39,31 @@ gulp.task('debug', function() {
   });
 });
 
-gulp.task('pre-test', function() {
-  return gulp.src(['./index.js', './app/**/*.js'])
-    .pipe(istanbul({
-      instrumenter: isparta.Instrumenter,
-      includeUntested: true
-    }))
-    .pipe(istanbul.hookRequire());
+gulp.task('pre-test', function() {                                                                                                                                                                                                          
+  return gulp.src(['./index.js', './app/**/*.js'])                                                                                                                                                                                          
+  .pipe(istanbul({                                                                                                                                                                                                                        
+    instrumenter: isparta.Instrumenter,                                                                                                                                                                                                   
+    includeUntested: false                                                                                                                                                                                                                
+  }))
+   .pipe(istanbul.hookRequire());
 });
 
 gulp.task('test', ['pre-test'], function() {
   process.env.NODE_ENV = 'test';
-  return gulp.src(['tests/**/*Spec.js'])
-    .pipe(jasmine({
-      errorOnFail: false
-    })).on('error', errorHandler)
-    .pipe(istanbul.writeReports({
-      reporters: ['text', 'text-summary', 'html', 'cobertura', 'lcov'],
-      reportOpts: {
-        dir: './coverage'
-      }
-    }));
+  return gulp.src(['./tests/**/*spec.js'])
+  .pipe(jasmine({
+    reporter: new reporters.JUnitXmlReporter({
+      savePath: './tests/reports/unit',
+      consolidateAll: false
+    }),
+    errorOnFail: false
+  })).on('error', errorHandler)
+  .pipe(istanbul.writeReports({
+    reporters: ['cobertura', 'html', 'lcov'],
+    reportOpts: {
+      dir: './tests/reports/coverage'
+    }
+  }));
 });
 
 gulp.task('lint', function() {
