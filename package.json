@@ -1,7 +1,7 @@
 {
-  "name": "kst-archer-ms-blockchain-adapter",
+  "name": "kst-lab-hancock-ms-dlt-adapter",
   "version": "0.1.0",
-  "description": "Blockchain adapter to interact with DLT networks",
+  "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
   "author": "Javier Moreno Molina <javier.moreno.molina@bbva.com",
   "license": "Copyright",
@@ -17,6 +17,7 @@
     "genesis-lib-log": "^2.0.1",
     "gulp": "^3.9.1",
     "method-override": "^2.3.10",
+    "mongodb": "^2.2.33",
     "q": "^1.5.1",
     "request": "^2.83.0",
     "solc": "^0.4.18",
