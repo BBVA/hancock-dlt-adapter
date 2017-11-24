@@ -3,10 +3,10 @@
   "description": "Smart Contract creation schema",
   "type": "object",
   "properties": {
-    "smartContractURL": {
+    "url": {
       "type": "string"
     },
-    "method": {
+    "constructor": {
       "type": "string"
     },
     "params": {
@@ -31,5 +31,5 @@
       "type": "string"
     }
   },
-  "required": [ "smartContractURL", "method" ]
+  "required": [ "url", "method" ]
 }
