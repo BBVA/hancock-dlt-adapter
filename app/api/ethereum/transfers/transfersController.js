@@ -1,7 +1,7 @@
 'use strict';
 
 var GeneralResponses       = require('../../../components/responses')
-var ResponsesTransaction  = require('./transactionResponses');
+var ResponsesTransaction  = require('./transfersResponses');
 var Errors          = require('../../../components/errors');
 var Utils           = require('../../../components/utils');
 var Q               = require('q');

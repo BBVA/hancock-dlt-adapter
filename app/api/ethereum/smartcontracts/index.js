@@ -1,25 +1,24 @@
 'use strict';
 
-var express = require('express');
-var validate = require('express-jsonschema').validate;
-var router = express.Router();
+const express = require('express');
+const validate = require('express-jsonschema').validate;
+const router = express.Router();
 
-var ContractModel = require('../../../../raml/schemas/smartContract.json');
-var TransactionModel = require('../../../../raml/schemas/transaction.json');
-var smartContract = require('./smartContractController');
+const ContractModel = require('../../../../raml/schemas/smartContract.json');
+const TransactionModel = require('../../../../raml/schemas/transaction.json');
+const smartContract = require('./smartContractController');
 
 router.route('/').post(validate({body: ContractModel}), smartContract.create);
-
-router.route('/:address').post(validate({ body: TransactionModel }), smartContract.transaction);
+router.route('/:address').post(validate({body: TransactionModel}), smartContract.transaction);
 
 //router.get('/:name', contract.contractInfo(request, reply, next));
 
 // Healthcheck
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.json({
     status: 'OK',
-    app: CONF.application
+    app: 'Ethereum Smart Contracts'
   });
 });
 
-module.exports = router
+module.exports = router;

@@ -4,7 +4,7 @@ var express = require('express');
 var validate = require('express-jsonschema').validate;
 var router = express.Router();
 
-var transaction = require('./transactionController');
+var transaction = require('./transfersController');
 var TransactionModel = require('../../../../raml/schemas/transaction.json');
 
 //router.route('/:address').post(validate({ body: TransactionModel}), transaction.sendTransaction);

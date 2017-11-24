@@ -1,19 +1,10 @@
 'use strict';
 
-var GeneralResponses       = require('../../../components/responses')
-var ResponsesUtil  = require('./utilResponses');
-var Errors          = require('../../../components/errors');
-var config          = require('../../config/environment');
-var mongo           = require('mongodb');
+var ResponsesUtil  = require('./notarizationsResponses');
 var Utils           = require('../../../components/utils');
 //var AdminModel   = require('./model/adminModel')
 //var AdminSchema  = require('./model/adminModelJoi')
-var Joi             = require('joi');
-var Q               = require('q');
-var crypto          = require('crypto');
-var w               = require('winston');
-var fs              = require('fs');
-var _               = require('lodash');
+
 
 //var DEFAULT_GAS = 0x50000;
 

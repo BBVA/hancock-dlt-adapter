@@ -1,18 +1,18 @@
 'use strict';
 
-var events                 = require('../../../services/events');
-var request 	           = require('request');
-var Solc                   = require('solc');
-var ResponsesSmartContract = require('./smartContractResponses');
-var Errors                 = require('../../../components/errors');
-var Utils                  = require('../../../components/utils');
-var Q                      = require('q');
-var fs                     = require('fs');
-var path                   = require('path');
+const events = require('../../../services/events');
+const request = require('request');
+const Solc                   = require('solc');
+const ResponsesSmartContract = require('./smartContractResponses');
+const Errors                 = require('../../../components/errors');
+const Utils                  = require('../../../components/utils');
+const Q                      = require('q');
+const fs                     = require('fs');
+const path                   = require('path');
 
-var DEFAULT_GAS = 0x47E7C3;
+const DEFAULT_GAS = 0x47E7C3;
 
-var errorMsgs = new Map([
+const errorMsgs = new Map([
   ['-1', "Transaction not allowed in current contract state"], 
   ['-2', "Transaction attempt before due time"],
   ['-3', "Unauthorized transaction sender"]
@@ -129,7 +129,7 @@ function contractMinedCallback(data, result)
   let options = {
     method: 'POST',
     json: true,
-    url: CONF.smartcontracts.url+'/transactions',
+    url: CONF.smartcontracts.url+'/transfers',
     headers: {
       'content-type': 'application/json'
     },
