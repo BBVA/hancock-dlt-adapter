@@ -6,7 +6,6 @@ const Solc                   = require('solc');
 const ResponsesSmartContract = require('./smartContractResponses');
 const Errors                 = require('../../../components/errors');
 const Utils                  = require('../../../components/utils');
-const Q                      = require('q');
 const fs                     = require('fs');
 const path                   = require('path');
 
@@ -20,8 +19,8 @@ const errorMsgs = new Map([
 
 exports.create = function(request, reply, next) {
   LOG.debug( LOG.logData(request), 'contract create');
-  retrieveContract(request.body) // Read the solidity file
-    .then(contractCompile)    // Compiles the source code
+  retrieveContractFiles(request.body) // Read the solidity file
+    //.then(contractCompile)    // Compiles the source code
     .then(contractSubmit)     // Actually creates the contract in the Ethereum blockchain
     .then(function(data) {
       LOG.debug('Returning HTTP response');
@@ -32,6 +31,27 @@ exports.create = function(request, reply, next) {
       return Utils.createReply(reply, ResponsesSmartContract.smartcontract_error);      
     });
 };
+
+function retrieveContractFiles(body) {
+  let contractData;
+  return new Promise((resolve, reject) => {
+    request(body.url+'.bin', (error, response, data) => {
+      if(error){
+        reject(ResponsesSmartContracts.sourcecode_not_found_error);
+      } else {
+        contractData.bin = data;
+      }
+    });
+    request(body.url+'.abi', (error, response, data) => {
+      if(error){
+        reject(ResponsesSmartContracts.sourcecode_not_found_error);
+      } else {
+        contractData.abi = JSON.parse(data);
+      }
+    });
+    resolve(contractData);
+  });
+}
 
 function retrieveContract(body) {
   let deferred = Q.defer();
@@ -75,9 +95,12 @@ function contractCompile(data) {
 }
 
 function contractSubmit(data) {
-  let deferred = Q.defer();
 
-  LOG.debug('Deploying contract'); 
+  return new Promise((resolve, reject) => {
+    
+
+  });
+  LOG.debug('Deploying contract');
   /* Send the contract creation transaction. */
   let params = []; 
 

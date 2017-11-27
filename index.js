@@ -8,10 +8,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Web3 = require('web3');
 const app = express();
+const Database = require('./app/database');
+
 
 global.CONF = require('./app/config');
 global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
-global.DB = require('./app/database');
+global.DB = new Database(CONF.mongo.url);
 global.WEB3 = new Web3(new Web3.providers.HttpProvider(CONF.ethereum.url));
 
 require('./app/express')(app); 
@@ -25,27 +27,27 @@ app.use((err, req, res, next) => {
   next();
 });
 
-DB.connect(CONF.mongo.url, (err) =>{
-  if (err) {
+DB.connect()
+  .then(() => {
+    LOG.info('MongoDB connection open');
+  })
+  .catch((err) => {
     LOG.error(`MongoDB connection error: ${err}`);
     process.exit(1);
-  } else {
-    LOG.info('MongoDB connection open');
-  }
-});
+  });
 
 // If the Node process ends, close the MongoDB connection
 process.on('SIGINT', () => {
   const db = DB.get();
   if (db) {
-    db.close((err) => {
-      if (err) {
-        LOG.error(`MongoDB disconnection error: ${err}`);
-      } else {
+    db.close()
+      .then(() => {
         LOG.info('MongoDB disconnected through app termination');
         process.exit(0);
-      }
-    });
+      })
+      .catch((err) =>{
+        LOG.error(`MongoDB disconnection error: ${err}`);
+      });
   }
 });
 

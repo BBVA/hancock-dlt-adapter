@@ -1,8 +1,8 @@
 version: "2"
 services: 
-  ethereum-testrpc: 
-    container_name: da-ethereum-testrpc
-    image: dev.docker.kickstartteam.es:5000/kst/archer/ethereum-testrpc:0.1.0
+  ganache-cli: 
+    container_name: da-ganache-cli
+    image: dev.docker.kickstartteam.es:5000/kst/lab/ganache-cli:0.1.0
     ports: 
       - "8545:8545"
     environment:
@@ -25,4 +25,4 @@ services:
       CONSUL: dev.consul.kickstartteam.es:8500
     depends_on:
       - mongo
-      - ethereum-testrpc
+      - ganache-cli
