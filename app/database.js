@@ -2,7 +2,7 @@
 
 const MongoClient = require('mongodb').MongoClient;
 
-export default class Database {
+class Database {
 
   constructor(uri) {
     this.uri = uri;
@@ -38,3 +38,5 @@ export default class Database {
     });
   }
 }
+
+exports.Database = Database;

@@ -16,7 +16,7 @@ module.exports = {
   },
 
   mongo: {
-    url: process.env.DLT_ADAPTER_MONGO_URI || 'http://localhost:27017/hancock',
+    url: process.env.DLT_ADAPTER_MONGO_URI || 'mongodb://localhost:27018/hancock',
     collections: {
       smartContracts: process.env.DLT_ADAPTER_COLLECTION_SMARTCONTRACTS || 'smartcontracts'
     }

@@ -1,13 +1,12 @@
 'use strict';
 
-var uuid          = require('uuid');
-var Q             = require('q');
-var req           = require('request');
-var crypto        = require('crypto');
+const uuid          = require('uuid');
+const req           = require('request');
+const crypto        = require('crypto');
 
 exports.generateToken = function(bytes, format){
   return crypto.randomBytes(bytes).toString(format);
-}
+};
 
 
 exports.generateUuid = function() {
@@ -15,7 +14,7 @@ exports.generateUuid = function() {
 };
 
 exports.createResponseData = function(result, data) {
-  var response = {
+  let response = {
     result: result
   };
 
@@ -25,7 +24,7 @@ exports.createResponseData = function(result, data) {
 };
 
 exports.createReply = function(reply, result, data) {
-  var response = {
+  let response = {
     result: {
       code: result.statusCode,
       description: result.message
@@ -35,27 +34,27 @@ exports.createReply = function(reply, result, data) {
   if (data) response.data = data;
 
   return reply.status(result.statusCode).json(response);
-}
+};
 
 exports.sendRequest = function (data){
-  var deferred = Q.defer();
-  req(data.reqData, function(error, response, body){
-    if(error) {
-      deferred.reject(error)
-    } else {
-      data.response = response;
-      deferred.resolve(data);
-    }
+  return new Promise((resolve, reject) => {
+    req(data.reqData, function (error, response, body) {
+      if (error) {
+        reject(error)
+      } else {
+        data.response = response;
+        resolve(data);
+      }
+    });
   });
-  return deferred.promise;
-}
+};
 
 exports.randomAccountNum = function (length){
-    var text = "";
-    var possible = "0123456789";
+    let text = "";
+    let possible = "0123456789";
 
     for( var i=0; i < length; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
-}
+};

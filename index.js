@@ -6,17 +6,16 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const Web3 = require('web3');
 const app = express();
-const Database = require('./app/database');
-
+const {Ethereum} = require('./app/ethereum');
+const {Database} = require('./app/database');
 
 global.CONF = require('./app/config');
 global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
 global.DB = new Database(CONF.mongo.url);
-global.WEB3 = new Web3(new Web3.providers.HttpProvider(CONF.ethereum.url));
+global.ETH = new Ethereum();
 
-require('./app/express')(app); 
+require('./app/express')(app);
 require('./app/routes')(app); // config routes in external file
 
 app.use((err, req, res, next) => {
