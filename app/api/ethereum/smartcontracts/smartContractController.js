@@ -2,22 +2,14 @@
 
 const events = require('../../../services/ethereum-events');
 const request = require('request');
-//const Solc                   = require('solc');
 const ResponsesSmartContract = require('./smartContractResponses');
-//const Errors                 = require('../../../components/errors');
 const Utils                  = require('../../../components/utils');
 const fs                     = require('fs');
 const path                   = require('path');
 
 const DEFAULT_GAS = 0x47E7C3;
 
-const errorMsgs = new Map([
-  ['-1', "Transaction not allowed in current contract state"], 
-  ['-2', "Transaction attempt before due time"],
-  ['-3', "Unauthorized transaction sender"]
-]);
-
-exports.create = function(request, reply, next) {
+exports.create = (request, reply) => {
   LOG.debug( LOG.logData(request), 'contract create');
   let contractData = {};
   contractData.request = request.body;
@@ -72,31 +64,9 @@ function checkContractSender(contractData) {
   LOG.debug('Checking whether contract sender wallet is registered');
 
   return new Promise((resolve, reject) => {
-    ETH.web3.eth.getAccounts((error, accounts) => {
-      if(error) {
-        console.log(error);
-        reject(error);
-      } else {
-        console.log(accounts);
-        resolve(contractData);
-      }
-    });
+    LOG.debug('TODO: lookup wallet registry or mongodb');
+    resolve(contractData);
   });
-}
-
-function createContractObject(contractData) {
-
-  /*return new Promise((resolve, reject) => {
-    ETH.web3.eth.Contract(contractData.abi).
-      then((contract) => {
-        LOG.debug('Contract object successfully created') ;
-        contractData.contract = contract;
-        resolve(contractData);
-      }).catch((error) => {
-        LOG.error('Contract object creation failed');
-        reject(error);
-      });
-  });*/
 }
 
 function adaptContractDeploy(contractData) {
@@ -111,30 +81,22 @@ function adaptContractDeploy(contractData) {
   contractData.contract = new ETH.web3.eth.Contract(contractData.abi);
   return new Promise((resolve, reject) => {
     LOG.debug('Deploying contract');
-
     contractData.contract
       .deploy({ data: '0x'+contractData.bin, arguments: params})
       .send({ from: contractData.request.from }, (error, result) => {
+        LOG.debug('Adapt deploy callback');
         if(error) {
           LOG.debug('Error sending contract deployment');
-          console.log(error);
+          reject(error);
         } else {
-          LOG.debug('Contract deployment callback');
-          console.log(result);
+          LOG.debug('Contract deployment successfully adapted');
+          resolve(result);
         }
       })
       .on('error', function(error){ console.log(error); })
       .on('transactionHash', function(transactionHash){ console.log(transactionHash); })
       .on('receipt', function(receipt){
         console.log(receipt.contractAddress) // contains the new contract address
-      })
-      .then((contractInstance) => {
-        console.log(contractInstance);
-        resolve(contractInstance);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
       });
   });
 }
