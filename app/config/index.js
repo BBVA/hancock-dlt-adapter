@@ -6,26 +6,28 @@ module.exports = {
 
   env: process.env.NODE_ENV || 'local',
 
-  application: 'archer:ms-blockchain-adapter',
+  application: 'hancock:ms-dlt-adapter',
 
   host: 'localhost',
-  port: process.env.ARCHER_PORT || 3000,
+  port: process.env.DLT_ADAPTER_PORT || 3000,
 
   routes: {
-    prefix: process.env.ARCHER_ROUTES_PREFIX || '/v1/'
+    prefix: process.env.DLT_ADAPTER_ROUTES_PREFIX || '/'
+  },
+
+  mongo: {
+    url: process.env.DLT_ADAPTER_MONGO_URI || 'mongodb://localhost:27018/hancock',
+    collections: {
+      smartContracts: process.env.DLT_ADAPTER_COLLECTION_SMARTCONTRACTS || 'smartcontracts'
+    }
   },
 
   logger: {
-    logLevel: process.env.ARCHER_LOG_LEVEL || 'debug'
+    logLevel: process.env.DLT_ADAPTER_LOG_LEVEL || 'debug'
   },
 
   ethereum: {
-    url: process.env.ARCHER_ETHEREUM_URL || 'http://localhost:8547'
-  },
-
-  smartcontracts: {
-    url: process.env.ARCHER_SMARTCONTRACTS_URL || 'http://localhost:3000'
+    url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://localhost:8547'
   }
-
 };
 

@@ -31,5 +31,5 @@
       "type": "string"
     }
   },
-  "required": [ "url", "method" ]
+  "required": [ "url", "constructor" ]
 }

@@ -1,16 +1,22 @@
 version: "2"
 services: 
-  ethereum-testrpc: 
-    container_name: ba-ethereum-testrpc
-    image: dev.docker.kickstartteam.es:5000/kst/archer/ethereum-testrpc:0.1.0
+  ganache-cli: 
+    container_name: da-ganache-cli
+    image: dev.docker.kickstartteam.es:5000/kst/lab/ganache-cli:0.1.0
     ports: 
       - "8545:8545"
     environment:
       CONSUL: dev.consul.kickstarteam.es:8500
-  blockchain-adapter:
-    container_name: ba-blockchain-adapter
-    command: "kst-archer/ms-blockchain-adapter/loc"
-    image: dev.docker.kickstartteam.es:5000/kst/archer/ms-blockchain-adapter:0.1.0
+  mongo:
+    container_name: da-mongo
+    command: '--port 28018 --smallfiles --dbpath=/tmp'
+    image: dev.docker.kickstartteam.es:5000/kst/mongo:latest
+    ports:
+      - "28018:28018"
+  dlt-adapter:
+    container_name: da-dlt-adapter
+    command: "kst-lab/hancock/ms-dlt-adapter/loc"
+    image: dev.docker.kickstartteam.es:5000/kst/lab/hancock/ms-dlt-adapter:0.1.0
     ports: 
       - "9000:9000"
     env_file:
@@ -18,4 +24,5 @@ services:
     environment:
       CONSUL: dev.consul.kickstartteam.es:8500
     depends_on:
-      - ethereum-testrpc
+      - mongo
+      - ganache-cli

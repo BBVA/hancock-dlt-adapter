@@ -1,117 +1,104 @@
 'use strict';
 
-const events = require('../../../services/events');
+const events = require('../../../services/ethereum-events');
 const request = require('request');
-const Solc                   = require('solc');
 const ResponsesSmartContract = require('./smartContractResponses');
-const Errors                 = require('../../../components/errors');
 const Utils                  = require('../../../components/utils');
-const Q                      = require('q');
 const fs                     = require('fs');
 const path                   = require('path');
 
 const DEFAULT_GAS = 0x47E7C3;
 
-const errorMsgs = new Map([
-  ['-1', "Transaction not allowed in current contract state"], 
-  ['-2', "Transaction attempt before due time"],
-  ['-3', "Unauthorized transaction sender"]
-]);
-
-exports.create = function(request, reply, next) {
+exports.create = (request, reply) => {
   LOG.debug( LOG.logData(request), 'contract create');
-  retrieveContract(request.body) // Read the solidity file
-    .then(contractCompile)    // Compiles the source code
-    .then(contractSubmit)     // Actually creates the contract in the Ethereum blockchain
-    .then(function(data) {
+  let contractData = {};
+  contractData.request = request.body;
+  retrieveContractBinary(contractData) // Read the solidity file
+    .then(retrieveContractAbi)
+    .then(checkContractSender)
+    .then(adaptContractDeploy)     // Actually creates the contract in the Ethereum blockchain
+    .then((data) => {
       LOG.debug('Returning HTTP response');
-      return Utils.createReply(reply, ResponsesSmartContract.smartcontract_ok, { transactionID: data.transactionHash });
+      return Utils.createReply(reply, ResponsesSmartContract.smartcontract_ok, data);
     })
-    .fail(function (err) {
+    .catch((err) => {
       LOG.debug('Error while processing HTTP request');
+      console.log(err);
       return Utils.createReply(reply, ResponsesSmartContract.smartcontract_error);      
     });
 };
 
-function retrieveContract(body) {
-  let deferred = Q.defer();
-
-  var data = {};
-  data.body = body;
-
-  LOG.debug('Retrieving solidity file');
-
-  fs.readFile(path.join(__dirname, '../../../solidity/'+data.body.smartContractURL), "utf8", (err, result) => {
-    if(err) {
-      deferred.reject(ResponsesSmartContracts.sourcecode_not_found_error);
-    } else {
-      data.solInput = result;
-      deferred.resolve(data);
-    }
-  });
-
-  return deferred.promise;
-}
-
-function contractCompile(data) {
-
-  let deferred = Q.defer();
-
-  LOG.debug('Contract Compile');
-  /* Compiles the source code with Solidity */
-
-  let output = Solc.compile(data.solInput, 1);
-  
-  if(!output.contracts[':'+data.body.method]) {
-    LOG.debug('Compilation failed');
-    deferred.reject(ResponsesSmartContracts.compilation_error);
-  } else {      
-    LOG.debug('Compilation succeeded');	
-    data.abi = JSON.parse(output.contracts[':'+data.body.method].interface); // Add the "compiled" object to data
-    data.bytecode = output.contracts[':'+data.body.method].bytecode;
-    deferred.resolve(data);
-  }
-  return deferred.promise;
-}
-
-function contractSubmit(data) {
-  let deferred = Q.defer();
-
-  LOG.debug('Deploying contract'); 
-  /* Send the contract creation transaction. */
-  let params = []; 
-
-  console.log(data.body.params);
-
-  for(var i = 0; i < data.body.params.length; i++) {
-    params[i] = data.body.params[i].value;
-  }
-  
-  params.push({ 'from': data.body.from,
-	        'data': data.bytecode,
-		'gas': DEFAULT_GAS
-	      });
-
-  params.push((err, result) => {
-    if(err) {
-      LOG.info('Contract deployment error: '+err);
-      deferred.reject(ResponsesSmartContract.deploy_error);
-    } else {
-      if(!result.address) {
-        LOG.debug('Contract transaction sent. TransactionHash: ' + result.transactionHash + ' waiting to be mined...');
-	deferred.resolve(result);
+function retrieveContractBinary(contractData) {
+  LOG.debug('Retrieving contract binary');
+  return new Promise((resolve, reject) => {
+    request(contractData.request.url + '.bin', (error, response, data) => {
+      if (error) {
+        LOG.debug('Contract binary not found');
+        reject(ResponsesSmartContract.sourcecode_not_found_error);
       } else {
-	contractMinedCallback(data, result);
+        LOG.debug('Contract binary retrieved');
+        contractData.bin = data;
+        resolve(contractData);
       }
-    }
+    });
   });
-  
+}
 
-  let contract = WEB3.eth.contract(data.abi);
+function retrieveContractAbi(contractData) {
+  LOG.debug('Retrieving contract ABI');
+  return new Promise((resolve, reject) => {
+    request(contractData.request.url + '.abi', (error, response, data) => {
+      if (!error) {
+        LOG.debug('Contract ABI retrieved');
+        contractData.abi = JSON.parse(data);
+        resolve(contractData);
+      } else {
+        LOG.debug('Contract ABI not found');
+        reject(ResponsesSmartContract.sourcecode_not_found_error);
+      }
+    });
+  });
+}
 
-  contract.new.apply(contract, params);
+function checkContractSender(contractData) {
+  LOG.debug('Checking whether contract sender wallet is registered');
 
-  return deferred.promise;
+  return new Promise((resolve, reject) => {
+    LOG.debug('TODO: lookup wallet registry or mongodb');
+    resolve(contractData);
+  });
+}
+
+function adaptContractDeploy(contractData) {
+  LOG.debug('Creating contract object');
+
+  /* Send the contract creation transaction. */
+  let params = [];
+  for(let i = 0; i < contractData.request.params.length; i++) {
+    params[i] = contractData.request.params[i].value;
+  }
+
+  contractData.contract = new ETH.web3.eth.Contract(contractData.abi);
+  return new Promise((resolve, reject) => {
+    LOG.debug('Deploying contract');
+    contractData.contract
+      .deploy({ data: '0x'+contractData.bin, arguments: params})
+      .send({ from: contractData.request.from }, (error, result) => {
+        LOG.debug('Adapt deploy callback');
+        if(error) {
+          LOG.debug('Error sending contract deployment');
+          reject(error);
+        } else {
+          LOG.debug('Contract deployment successfully adapted');
+          resolve(result);
+        }
+      })
+      .on('error', function(error){ console.log(error); })
+      .on('transactionHash', function(transactionHash){ console.log(transactionHash); })
+      .on('receipt', function(receipt){
+        console.log(receipt.contractAddress) // contains the new contract address
+      });
+  });
 }
 
 function contractMinedCallback(data, result) 

@@ -41,7 +41,7 @@ function closeTx(ev) {
   let options = {
     method: 'POST',
     json: true,
-    url: CONF.smartcontracts.url+'/transactions',
+    url: CONF.smartcontracts.url+'/transfers',
     headers: {
       'content-type': 'application/json'
     },
@@ -49,7 +49,7 @@ function closeTx(ev) {
   }
   request(options, (err, resp, body) => {
     if(err) {
-      LOG.debug('Error in SmartContract transactions webhook'+err);
+      LOG.debug('Error in SmartContract transfers webhook'+err);
     } else {
       LOG.debug('SmartContract transaction webhook request successful'+resp);
     }

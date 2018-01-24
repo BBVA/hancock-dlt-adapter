@@ -1,16 +1,16 @@
 {
-  "id": "/archer/REPLACE_FOR_MARATHON_ENV",
+  "id": "/lab/hancock/REPLACE_FOR_MARATHON_ENV",
   "apps": [{
-    "id": "ms-blockchain-adapter",
-    "args": ["kst-archer/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV"],
-    "instances": {{key "kst-archer/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/INSTANCES"}},
-    "cpus": {{key "kst-archer/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/CPUS"}},
-    "mem": {{key "kst-archer/ms-blockchain-adapter/REPLACE_FOR_MARATHON_ENV/marathon/MEM"}},
+    "id": "ms-dlt-adapter",
+    "args": ["kst-lab/hancock/ms-dlt-adapter/REPLACE_FOR_MARATHON_ENV"],
+    "instances": {{key "kst-lab/hancock/ms-dlt-adapter/REPLACE_FOR_MARATHON_ENV/marathon/INSTANCES"}},
+    "cpus": {{key "kst-hancock/ms-dlt-adapter/REPLACE_FOR_MARATHON_ENV/marathon/CPUS"}},
+    "mem": {{key "kst-lab/hancock/ms-dlt-adapter/REPLACE_FOR_MARATHON_ENV/marathon/MEM"}},
     "dependencies": [],
     "container": {
       "type": "DOCKER",
       "docker": {
-        "image": "REPLACE_FOR_REGISTRY/kst/archer/ms-blockchain-adapter:REPLACE_FOR_DOCKER_IMAGE_VERSION",
+        "image": "REPLACE_FOR_REGISTRY/kst/lab/hancock/ms-dlt-adapter:REPLACE_FOR_DOCKER_IMAGE_VERSION",
         "forcePullImage": true,
         "network": "BRIDGE",
         "portMappings": [{
@@ -21,9 +21,9 @@
       }
     },
     "labels": {
-      "project": "archer",
-      "subproject": "ms-blockchain-adapter",
-      "tags": "archer,microservice,blockchain,adapter",
+      "project": "lab",
+      "subproject": "hancock",
+      "tags": "dlt,microservice,blockchain,adapter",
       "elb": "true"
     },
     "constraints": [
