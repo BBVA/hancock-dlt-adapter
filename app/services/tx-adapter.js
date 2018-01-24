@@ -85,7 +85,7 @@ class TxAdapter extends Subprovider {
         return;
 
       default:
-        
+
         next();
         return;
     }
