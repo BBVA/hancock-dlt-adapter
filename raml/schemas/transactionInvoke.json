@@ -12,10 +12,16 @@
         "type": "string"
       }
     },
+    "urlBase": {
+      "type": "string"
+    },
     "from": {
+      "type": "string"
+    },
+    "to": {
       "type": "string"
     }
   },
-  "required": [ "method", "params", "from" ]
+  "required": [ "method", "params", "urlBase", "from", "to" ]
 }
 

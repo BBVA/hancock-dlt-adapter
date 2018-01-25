@@ -6,10 +6,14 @@ const router = express.Router();
 
 const ContractModel = require('../../../../raml/schemas/smartContract.json');
 const TransactionModel = require('../../../../raml/schemas/transaction.json');
-const smartContract = require('./smartContractController');
+const TransactionDeployModel = require('../../../../raml/schemas/transactionDeploy.json');
+const TransactionInvokeModel = require('../../../../raml/schemas/transactionInvoke.json');
+const smartContractDeploy = require('./controller/deploy');
+const smartContractInvoke = require('./controller/invoke');
 
-router.route('/').post(validate({body: ContractModel}), smartContract.create);
-router.route('/:address').post(validate({body: TransactionModel}), smartContract.transaction);
+
+router.route('/deploy').post(validate({body: TransactionDeployModel}), smartContractDeploy.deploy);
+router.route('/invoke').post(validate({body: TransactionInvokeModel}), smartContractInvoke.invoke);
 
 //router.get('/:name', contract.contractInfo(request, reply, next));
 

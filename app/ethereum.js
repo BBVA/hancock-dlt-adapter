@@ -1,7 +1,7 @@
 'use strict';
 
 const ProviderEngine = require('web3-provider-engine');
-const {TxAdapter} = require('./services/tx-adapter');
+const {TxAdapter} = require('./services/ethereum/txAdapter');
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc');
 const Web3 = require('web3');
 

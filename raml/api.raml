@@ -11,6 +11,8 @@ mediaType: application/json
 types:
   SmartContract: !include schemas/smartContract.json
   Transaction: !include schemas/transaction.json
+  TransactionInvoke: !include schemas/transactionInvoke.json
+  TransactionDeploy: !include schemas/transactionDeploy.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
@@ -24,37 +26,50 @@ securitySchemes:
     displayName: Smart Contract  
 
     post:
-      description: Create a new Smart Contract
+      description: Register a deployed Smart Contract
       securedBy: [ oauth_2_0 ]
       headers:
       body:
         application/json:
           type: SmartContract
       responses:
-        202:
+        200:
 
-    /{address}:
+    /{address|alias}:
       uriParameters:
         address:
           type: string
 
       post:
-        description: execute write transaction in a Smart Contract
+        description: adapt transaction in the registered Smart Contract
         securedBy: [ oauth_2_0 ]
         headers:
         body:
           application/json:
             type: Transaction
         responses:
-          202:
+          200:
       get:
-        description: synchronous read from a Smart Contract
+        description: retrieve ABI from registered Smart Contract
         securedBy: [ oauth_2_0 ]
-        queryParameters:
-          method: 
-            type: string
-            description: the name of the public method to call 
-
+    /deploy:
+      post:
+        description: adapt a Smart Contract deployment transaction
+        securedBy: [ oauth_2_0 ]
+        body:
+          application/json:
+            type: Transaction
+        responses:
+          200:
+    /invoke:
+      post:
+        description: adapt a Smart Contract invocation transaction
+        securedBy: [ oauth_2_0 ]
+        body:
+          application/json:
+            type: Transaction
+        responses:
+          200:
   /transfers:
     post:
       description: transfer dlt native cryptocurrency
