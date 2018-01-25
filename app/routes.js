@@ -15,7 +15,7 @@ module.exports = (app) => {
   dirs.forEach((routeName) => {
     // Define routes
     app.use('/'+changeCase.paramCase(routeName), require('./api/' + routeName));
-    app.use('/'+changeCase.paramCase(routeName)+'/smartcontracts', require('./api/' + routeName + '/smartcontracts'));
+    //app.use('/'+changeCase.paramCase(routeName)+'/smartcontracts', require('./api/' + routeName + '/smartcontracts'));
     //app.use('/'+changeCase.paramCase(routeName)+'/transfers', require('./api/' + routeName + '/transfers'));
     //app.use('/'+changeCase.paramCase(routeName)+'/notarizations', require('./api/' + routeName + '/notarizations'));
   });

@@ -3,33 +3,15 @@
   "description": "Smart Contract creation schema",
   "type": "object",
   "properties": {
-    "url": {
+    "address": {
       "type": "string"
     },
-    "constructor": {
+    "alias": {
       "type": "string"
     },
-    "params": {
-      "type": "array",
-      "items": {
-        "type": "object",
-	"properties": {
-	  "offset": {
-	    "type": "long"
-	  }, 
-	  "value": {
-	    "type": "string"
-	  },
-	  "type": {
-	    "type": "string"
-	  },
-	  "required": [ "offset", "value", "type" ]
-        } 
-      }
-    },
-    "from": {
-      "type": "string"
+    "abi": {
+      "type": "object"
     }
   },
-  "required": [ "url", "constructor" ]
+  "required": [ "address", "alias", "abi" ]
 }
