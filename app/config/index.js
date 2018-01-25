@@ -27,7 +27,7 @@ module.exports = {
   },
 
   ethereum: {
-    url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://localhost:8547'
+    url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://localhost:8545'
   }
 };
 

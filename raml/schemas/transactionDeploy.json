@@ -19,6 +19,6 @@
       "type": "string"
     }
   },
-  "required": [ "method", "params", "from", "urlBase" ]
+  "required": [ "method", "from", "urlBase" ]
 }
 

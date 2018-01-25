@@ -22,11 +22,13 @@ exports.retrieveContractAbi = (contractData) => {
 exports.adaptContractInvoke = (contractData) => {
   LOG.debug('Adapting contract invoke');
 
-  contractData.contract = ETH.web3.eth.Contract(contractData.abi, contractData.to);
+  contractData.contract = new ETH.web3.eth.Contract(contractData.abi, contractData.request.to);
 
   return new Promise((resolve, reject) => {
     LOG.debug('Invoking contract');
-    contractData.contract[contractData.request.method](contractData.request.params)
+    console.log(contractData.request.method);
+    console.log(contractData.abi);
+    contractData.contract.methods[contractData.request.method]()
       .send({ from: contractData.request.from }, (error, result) => {
         LOG.debug('Adapt invoke callback');
         if(error) {

@@ -16,6 +16,6 @@
       "type": "string"
     }
   },
-  "required": [ "method", "params", "from" ]
+  "required": [ "method", "from" ]
 }
 
