@@ -26,19 +26,20 @@ exports.adaptContractInvoke = (contractData) => {
 
   return new Promise((resolve, reject) => {
     LOG.debug('Invoking contract');
-    console.log(contractData.request.method);
-    console.log(contractData.abi);
-    contractData.contract.methods[contractData.request.method]()
-      .send({ from: contractData.request.from }, (error, result) => {
-        LOG.debug('Adapt invoke callback');
-        if(error) {
-          LOG.debug('Error sending contract invocation');
-          reject(error);
-        } else {
-          LOG.debug('Contract invocation successfully adapted');
-          resolve(result);
-        }
-      })
-      .on('error', function(error){ console.log(error); })
+
+    contractData.contract.methods[contractData.request.method].apply(null, contractData.request.params)
+      .send({from: contractData.request.from}, (error, result) => {
+      LOG.debug('Adapt invoke callback');
+      if (error) {
+        LOG.debug('Error sending contract invocation');
+        reject(error);
+      } else {
+        LOG.debug('Contract invocation successfully adapted');
+        resolve(result);
+      }
+    })
+      .on('error', function (error) {
+      console.log(error);
+    })
   });
 };
