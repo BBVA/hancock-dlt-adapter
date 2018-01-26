@@ -45,8 +45,8 @@ function adaptContractDeploy(contractData) {
   contractData.contract = new ETH.web3.eth.Contract(contractData.abi);
   return new Promise((resolve, reject) => {
     LOG.debug('Deploying contract');
-    contractData.contract
-      .deploy({ data: '0x'+contractData.bin, arguments: contractData.request.params})
+
+    contractData.contract.deploy({ data: '0x'+contractData.bin, arguments: contractData.request.params})
       .send({ from: contractData.request.from }, (error, result) => {
         LOG.debug('Adapt deploy callback');
         if(error) {
