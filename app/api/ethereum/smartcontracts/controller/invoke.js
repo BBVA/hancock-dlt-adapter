@@ -54,7 +54,7 @@ exports.invokeByQuery = (request, reply) => {
           });
       } else {
         LOG.info(logData, 'Contract not found');
-        return Utils.createReply(reply, ResponsesSmartContract.bad_request);
+        return Utils.createReply(reply, ResponsesSmartContract.not_found);
       }
     })
     .catch((error) => {
