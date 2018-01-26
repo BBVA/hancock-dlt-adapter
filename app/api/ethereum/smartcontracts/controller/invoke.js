@@ -10,11 +10,12 @@ exports.invoke = (request, reply) => {
   LOG.debug(LOG.logData(request), 'contract invoke ');
   let contractData = {};
   contractData.request = request.body;
+  contractData.to = request.body.to;
   SmartContract.retrieveContractAbi(contractData)
     .then(SmartContract.adaptContractInvoke)
     .then((data) => {
       LOG.debug('Returning HTTP response');
-      return Utils.createReply(reply, ResponsesSmartContract.smartcontract_ok, data);
+      return Utils.createReply(reply, ResponsesSmartContract.success, data);
     })
     .catch((err) => {
       LOG.debug('Error while processing HTTP request');
@@ -45,7 +46,7 @@ exports.invokeByQuery = (request, reply) => {
         SmartContract.adaptContractInvoke(contractData)
           .then((data) => {
             LOG.info(logData, 'Contract invoke adapted. Returning success response');
-            return Utils.createReply(reply, ResponsesSmartContract.smartcontract_ok, data);
+            return Utils.createReply(reply, ResponsesSmartContract.success, data);
           })
           .catch((error) => {
             LOG.error(logData, `Error while adapting contract invoke: ${error}`);

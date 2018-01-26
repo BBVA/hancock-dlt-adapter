@@ -7,7 +7,7 @@ exports.register = (request, reply) => {
   const db = DB.get();
   const collection = db.collection(CONF.mongo.collections.smartContracts);
   
-  collection.findOne({alias: request.body.alias})
+  collection.findOne({$or: [{alias: request.body.alias}, {address: request.body.address}]})
     .then((result) => {
       if (!result) {
         collection.insertOne(request.body)

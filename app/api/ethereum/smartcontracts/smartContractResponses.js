@@ -28,7 +28,7 @@ module.exports = {
     message: 'Smart Contract - Transaction OK'
   },
   
-  smartcontract_ok: {
+  smartcontract_accepted: {
     statusCode: 202,
     code: responses.ndbsmartcontract202.code,
     message: 'Smart Contracts - Operation successfully requested. Consensus pending'
@@ -55,7 +55,7 @@ module.exports = {
   conflict: {
     statusCode: 409,
     code: responses.ndbsmartcontract409.code,
-    message: 'Smart Contract - Alias in use'
+    message: 'Smart Contract - Alias or address in use'
   },
   
   internal_server_error: {

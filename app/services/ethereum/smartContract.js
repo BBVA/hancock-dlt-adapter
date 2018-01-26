@@ -22,7 +22,7 @@ exports.retrieveContractAbi = (contractData) => {
 exports.adaptContractInvoke = (contractData) => {
   LOG.debug('Adapting contract invoke');
 
-  contractData.contract = new ETH.web3.eth.Contract(contractData.abi, contractData.request.to);
+  contractData.contract = new ETH.web3.eth.Contract(contractData.abi, contractData.to);
 
   return new Promise((resolve, reject) => {
     LOG.debug('Invoking contract');

@@ -9,8 +9,7 @@
     "params": {
       "type": "array",
       "items": {
-        "type": "string",
-        "value": "string"
+        "type": "string"
       }
     },
     "from": {

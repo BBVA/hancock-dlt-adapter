@@ -10,7 +10,7 @@
       "type": "string"
     },
     "abi": {
-      "type": "object"
+      "type": "array"
     }
   },
   "required": [ "address", "alias", "abi" ]

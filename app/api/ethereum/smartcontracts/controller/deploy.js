@@ -14,7 +14,7 @@ exports.deploy = (request, reply) => {
     .then(adaptContractDeploy)     // Actually creates the contract in the Ethereum blockchain
     .then((data) => {
       LOG.debug('Returning HTTP response');
-      return Utils.createReply(reply, ResponsesSmartContract.smartcontract_ok, data);
+      return Utils.createReply(reply, ResponsesSmartContract.success, data);
     })
     .catch((err) => {
       LOG.debug('Error while processing HTTP request');
