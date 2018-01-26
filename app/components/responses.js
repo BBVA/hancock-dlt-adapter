@@ -13,6 +13,11 @@ module.exports = {
     description: 'Created'
   },
   
+  ndbgeneral204: {
+    code: 'NDBGEN204',
+    description: 'No-Content'
+  },
+  
   ndbgeneral400: {
     code: 'NDBGEN400',
     description: 'Bad request'

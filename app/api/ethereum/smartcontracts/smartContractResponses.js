@@ -34,6 +34,12 @@ module.exports = {
     message: 'Smart Contracts - Operation successfully requested. Consensus pending'
   },
   
+  no_content: {
+    statusCode: 204,
+    code: responses.ndbgeneral204.code,
+    message: responses.ndbgeneral204.description
+  },
+  
   bad_request: {
     statusCode: 400,
     code: responses.ndbgeneral400.code,

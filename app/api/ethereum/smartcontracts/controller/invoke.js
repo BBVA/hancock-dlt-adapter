@@ -26,7 +26,7 @@ exports.invoke = (request, reply) => {
 
 exports.invokeByQuery = (request, reply) => {
   const logData = LOG.logData(request);
-  LOG.info(logData, `contract invoke by query: ${request.params.query}`);
+  LOG.info(logData, `Contract invoke by query: ${request.params.query}`);
   
   let addressPattern = new RegExp(/^0x[a-fA-F0-9]{40}$/i);
   let query = addressPattern.test(request.params.query) ? {address: request.params.query} : {alias: request.params.query};

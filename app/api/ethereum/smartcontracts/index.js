@@ -11,12 +11,14 @@ const TransactionInvokeParamModel = require(`${CONF.raml}/schemas/ethereum/smart
 const smartContractDeploy = require('./controller/deploy');
 const smartContractInvoke = require('./controller/invoke');
 const smartContractRegister = require('./controller/register');
+const smartContractDelete = require('./controller/delete');
 
 
 router.route('/deploy').post(validate({body: TransactionDeployModel}), smartContractDeploy.deploy);
 router.route('/invoke').post(validate({body: TransactionInvokeModel}), smartContractInvoke.invoke);
 router.route('/register').post(validate({body: RegisterSmartContractModel}), smartContractRegister.register);
 router.route('/:query').post(validate({body: TransactionInvokeParamModel}), smartContractInvoke.invokeByQuery);
+router.route('/:query').delete(smartContractDelete.deleteByQuery);
 
 //router.get('/:name', contract.contractInfo(request, reply, next));
 
