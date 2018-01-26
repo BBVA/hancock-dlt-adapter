@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
-/*DB.connect()
+DB.connect()
   .then(() => {
     LOG.info('MongoDB connection open');
   })
@@ -49,7 +49,7 @@ process.on('SIGINT', () => {
       });
   }
 });
-*/
+
 exports.server = app.listen(CONF.port, () => {
   LOG.info('APP.INIT: App up, listening on ' + CONF.port);
 });

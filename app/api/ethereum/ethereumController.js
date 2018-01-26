@@ -1,6 +1,6 @@
 'use strict';
 
-const GeneralResponses       = require('../../components/responses')
+const GeneralResponses       = require('../../components/responses');
 const ResponsesBlock  = require('./ethereumResponses');
 const Errors          = require('../../components/errors');
 const Utils           = require('../../components/utils');

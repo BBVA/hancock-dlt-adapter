@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "description": "Transactions schema",
+  "description": "Transaction Invoke By Param schema",
   "type": "object",
   "properties": {
     "method": {
@@ -9,13 +9,14 @@
     "params": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "value": "string"
       }
     },
     "from": {
       "type": "string"
     }
   },
-  "required": [ "method", "params", "from" ]
+  "required": [ "method", "from" ]
 }
 

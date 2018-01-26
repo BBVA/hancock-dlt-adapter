@@ -9,10 +9,10 @@ documentation:
 mediaType: application/json
 
 types:
-  SmartContract: !include schemas/smartContract.json
-  Transaction: !include schemas/transaction.json
-  TransactionInvoke: !include schemas/transactionInvoke.json
-  TransactionDeploy: !include schemas/transactionDeploy.json
+  SmartContract: !include schemas/ethereum/smartContracts/register.json
+  Transaction: !include schemas/ethereum/smartContracts/transaction.json
+  TransactionInvoke: !include schemas/ethereum/smartContracts/transactionInvoke.json
+  TransactionDeploy: !include schemas/ethereum/smartContracts/transactionDeploy.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
