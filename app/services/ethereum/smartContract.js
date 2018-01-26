@@ -22,21 +22,24 @@ exports.retrieveContractAbi = (contractData) => {
 exports.adaptContractInvoke = (contractData) => {
   LOG.debug('Adapting contract invoke');
 
-  contractData.contract = ETH.web3.eth.Contract(contractData.abi, contractData.to);
+  contractData.contract = new ETH.web3.eth.Contract(contractData.abi, contractData.request.to);
 
   return new Promise((resolve, reject) => {
     LOG.debug('Invoking contract');
-    contractData.contract[contractData.request.method](contractData.request.params)
-      .send({ from: contractData.request.from }, (error, result) => {
-        LOG.debug('Adapt invoke callback');
-        if(error) {
-          LOG.debug('Error sending contract invocation');
-          reject(error);
-        } else {
-          LOG.debug('Contract invocation successfully adapted');
-          resolve(result);
-        }
-      })
-      .on('error', function(error){ console.log(error); })
+
+    contractData.contract.methods[contractData.request.method].apply(null, contractData.request.params)
+      .send({from: contractData.request.from}, (error, result) => {
+      LOG.debug('Adapt invoke callback');
+      if (error) {
+        LOG.debug('Error sending contract invocation');
+        reject(error);
+      } else {
+        LOG.debug('Contract invocation successfully adapted');
+        resolve(result);
+      }
+    })
+      .on('error', function (error) {
+      console.log(error);
+    })
   });
 };

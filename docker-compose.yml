@@ -2,7 +2,7 @@ version: "2"
 services: 
   ganache-cli: 
     container_name: da-ganache-cli
-    image: dev.docker.kickstartteam.es:5000/kst/lab/ganache-cli:0.1.0
+    image: dev.docker.kickstartteam.es:5000/kst/shuttle/ganache-cli:0.1.0
     ports: 
       - "8545:8545"
     environment:

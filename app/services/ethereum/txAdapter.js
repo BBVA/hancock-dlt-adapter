@@ -83,7 +83,9 @@ class TxAdapter extends Subprovider {
             end(error);
           });
         return;
-
+      case 'eth_subscribe':
+        LOG.debug('Intercepted Event Subscription');
+        return;
       default:
 
         next();
