@@ -1,4 +1,4 @@
-blockchainhubNodePipeline{
+nodePipeline{
 // ---- DEVELOP ----
       if (env.BRANCH_NAME == 'develop') {
 
