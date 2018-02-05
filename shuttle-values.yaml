@@ -1,0 +1,19 @@
+port: 3000
+healthcheck:
+  type: tcp
+
+resources:
+  request:
+    cpu: 300m
+    memory: 128Mi
+  limit:
+    cpu: 500m
+    memory: 300Mi
+
+forward_logs: true
+monitoring: true
+# slack_receiver: shuttle
+# slack_channel: alerts
+
+#externalDns: dlt-adapter # https://dlt-adapter-blockchainhub-develop.kickstartteam.es
+#SSL: true

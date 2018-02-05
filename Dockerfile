@@ -1,3 +1,10 @@
-FROM dev.docker.kickstartteam.es:5000/kst/nodejs:onbuild-7.4.0
+FROM node:7.4.0
 
-RUN rm .npmrc
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+RUN npm install --production
+
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "start"]
