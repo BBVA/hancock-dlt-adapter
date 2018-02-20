@@ -20,6 +20,6 @@ nodePipeline{
         docker_shuttle_stage()
 
         // Deploy
-        deploy_shuttle_stage(project: "blockchainhub", environment: "develop")
+        deploy_shuttle_stage(project: "blockchainhub", environment: "develop", askForConfirmation: false)
       }
 }

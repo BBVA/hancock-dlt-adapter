@@ -39,14 +39,10 @@
     "isparta": "^4.0.0",
     "jshint": "2.x"
   },
-  "publishConfig": {
-    "registry": "http://dev.npm.kickstartteam.es"
-  },
   "engines": {
     "node": ">=0.12.0"
   },
   "scripts": {
     "start": "node index.js"
-  },
-  "private": true
+  }
 }
