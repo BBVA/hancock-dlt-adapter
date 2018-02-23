@@ -36,6 +36,7 @@
     "gulp-nodemon": "^2.2.1",
     "gulp-raml2html": "^0.3.0",
     "gulp-sonar": "^3.0.0",
+    "nodemon": "1.14.12",    
     "isparta": "^4.0.0",
     "jshint": "2.x"
   },
