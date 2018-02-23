@@ -130,7 +130,7 @@ class TxAdapter extends Subprovider {
         if (result.nonce) res.nonce = result.nonce.result;
         if (result.gas) res.gas = result.gas;
 
-        resolve(Object.assign(res, txParams));
+        resolve(Object.assign(txParams, res));
       });
     });
   };

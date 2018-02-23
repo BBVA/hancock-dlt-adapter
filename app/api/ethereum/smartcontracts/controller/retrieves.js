@@ -4,7 +4,7 @@ const ResponsesSmartContract = require('../smartContractResponses');
 const Utils = require(`${CONF.components}/utils`);
 
 exports.find = (request, reply) => {
-  const logData = LOG.logData(request);
+  const logData = LOG.info(request);
   
   const db = DB.get();
   const collection = db.collection(CONF.mongo.collections.smartContracts);
@@ -21,7 +21,7 @@ exports.find = (request, reply) => {
 };
 
 exports.findOne = (request, reply) => {
-  const logData = LOG.logData(request);
+  const logData = LOG.info(request);
   
   const db = DB.get();
   const collection = db.collection(CONF.mongo.collections.smartContracts);

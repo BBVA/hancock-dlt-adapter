@@ -31,7 +31,8 @@ module.exports = {
   },
 
   mongo: {
-    url: process.env.DLT_ADAPTER_MONGO_URI || 'mongodb://localhost:27017/hancock',
+    url: process.env.DLT_ADAPTER_MONGO_URI || 'mongodb://mongo:27017/hancock',
+    database: process.env.DLT_ADAPTER_MONGO_DATABASE || 'hancock',
     collections: {
       smartContracts: process.env.DLT_ADAPTER_COLLECTION_SMARTCONTRACTS || 'smartcontracts'
     }
@@ -42,7 +43,7 @@ module.exports = {
   },
 
   ethereum: {
-    url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://localhost:8545'
+    url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://ganache:8545'
   }
 };
 

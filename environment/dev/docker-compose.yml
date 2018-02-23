@@ -1,0 +1,48 @@
+version: '2.1'
+services:
+  hancock_dlt_adapter:
+    build:
+      context: ../..
+      dockerfile: ./environment/dev/Dockerfile
+    image: dev/hancock_dlt_adapter
+    container_name: dev/hancock_dlt_adapter
+    volumes:
+      - ../..:/code
+      - './scripts/:/code/scripts/'
+    ports:
+      - "3017:3000"
+      - "9229:9229"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: 'bitnami/mongodb:latest'
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017/test --quiet"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=password
+    volumes:
+      - 'hancock_dlt_mongodb_data:/bitnami'
+
+  mongo-shell:
+    image: 'bitnami/mongodb:latest'
+    entrypoint: 'mongo --host mongo -u root -p password admin'
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - './scripts/:/scripts/'
+
+volumes:
+  hancock_dlt_mongodb_data:
+
+# networks:
+#   default:
+#     external:
+#       name: dev_eth_local_net

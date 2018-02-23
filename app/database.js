@@ -10,12 +10,13 @@ class Database {
     return this;
   };
 
-  connect() {
+  connect(database) {
     return new Promise((resolve, reject) => {
+    console.log('mongo url =>', this.uri);      
       MongoClient.connect(this.uri, (err, db) => {
         if(err) reject(err);
-        this.db = db;
-        resolve(this);
+        this.db = db.db(database);
+        return resolve(this);
       });
     });
   };

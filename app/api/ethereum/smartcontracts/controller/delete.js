@@ -4,7 +4,7 @@ const ResponsesSmartContract = require('../smartContractResponses');
 const Utils = require(`${CONF.components}/utils`);
 
 exports.deleteByQuery = (request, reply) => {
-  const logData = LOG.logData(request);
+  const logData = LOG.info(request);
   LOG.info(logData, `De-registering contract by query: ${request.params.query}`);
   
   const db = DB.get();

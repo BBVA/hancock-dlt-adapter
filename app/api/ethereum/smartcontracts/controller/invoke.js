@@ -7,7 +7,7 @@ const SmartContract = require(`${CONF.services}/ethereum/smartContract`);
 const DEFAULT_GAS = 0x47E7C3;
 
 exports.invoke = (request, reply) => {
-  LOG.debug(LOG.logData(request), 'contract invoke ');
+  LOG.debug(LOG.info(request), 'contract invoke ');
   let contractData = {};
   contractData.request = request.body;
   contractData.to = request.body.to;
@@ -25,7 +25,7 @@ exports.invoke = (request, reply) => {
 };
 
 exports.invokeByQuery = (request, reply) => {
-  const logData = LOG.logData(request);
+  const logData = LOG.info(request);
   LOG.info(logData, `Contract invoke by query: ${request.params.query}`);
   
   let addressPattern = new RegExp(/^0x[a-fA-F0-9]{40}$/i);
