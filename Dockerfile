@@ -1,10 +1,21 @@
-FROM node:7.4.0
+FROM node:8.9.3
+LABEL maintainer "Angel Manzano Alcaraz <angel.manzano.contractor@bbva.com>"
 
-RUN mkdir -p /usr/src/app
+# Move to build dir
 WORKDIR /usr/src/app
-COPY . /usr/src/app
-RUN npm install --production
 
+# Install app dependencies
+ADD package*.json ./
+RUN yarn install --production
+RUN yarn cache clean --force
+
+ENV NODE_ENV production
+
+# Build the app
+COPY . .
+# RUN yarn run build:ts
+
+EXPOSE 80
 EXPOSE 3000
-
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT [ "./environment/entry.sh" ]
+CMD ["prod"]

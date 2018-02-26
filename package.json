@@ -17,10 +17,10 @@
     "ethereumjs-util": "latest",
     "express": "^4.16.2",
     "express-jsonschema": "^1.1.6",
-    "genesis-lib-log": "^2.0.1",
     "gulp": "^3.9.1",
     "method-override": "^2.3.10",
     "mongodb": "^2.2.33",
+    "pino": "^4.11.0",
     "request": "^2.83.0",
     "semaphore": "latest",
     "solc": "^0.4.18",
@@ -36,6 +36,7 @@
     "gulp-nodemon": "^2.2.1",
     "gulp-raml2html": "^0.3.0",
     "gulp-sonar": "^3.0.0",
+    "nodemon": "1.14.12",    
     "isparta": "^4.0.0",
     "jshint": "2.x"
   },
@@ -43,6 +44,9 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "npm run serve:dev",
+    "serve:dev": "nodemon --inspect=0.0.0.0 index.js",
+    "serve:prod": "node index.js",    
+    "test": "echo \"Error: no test specified\" && exit 0"
   }
 }

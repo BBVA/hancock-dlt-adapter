@@ -11,7 +11,9 @@ const {Ethereum} = require('./app/ethereum');
 const {Database} = require('./app/database');
 
 global.CONF = require('./app/config');
-global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
+// global.LOG  = require('genesis-lib-log').init(CONF.host, CONF.application, CONF.logger.logLevel);
+global.LOG = require('./app/utils/logger').init(CONF.host, CONF.application, CONF.logger.logLevel);
+
 global.DB = new Database(CONF.mongo.url);
 global.ETH = new Ethereum();
 
@@ -26,7 +28,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
-DB.connect()
+DB.connect(CONF.mongo.database)
   .then(() => {
     LOG.info('MongoDB connection open');
   })

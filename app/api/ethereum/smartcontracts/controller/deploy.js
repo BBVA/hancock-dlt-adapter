@@ -6,7 +6,7 @@ const Utils                  = require('../../../../components/utils');
 const SmartContract          = require('../../../../services/ethereum/smartContract');
 
 exports.deploy = (request, reply) => {
-  LOG.debug( LOG.logData(request), 'contract deploy');
+  LOG.debug( LOG.info(request), 'contract deploy');
   let contractData = {};
   contractData.request = request.body;
   retrieveContractBinary(contractData) // Read the solidity file
