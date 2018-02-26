@@ -1,7 +1,7 @@
 #%RAML 1.0
 title: Arrowhead - Blockchain Adapter
 version: v1
-baseUri: https://api-archer.kickstartteam.es
+baseUri: https://kong-blockchainhub-develop.kickstartteam.es/{version}/dlt-adapter
 documentation:
  - title: Summary
    content: !include README.md
@@ -9,83 +9,107 @@ documentation:
 mediaType: application/json
 
 types:
-  SmartContract: !include schemas/ethereum/smartContracts/register.json
-  TransactionInvokeByParam: !include schemas/ethereum/smartContracts/transactionInvokeByParam.json
-  TransactionInvoke: !include schemas/ethereum/smartContracts/transactionInvoke.json
-  TransactionDeploy: !include schemas/ethereum/smartContracts/transactionDeploy.json
+  SmartContractRequest: !include schemas/requests/ethereum/smartContracts/register.json
+  TransactionInvokeByParamRequest: !include schemas/requests/ethereum/smartContracts/transactionInvokeByParam.json
+  TransactionInvokeRequest: !include schemas/requests/ethereum/smartContracts/transactionInvoke.json
+  TransactionDeployRequest: !include schemas/requests/ethereum/smartContracts/transactionDeploy.json
+
+  GenericResponse: !include schemas/responses/generic.json
+  SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
+  TransactionInvokeResponse: !include schemas/responses/ethereum/smartContracts/transactionInvoke.json
+  TransactionDeployResponse: !include schemas/responses/ethereum/smartContracts/transactionDeploy.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
 
 /{dlt_type}:
+  displayName: Ethereum
+  description: API to adapt Ethereum transactions
+
   uriParameters:
     dlt_type:
       type: string
 
   /smartcontracts:
-    displayName: Smart Contract  
-
     post:
       description: Register a deployed Smart Contract
       securedBy: [ oauth_2_0 ]
       headers:
       body:
         application/json:
-          type: SmartContract
+          type: SmartContractRequest
       responses:
-        200:
+        201:
+         body:
+          type: GenericResponse
 
     /{address|alias}:
       uriParameters:
-        address:
+        address|alias:
           type: string
-
       post:
-        description: adapt transaction in the registered Smart Contract
+        description: Adapt transaction in the registered Smart Contract
         securedBy: [ oauth_2_0 ]
         headers:
         body:
           application/json:
-            type: TransactionInvokeByParam
+            type: TransactionInvokeByParamRequest
         responses:
           200:
+            body:
+              type: TransactionInvokeResponse
       get:
-        description: retrieve ABI from registered Smart Contract
+        description: Retrieve ABI from registered Smart Contract
         securedBy: [ oauth_2_0 ]
+        headers:
+        responses:
+          200:
+            body:
+              type: SmartContractResponse
+
     /deploy:
       post:
-        description: adapt a Smart Contract deployment transaction
+        description: Adapt a Smart Contract deployment transaction
         securedBy: [ oauth_2_0 ]
         body:
           application/json:
-            type: TransactionDeploy
+            type: TransactionDeployRequest
         responses:
           200:
+            body:
+              type: TransactionDeployResponse
+
     /invoke:
       post:
-        description: adapt a Smart Contract invocation transaction
+        description: Adapt a Smart Contract invocation transaction
         securedBy: [ oauth_2_0 ]
         body:
           application/json:
-            type: TransactionInvoke
+            type: TransactionInvokeRequest
         responses:
           200:
+            body:
+              type: TransactionInvokeResponse
+
   /transfers:
     post:
-      description: transfer dlt native cryptocurrency
+      description: Transfer dlt native cryptocurrency
+
   /notarizations:
     post:
-      description: write metadata in blockchain
+      description: Write metadata in blockchain
+
   /balance:
     get:
-      description: obtain the native cryptocurrency balance of a dlt address
+      description: Obtain the native cryptocurrency balance of a dlt address
       queryParameters:
         address:
           type: string
+
   /incentive:
     /average:
       get:
-        description: obtain the current average payed as mining incentive e.g. bitcoin fee or ethereum gas
+        description: Obtain the current average payed as mining incentive e.g. bitcoin fee or ethereum gas
         
   /receipt:
     get:

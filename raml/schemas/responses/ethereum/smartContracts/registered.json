@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Registered Smart Contract Schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string"
+    },
+    "alias": {
+      "type": "string"
+    },
+    "abi": {
+      "type": "array"
+    }
+  },
+  "required": [ "address", "alias", "abi" ]
+}
