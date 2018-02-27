@@ -4,10 +4,10 @@ const express = require('express');
 const validate = require('express-jsonschema').validate;
 const router = express.Router();
 
-const TransactionDeployModel = require(`${CONF.raml}/schemas/ethereum/smartContracts/transactionDeploy.json`);
-const TransactionInvokeModel = require(`${CONF.raml}/schemas/ethereum/smartContracts/transactionInvoke.json`);
-const RegisterSmartContractModel = require(`${CONF.raml}/schemas/ethereum/smartContracts/register.json`);
-const TransactionInvokeParamModel = require(`${CONF.raml}/schemas/ethereum/smartContracts/transactionInvokeByParam.json`);
+const TransactionDeployModel = require(`${CONF.raml}/schemas/requests/ethereum/smartContracts/transactionDeploy.json`);
+const TransactionInvokeModel = require(`${CONF.raml}/schemas/requests/ethereum/smartContracts/transactionInvoke.json`);
+const RegisterSmartContractModel = require(`${CONF.raml}/schemas/requests/ethereum/smartContracts/register.json`);
+const TransactionInvokeParamModel = require(`${CONF.raml}/schemas/requests/ethereum/smartContracts/transactionInvokeByParam.json`);
 const smartContractDeploy = require('./controller/deploy');
 const smartContractInvoke = require('./controller/invoke');
 const smartContractRegister = require('./controller/register');

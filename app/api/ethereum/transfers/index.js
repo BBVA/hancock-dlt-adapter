@@ -5,7 +5,7 @@ var validate = require('express-jsonschema').validate;
 var router = express.Router();
 
 var transaction = require('./transfersController');
-var TransactionModel = require('../../../../raml/schemas/transaction.json');
+var TransactionModel = require('../../../../raml/schemas/requests/ethereum/transfers/transaction.json');
 
 //router.route('/:address').post(validate({ body: TransactionModel}), transaction.sendTransaction);
 
