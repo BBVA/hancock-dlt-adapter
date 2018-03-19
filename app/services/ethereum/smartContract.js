@@ -2,6 +2,11 @@
 
 const request = require('request');
 const ResponsesSmartContract = require('../../api/ethereum/smartcontracts/smartContractResponses');
+const ACTIONS = {
+  SEND: 'send',
+  CALL: 'call'
+}
+const DEFAULT_ACTION = ACTIONS.SEND;
 
 exports.retrieveContractAbi = (contractData) => {
   LOG.debug('Retrieving contract ABI');
@@ -23,23 +28,72 @@ exports.adaptContractInvoke = (contractData) => {
   LOG.debug('Adapting contract invoke');
 
   contractData.contract = new ETH.web3.eth.Contract(contractData.abi, contractData.to);
+  const action = contractData.request.action || DEFAULT_ACTION;
 
   return new Promise((resolve, reject) => {
     LOG.debug('Invoking contract');
 
-    contractData.contract.methods[contractData.request.method].apply(null, contractData.request.params)
-      .send({from: contractData.request.from}, (error, result) => {
-      LOG.debug('Adapt invoke callback');
-      if (error) {
-        LOG.debug('Error sending contract invocation');
-        reject(error);
-      } else {
-        LOG.debug('Contract invocation successfully adapted');
-        resolve(result);
-      }
-    })
-      .on('error', function (error) {
-      console.log(error);
-    })
+    const contractMethod = contractData.contract.methods[contractData.request.method]
+      .apply(null, contractData.request.params);
+
+    if (action == ACTIONS.SEND) {
+
+      contractMethod[action].call(null, { from: contractData.request.from }, (error, result) => {
+        LOG.debug(`Adapt invoke (${action}) callback`);
+
+        if (error) {
+          
+          LOG.debug(`Error sending contract (${action}) invocation`);
+          reject(error);
+
+        } else {
+
+          LOG.debug(`Contract (${action}) invocation successfully adapted`);
+          resolve(result);
+
+        }
+
+      })
+        .on('error', console.log)
+
+    } else {
+
+      contractMethod[action].call(null, { from: contractData.request.from }, (error, result) => {
+        LOG.debug(`Adapt invoke (${action}) callback`);
+
+        try {
+
+          LOG.debug(`Contract (${action}) invocation successfully adapted`);
+          resolve(result);
+
+        } catch (e) {
+
+          LOG.debug(`Error sending contract (${action}) invocation`);
+          reject(error);
+
+        }
+
+      });
+
+      // contractMethod[action].call(null, { from: contractData.request.from }, (error) => {
+      //   LOG.debug(`Adapt invoke (${action}) callback`);
+
+      //   try {
+
+      //     const result = JSON.parse(error.message);
+      //     LOG.debug(`Contract (${action}) invocation successfully adapted`);
+      //     resolve(result);
+
+      //   } catch (e) {
+
+      //     LOG.debug(`Error sending contract (${action}) invocation`);
+      //     reject(error);
+
+      //   }
+
+      // });
+
+    }
+
   });
 };

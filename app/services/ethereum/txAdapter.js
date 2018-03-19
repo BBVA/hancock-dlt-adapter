@@ -71,6 +71,11 @@ class TxAdapter extends Subprovider {
             LOG.error('Error getting accounts');
           });
         return;
+      // case 'eth_call':
+      //   LOG.debug('Intercepted Ethereum Call');
+      //   let call = payload.params[0];
+      //   end(JSON.stringify(call));
+      //   return;
       case 'eth_sendTransaction':
         LOG.debug('Intercepted Ethereum Send Transaction');
         let tx = payload.params[0];
@@ -107,12 +112,12 @@ class TxAdapter extends Subprovider {
 
     if (txParams.gasPrice === undefined) {
       // console.log("need to get gasprice")
-      reqs.gasPrice = self.emitPayload.bind(self, {method: 'eth_gasPrice', params: []})
+      reqs.gasPrice = self.emitPayload.bind(self, { method: 'eth_gasPrice', params: [] })
     }
 
     if (txParams.nonce === undefined) {
       // console.log("need to get nonce")
-      reqs.nonce = self.emitPayload.bind(self, {method: 'eth_getTransactionCount', params: [address, 'pending']})
+      reqs.nonce = self.emitPayload.bind(self, { method: 'eth_getTransactionCount', params: [address, 'pending'] })
     }
 
     if (txParams.gas === undefined) {

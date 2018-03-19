@@ -6,6 +6,10 @@
     "method": {
       "type": "string"
     },
+    "action": {
+      "type": "string",
+      "enum": ["send", "call"]
+    },
     "params": {
       "type": "array",
       "items": {
