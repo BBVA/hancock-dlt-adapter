@@ -36,7 +36,7 @@ exports.invokeByQuery = (request, reply) => {
   const db = DB.get();
   const collection = db.collection(CONF.mongo.collections.smartContracts);
   
-  collection.findOne(query)
+  collection.findOne(query) 
     .then((result) => {
       if (result) {
         let contractData = {};

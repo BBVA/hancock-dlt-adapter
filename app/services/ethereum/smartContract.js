@@ -61,15 +61,15 @@ exports.adaptContractInvoke = (contractData) => {
       contractMethod[action].call(null, { from: contractData.request.from }, (error, result) => {
         LOG.debug(`Adapt invoke (${action}) callback`);
 
-        try {
-
-          LOG.debug(`Contract (${action}) invocation successfully adapted`);
-          resolve(result);
-
-        } catch (e) {
-
-          LOG.debug(`Error sending contract (${action}) invocation`);
+        if (error) {
+          
+          LOG.debug(`Error contract (${action}) invocation`);
           reject(error);
+
+        } else {
+
+          LOG.debug(`Contract (${action}) invocation success`);
+          resolve(result);
 
         }
 

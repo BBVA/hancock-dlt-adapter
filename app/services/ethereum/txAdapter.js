@@ -135,6 +135,9 @@ class TxAdapter extends Subprovider {
         if (result.nonce) res.nonce = result.nonce.result;
         if (result.gas) res.gas = result.gas;
 
+        // TODO: Remove that and do a research about gas = undefined
+        // if(!res.gas) res.gas = '0x5208';
+
         resolve(Object.assign(txParams, res));
       });
     });
