@@ -8,6 +8,7 @@ const Web3 = require('web3');
 class Ethereum {
 
   constructor(){
+    
     this.engine = new ProviderEngine();
     this.web3 = new Web3(this.engine);
 
@@ -26,6 +27,7 @@ class Ethereum {
 
     // start polling for blocks
     this.engine.start();
+
   };
 }
 

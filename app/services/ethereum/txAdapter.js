@@ -63,7 +63,7 @@ class TxAdapter extends Subprovider {
   handleRequest(payload, next, end) {
     const self = this;
     switch (payload.method) {
-      case 'eth_accounts':
+      case 'eth_accounts': 
         LOG.debug('Intercepted Ethereum Accounts');
         self.getAccounts()
           .then(end)
@@ -71,11 +71,20 @@ class TxAdapter extends Subprovider {
             LOG.error('Error getting accounts');
           });
         return;
-      // case 'eth_call':
-      //   LOG.debug('Intercepted Ethereum Call');
-      //   let call = payload.params[0];
-      //   end(JSON.stringify(call));
-      //   return;
+      case 'eth_call':
+        LOG.debug('Intercepted Ethereum Call');
+        const call = payload.params[0];
+        self.fillInTxExtras(call)
+        .then((rawTx) => {
+          payload.params[0] = rawTx;
+          next(null, payload);
+        })
+        .catch((error) => {
+          LOG.error('Error handling call transaction');
+          end(error);
+        });
+        // end(JSON.stringify(call));
+        return;
       case 'eth_sendTransaction':
         LOG.debug('Intercepted Ethereum Send Transaction');
         let tx = payload.params[0];
