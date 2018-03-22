@@ -2,9 +2,10 @@
 
 const ResponsesSmartContract = require('../smartContractResponses');
 const Utils = require(`${CONF.components}/utils`);
-const logData = LOG.info(request);
 
 exports.register = async (request, reply) => {
+
+  const logData = LOG.info(request);
 
   function onError(error) {
     LOG.error(logData, `Smart contract ${request.body.alias} cannot be registered: ${error}`);
@@ -27,8 +28,8 @@ exports.register = async (request, reply) => {
 
       if (aliasResult) {
 
-        const numVersions = await db.smartcontracts.count({ alias: { $regex: `^${alias}@v` } });
-        const newAlias = `${alias}@v${numVersions + 1}`;
+        const numVersions = await collection.count({ alias: { $regex: `^${alias}@` } });
+        const newAlias = `${alias}@${numVersions + 1}`;
 
         await collection.update({ alias }, { $set: { alias: newAlias } });
 
@@ -36,7 +37,7 @@ exports.register = async (request, reply) => {
 
       const insert = await collection.insertOne(request.body);
 
-      if (insert && insert.ok) {
+      if (insert && insert.result.ok) {
 
         LOG.info(logData, `Smart contract registered as ${request.body.alias}`);
         return Utils.createReply(reply, ResponsesSmartContract.created);
@@ -51,7 +52,7 @@ exports.register = async (request, reply) => {
 
   } catch (error) {
 
-    onError(error);
+    return onError(error);
 
   }
 
