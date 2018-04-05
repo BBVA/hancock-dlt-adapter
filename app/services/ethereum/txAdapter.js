@@ -63,13 +63,27 @@ class TxAdapter extends Subprovider {
   handleRequest(payload, next, end) {
     const self = this;
     switch (payload.method) {
-      case 'eth_accounts':
+      case 'eth_accounts': 
         LOG.debug('Intercepted Ethereum Accounts');
         self.getAccounts()
           .then(end)
           .catch((error) => {
             LOG.error('Error getting accounts');
           });
+        return;
+      case 'eth_call':
+        LOG.debug('Intercepted Ethereum Call');
+        const call = payload.params[0];
+        self.fillInTxExtras(call)
+        .then((rawTx) => {
+          payload.params[0] = rawTx;
+          next(null, payload);
+        })
+        .catch((error) => {
+          LOG.error('Error handling call transaction');
+          end(error);
+        });
+        // end(JSON.stringify(call));
         return;
       case 'eth_sendTransaction':
         LOG.debug('Intercepted Ethereum Send Transaction');
@@ -107,12 +121,12 @@ class TxAdapter extends Subprovider {
 
     if (txParams.gasPrice === undefined) {
       // console.log("need to get gasprice")
-      reqs.gasPrice = self.emitPayload.bind(self, {method: 'eth_gasPrice', params: []})
+      reqs.gasPrice = self.emitPayload.bind(self, { method: 'eth_gasPrice', params: [] })
     }
 
     if (txParams.nonce === undefined) {
       // console.log("need to get nonce")
-      reqs.nonce = self.emitPayload.bind(self, {method: 'eth_getTransactionCount', params: [address, 'pending']})
+      reqs.nonce = self.emitPayload.bind(self, { method: 'eth_getTransactionCount', params: [address, 'pending'] })
     }
 
     if (txParams.gas === undefined) {
@@ -129,6 +143,9 @@ class TxAdapter extends Subprovider {
         if (result.gasPrice) res.gasPrice = result.gasPrice.result;
         if (result.nonce) res.nonce = result.nonce.result;
         if (result.gas) res.gas = result.gas;
+
+        // TODO: Remove that and do a research about gas = undefined
+        // if(!res.gas) res.gas = '0x5208';
 
         resolve(Object.assign(txParams, res));
       });

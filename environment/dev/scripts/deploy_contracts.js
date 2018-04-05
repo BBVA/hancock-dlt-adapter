@@ -12,8 +12,8 @@ web3.eth
 
     console.log('accounts => \n', accounts);
 
-    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/Token.abi', 'utf8'));
-    const bytecode = '0x' + fs.readFileSync(__dirname + '/contracts/Token.bin', 'utf8');
+    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/EIP20.abi', 'utf8'));
+    const bytecode = '0x' + fs.readFileSync(__dirname + '/contracts/EIP20.bin', 'utf8');
 
     var contract = new web3.eth.Contract(abi);
     const coinbase = accounts[0];
