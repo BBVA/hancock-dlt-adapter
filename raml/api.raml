@@ -100,11 +100,9 @@ securitySchemes:
       description: Write metadata in blockchain
 
   /balance:
-    get:
-      description: Obtain the native cryptocurrency balance of a dlt address
-      queryParameters:
-        address:
-          type: string
+    /{address}:
+      get:
+        description: Obtain the native cryptocurrency balance of a dlt address
 
   /incentive:
     /average:
