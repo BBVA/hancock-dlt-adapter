@@ -19,7 +19,7 @@ module.exports = {
   ethereum_ok: {
     statusCode: 202,
     code: responses.ndbsmartcontract202.code,
-    message: 'Ethereum - Operation successfully requested. Consensus pending'
+    message: 'Ethereum - Operation successfully requested'
   },
 
 
