@@ -65,3 +65,7 @@ exports.randomAccountNum = function (length) {
   
   return text;
 };
+
+exports.strToHex = function (str){
+  return '0x' + Buffer.from(str, 'utf8').toString('hex');
+}
