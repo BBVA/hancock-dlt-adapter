@@ -35,6 +35,9 @@
           },
           "value": {
             "type": "string"
+          },
+          "data": {
+            "type": "string"
           }
         }
       }

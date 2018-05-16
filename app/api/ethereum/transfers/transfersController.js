@@ -36,16 +36,13 @@ var DEFAULT_GAS = 0x47E7C3;
 // };
 
 exports.sendTransaction = function(request, reply, next){
-  let transactionData = {};
-  transactionData.from = request.body.from;
-  transactionData.to = request.body.to;
-  transactionData.value = request.body.value;
-  new ETH.web3.eth.sendTransaction(transactionData, function(err, result) {
+  if(request.body.data)
+    request.body.data = Utils.strToHex(request.body.data);
+  new ETH.web3.eth.sendTransaction(request.body, function(err, result) {
     if(err) {
       console.log("Error adapting send transaction.");
       return Utils.createReply(reply, ResponsesTransaction.ethereum_error);
     } else {
-      console.log(result);
       return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, result);
     }  
   })

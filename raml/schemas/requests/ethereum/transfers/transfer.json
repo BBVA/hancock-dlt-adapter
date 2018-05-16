@@ -11,6 +11,9 @@
       },
       "value": {
         "type": "string"
+      },
+      "data": {
+        "type": "string"
       }
     },
     "required": [ "from", "to", "value" ]
