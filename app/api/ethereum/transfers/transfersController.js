@@ -10,30 +10,46 @@ var path            = require('path');
 
 var DEFAULT_GAS = 0x47E7C3;
 
-exports.gasPrice = function(request, reply, next) {
-  WEB3.eth.getGasPrice(function(err, result) {
+// exports.gasPrice = function(request, reply, next) {
+//   WEB3.eth.getGasPrice(function(err, result) {
+//     if(err) {
+//       console.log("Error getting gas price.");
+//       return Utils.createReply(reply, ResponsesTransaction.transaction_error);
+//     } else {
+//       return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { gasPrice: result});
+//     }  
+//   })
+
+// };
+
+// exports.getTransaction = function(request, reply, next) {
+//   // XXX @todo parse querystring data!!
+//   WEB3.eth.getTransaction(request.params.txhash, function(err, result) {
+//     if(err) {
+//       console.log("Error getting transaction.");
+//       return Utils.createReply(reply, ResponsesTransaction.transaction_error);
+//     } else {
+//       return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { transaction: result});
+//     }  
+//   })
+
+// };
+
+exports.sendTransaction = function(request, reply, next){
+  let transactionData = {};
+  transactionData.from = request.body.from;
+  transactionData.to = request.body.to;
+  transactionData.value = request.body.value;
+  new ETH.web3.eth.sendTransaction(transactionData, function(err, result) {
     if(err) {
-      console.log("Error getting gas price.");
-      return Utils.createReply(reply, ResponsesTransaction.transaction_error);
+      console.log("Error adapting send transaction.");
+      return Utils.createReply(reply, ResponsesTransaction.ethereum_error);
     } else {
-      return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { gasPrice: result});
+      console.log(result);
+      return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, result);
     }  
   })
-
-};
-
-exports.getTransaction = function(request, reply, next) {
-  // XXX @todo parse querystring data!!
-  WEB3.eth.getTransaction(request.params.txhash, function(err, result) {
-    if(err) {
-      console.log("Error getting transaction.");
-      return Utils.createReply(reply, ResponsesTransaction.transaction_error);
-    } else {
-      return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, { transaction: result});
-    }  
-  })
-
-};
+}
 
 /*exports.getTransactionFromBlock = function(request, reply, next) {
   var web3 = Utils.getWeb3();

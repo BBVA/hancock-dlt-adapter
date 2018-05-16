@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "description": "Transfer schema",
+    "type": "object",
+    "properties": {
+      "from": {
+        "type": "string"
+      },
+      "to": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [ "from", "to", "value" ]
+  }
+  
+  

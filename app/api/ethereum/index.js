@@ -5,6 +5,7 @@ const router = express.Router();
 const ethereum = require('./ethereumController');
 
 router.use('/smartcontracts', require('./smartcontracts'));
+router.use('/transfers', require('./transfers'));
 router.route('/balance/:address').get(ethereum.getBalance);
 router.route('/incentives').get(ethereum.getIncentive);
 router.route('/receipts').get(ethereum.getReceipt);
