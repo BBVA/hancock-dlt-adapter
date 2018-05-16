@@ -18,6 +18,7 @@ types:
   SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
   TransactionInvokeResponse: !include schemas/responses/ethereum/smartContracts/transactionInvoke.json
   TransactionDeployResponse: !include schemas/responses/ethereum/smartContracts/transactionDeploy.json
+  GetBalanceResponse: !include schemas/responses/ethereum/getBalance.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
@@ -100,11 +101,13 @@ securitySchemes:
       description: Write metadata in blockchain
 
   /balance:
-    get:
-      description: Obtain the native cryptocurrency balance of a dlt address
-      queryParameters:
-        address:
-          type: string
+    /{address}:
+      get:
+        description: Obtain the native cryptocurrency balance of a dlt address
+        responses:
+          200:
+            body:
+              type: GetBalanceResponse
 
   /incentive:
     /average:
