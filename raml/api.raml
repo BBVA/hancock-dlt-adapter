@@ -13,11 +13,13 @@ types:
   TransactionInvokeByParamRequest: !include schemas/requests/ethereum/smartContracts/transactionInvokeByParam.json
   TransactionInvokeRequest: !include schemas/requests/ethereum/smartContracts/transactionInvoke.json
   TransactionDeployRequest: !include schemas/requests/ethereum/smartContracts/transactionDeploy.json
+  TransferRequest: !include schemas/requests/ethereum/transfers/transfer.json
 
   GenericResponse: !include schemas/responses/generic.json
   SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
   TransactionInvokeResponse: !include schemas/responses/ethereum/smartContracts/transactionInvoke.json
   TransactionDeployResponse: !include schemas/responses/ethereum/smartContracts/transactionDeploy.json
+  TransferResponse: !include schemas/responses/ethereum/transfers/transfer.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
@@ -94,11 +96,18 @@ securitySchemes:
   /transfers:
     post:
       description: Transfer dlt native cryptocurrency
+      body:
+        application/json:
+          type: TransferRequest
+        responses:
+          200:
+            body:
+              type: TransferResponse
 
   /notarizations:
     post:
       description: Write metadata in blockchain
-
+      
   /balance:
     get:
       description: Obtain the native cryptocurrency balance of a dlt address
