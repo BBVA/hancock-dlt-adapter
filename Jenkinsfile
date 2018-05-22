@@ -5,7 +5,8 @@ nodePipeline{
 
     docker_shuttle_stage()
 
-    qa_data_shuttle_stage()
+    // We dont have test by the moment
+    // qa_data_shuttle_stage()
 
     deploy_shuttle_stage(project: "blockchainhub", environment: "develop", askForConfirmation: false)
 
