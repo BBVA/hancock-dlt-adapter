@@ -15,6 +15,7 @@ types:
   TransactionDeployRequest: !include schemas/requests/ethereum/smartContracts/transactionDeploy.json
   TransferRequest: !include schemas/requests/ethereum/transfers/transfer.json
   ProtocolEncodeModelRequest: !include schemas/requests/protocol/encode.json
+  ProtocolDecodeModelRequest: !include schemas/requests/protocol/decode.json
 
   GenericResponse: !include schemas/responses/generic.json
   SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
@@ -135,7 +136,7 @@ securitySchemes:
   description: API to adapt operations to Hancock Protocol
 
   /encode:
-    put:
+    post:
       description: Encode operation data to Hancock Protocol
       queryParameters: 
         application/json:
@@ -146,21 +147,12 @@ securitySchemes:
               type: string
 
   /decode:
-    /{code}:
-      get:
-        description: Obtein operation decode
-        responses:
-            200:
-              body:
-                type: ProtocolDecodeModelResponse
-
-  /qrEncode:
-    put:
-      description: Encode operation data to Qr
+    get:
+      description: Obtein operation decode
       queryParameters: 
         application/json:
-          type: ProtocolEncodeModelRequest
+          type: ProtocolDecodeModelRequest
       responses:
           200:
             body:
-              type: string
+              type: ProtocolDecodeModelResponse
