@@ -135,7 +135,7 @@ securitySchemes:
   description: API to adapt operations to Hancock Protocol
 
   /encode:
-    get:
+    put:
       description: Encode operation data to Hancock Protocol
       queryParameters: 
         application/json:
@@ -155,7 +155,7 @@ securitySchemes:
                 type: ProtocolDecodeModelResponse
 
   /qrEncode:
-    get:
+    put:
       description: Encode operation data to Qr
       queryParameters: 
         application/json:
