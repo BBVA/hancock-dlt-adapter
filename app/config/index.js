@@ -46,6 +46,6 @@ module.exports = {
     url: process.env.DLT_ADAPTER_ETHEREUM_URL || 'http://ganache:8545'
   },
 
-  protocol: 'hancock://?code=__CODE__'
+  protocol: 'hancock://qr?code=__CODE__'
 };
 

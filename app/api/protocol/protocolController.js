@@ -8,7 +8,8 @@ const config = require('../../config');
 const querystring = require('querystring');
 
 exports.decode = (request, reply, next) => {
-  const dataDecode = JSON.parse(decodeURIComponent(request.body.code));
+  const removedPath = config.protocol.replace("__CODE__", "");
+  const dataDecode = JSON.parse(decodeURIComponent(request.body.code.replace(removedPath, "")));
   return Utils.createReply(reply, Responses.request_ok, dataDecode);
 };
 
