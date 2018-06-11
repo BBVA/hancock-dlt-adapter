@@ -9,7 +9,7 @@ const querystring = require('querystring');
 
 exports.decode = (request, reply, next) => {
   const dataDecode = JSON.parse(decodeURIComponent(request.body.code));
-  return Utils.createReply(reply, Responses.request_ok, { dataDecode: dataDecode});
+  return Utils.createReply(reply, Responses.request_ok, dataDecode);
 };
 
 exports.encode = (request, reply, next) => {
