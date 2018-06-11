@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "description": "Protocol Decode Param Model Request",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string"
+      }
+    }
+  }
+  

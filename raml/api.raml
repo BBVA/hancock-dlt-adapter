@@ -14,6 +14,8 @@ types:
   TransactionInvokeRequest: !include schemas/requests/ethereum/smartContracts/transactionInvoke.json
   TransactionDeployRequest: !include schemas/requests/ethereum/smartContracts/transactionDeploy.json
   TransferRequest: !include schemas/requests/ethereum/transfers/transfer.json
+  ProtocolEncodeModelRequest: !include schemas/requests/protocol/encode.json
+  ProtocolDecodeModelRequest: !include schemas/requests/protocol/decode.json
 
   GenericResponse: !include schemas/responses/generic.json
   SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
@@ -21,6 +23,9 @@ types:
   TransactionDeployResponse: !include schemas/responses/ethereum/smartContracts/transactionDeploy.json
   TransferResponse: !include schemas/responses/ethereum/transfers/transfer.json
   GetBalanceResponse: !include schemas/responses/ethereum/getBalance.json
+  ProtocolDecodeModelResponse: !include schemas/responses/protocol/decode.json
+
+  
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
@@ -100,10 +105,10 @@ securitySchemes:
       body:
         application/json:
           type: TransferRequest
-        responses:
-          200:
-            body:
-              type: TransferResponse
+      responses:
+        200:
+          body:
+            type: TransferResponse
 
   /notarizations:
     post:
@@ -126,3 +131,28 @@ securitySchemes:
   /receipt:
     get:
 
+/protocol:
+  displayName: Protocol
+  description: API to adapt operations to Hancock Protocol
+
+  /encode:
+    post:
+      description: Encode operation data to Hancock Protocol
+      queryParameters: 
+        application/json:
+          type: ProtocolEncodeModelRequest
+      responses:
+          200:
+            body:
+              type: string
+
+  /decode:
+    get:
+      description: Obtein operation decode
+      queryParameters: 
+        application/json:
+          type: ProtocolDecodeModelRequest
+      responses:
+          200:
+            body:
+              type: ProtocolDecodeModelResponse

@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "description": "Protocol Encode Param Model Request",
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": ["transfer"]
+      },
+      "body": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
+      "dlt": {
+        "type": "string",
+        "enum": ["ethereum"]
+      }
+    },
+    "required": [ "action", "body", "dlt" ]
+  }
+  
