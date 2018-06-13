@@ -9,7 +9,6 @@ exports.sendTransaction = function(request, reply, next){
   new ETH.web3.eth.sendTransaction(request.body, function(err, result) {
     if(err) {
       console.log("Error adapting send transaction.");
-      console.log(err)
       return Utils.createReply(reply, ResponsesTransaction.ethereum_error);
     } else {
       return Utils.createReply(reply, ResponsesTransaction.transaction_sync_ok, result);
