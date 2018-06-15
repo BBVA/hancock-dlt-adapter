@@ -19,6 +19,7 @@ types:
 
   GenericResponse: !include schemas/responses/generic.json
   SmartContractResponse: !include schemas/responses/ethereum/smartContracts/registered.json
+  SmartContractListResponse: !include schemas/responses/ethereum/smartContracts/registeredList.json
   TransactionInvokeResponse: !include schemas/responses/ethereum/smartContracts/transactionInvoke.json
   TransactionDeployResponse: !include schemas/responses/ethereum/smartContracts/transactionDeploy.json
   TransferResponse: !include schemas/responses/ethereum/transfers/transfer.json
@@ -31,33 +32,51 @@ securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
 
 /{dlt_type}:
-  displayName: Ethereum
-  description: API to adapt Ethereum transactions
+  displayName: DLT
+  description: API to adapt transactions to specific DLT
 
   uriParameters:
     dlt_type:
       type: string
+      description: Dlt to work with 
 
   /smartcontracts:
-    post:
-      description: Register a deployed Smart Contract
-      securedBy: [ oauth_2_0 ]
-      headers:
-      body:
-        application/json:
-          type: SmartContractRequest
+    get:
+      description: Retrieve the list of all smart contracts registered in Hancock
       responses:
-        201:
-         body:
-          type: GenericResponse
+        200:
+          body:
+            application/json:
+              type: SmartContractListResponse
+        500:
+          body:
+            application/json:
+              type: GenericResponse
 
     /{address|alias}:
       uriParameters:
         address|alias:
           type: string
+
+      get:
+        description: Retrieve ABI from registered Smart Contract
+        headers:
+        responses:
+          200:
+            body:
+              application/json:
+                type: SmartContractResponse
+          404:
+            body:
+              application/json:
+                type: GenericResponse
+          500:
+            body:
+              application/json:
+                type: GenericResponse
+
       post:
-        description: Adapt transaction in the registered Smart Contract
-        securedBy: [ oauth_2_0 ]
+        description: Adapt transaction that will invoke a method in the registered Smart Contract
         headers:
         body:
           application/json:
@@ -65,71 +84,118 @@ securitySchemes:
         responses:
           200:
             body:
-              type: TransactionInvokeResponse
-      get:
-        description: Retrieve ABI from registered Smart Contract
-        securedBy: [ oauth_2_0 ]
+              application/json:
+                type: TransactionInvokeResponse
+          400:
+          404:
+            body:
+              application/json:
+                type: GenericResponse
+          500:
+            body:
+              application/json:
+                type: GenericResponse
+
+      delete:
+        description: Unregister the Smart Contract in Hancock
         headers:
         responses:
-          200:
+          204:
+          500:
             body:
-              type: SmartContractResponse
+              application/json:
+                type: GenericResponse
 
     /deploy:
       post:
         description: Adapt a Smart Contract deployment transaction
-        securedBy: [ oauth_2_0 ]
         body:
           application/json:
             type: TransactionDeployRequest
         responses:
           200:
             body:
-              type: TransactionDeployResponse
+              application/json:
+                type: TransactionDeployResponse
+          400:
+          500:
+            body:
+              application/json:
+                type: GenericResponse
 
     /invoke:
       post:
         description: Adapt a Smart Contract invocation transaction
-        securedBy: [ oauth_2_0 ]
         body:
           application/json:
             type: TransactionInvokeRequest
         responses:
           200:
             body:
-              type: TransactionInvokeResponse
+              application/json:
+                type: TransactionInvokeResponse
+          400:
+          500:
+            body:
+              application/json:
+                type: GenericResponse
+
+    /register:
+      post:
+        description: Register a deployed Smart Contract
+        headers:
+        body:
+          application/json:
+            type: SmartContractRequest
+        responses:
+          201:
+            body:
+              application/json:
+                type: GenericResponse
+          400:
+          409:
+            body:
+              application/json:
+                type: GenericResponse
+          500:
+            body:
+              application/json:
+                type: GenericResponse
 
   /transfers:
+    displayName: AdaptTransfer
     post:
-      description: Transfer dlt native cryptocurrency
+      description: Adapt a transfer call to the DLT between to address
       body:
         application/json:
           type: TransferRequest
       responses:
         200:
           body:
-            type: TransferResponse
-
-  /notarizations:
-    post:
-      description: Write metadata in blockchain
+            application/json:
+              type: TransferResponse
+        400:
+        500:
+          body:
+            application/json:
+              type: GenericResponse
       
   /balance:
     /{address}:
+      uriParameters:
+        address:
+          type: string
       get:
-        description: Obtain the native cryptocurrency balance of a dlt address
+        description: Obtain the native cryptocurrency balance of an address
         responses:
           200:
             body:
-              type: GetBalanceResponse
-
-  /incentive:
-    /average:
-      get:
-        description: Obtain the current average payed as mining incentive e.g. bitcoin fee or ethereum gas
-        
-  /receipt:
-    get:
+              application/json:
+                type: GetBalanceResponse
+          500:
+            body:
+              application/json:
+                type: GetBalanceResponse
 
 /protocol:
   displayName: Protocol
@@ -142,9 +208,11 @@ securitySchemes:
         application/json:
           type: ProtocolEncodeModelRequest
       responses:
-          200:
-            body:
+        200:
+          body:
+            application/json:
               type: string
+        400:
 
   /decode:
     get:
@@ -153,6 +221,8 @@ securitySchemes:
         application/json:
           type: ProtocolDecodeModelRequest
       responses:
-          200:
-            body:
+        200:
+          body:
+            application/json:
               type: ProtocolDecodeModelResponse
+        400:
