@@ -6,16 +6,16 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 ADD package*.json ./
-RUN yarn install --production
+RUN yarn install
 RUN yarn cache clean --force
 
 ENV NODE_ENV production
 
 # Build the app
 COPY . .
-# RUN yarn run build:ts
+RUN yarn run build:ts
 
 EXPOSE 80
-EXPOSE 3000
+EXPOSE 9229
 ENTRYPOINT [ "./environment/entry.sh" ]
 CMD ["prod"]

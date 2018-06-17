@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
-  "author": "Javier Moreno Molina <javier.moreno.molina@bbva.com",
+  "authors": [
+    "Javier Moreno Molina <javier.moreno.molina@bbva.com",
+    "Angel Manzano Alcaraz <angel.manzano.contractor@bbva.com>"
+    ],
   "license": "Copyright",
   "dependencies": {
     "async": "^2.6.0",
@@ -17,7 +20,6 @@
     "ethereumjs-util": "latest",
     "express": "^4.16.2",
     "express-jsonschema": "^1.1.6",
-    "gulp": "^3.9.1",
     "method-override": "^2.3.10",
     "mongodb": "^2.2.33",
     "pino": "^4.11.0",
@@ -27,26 +29,33 @@
     "uuid": "^3.1.0",
     "web3": "^1.0.0-beta.26",
     "web3-provider-engine": "^13.3.3",
-    "xtend": "latest"
+    "xtend": "latest",
+    "config": "1.29.2",
+    "js-yaml": "3.10.0"
   },
   "devDependencies": {
-    "gulp-istanbul": "^1.1.1",
-    "gulp-jasmine": "^2.4.2",
-    "gulp-jshint": "^2.0.4",
-    "gulp-nodemon": "^2.2.1",
-    "gulp-raml2html": "^0.3.0",
-    "gulp-sonar": "^3.0.0",
+    "@types/config": "0.0.33",
+    "@types/express": "4.11.0",
+    "@types/mongodb": "2.2.18",
+    "@types/request": "^2.47.0",
     "nodemon": "1.14.12",    
     "isparta": "^4.0.0",
-    "jshint": "2.x"
+    "jshint": "2.x",
+    "concurrently": "3.5.1",
+    "mkdirp": "0.5.1",
+    "tslint": "5.8.0",
+    "typescript": "2.6.2"
   },
   "engines": {
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "npm run serve:dev",
-    "serve:dev": "nodemon --inspect=0.0.0.0 index.js",
-    "serve:prod": "node index.js",    
+    "start": "npm run serve:dev", 
+    "serve:dev": "concurrently \"npm run watch:ts\" \"sleep 3 && npm run serve:debug\"",
+    "serve:prod": "node dist/index.js",
+    "serve:debug": "nodemon --inspect=0.0.0.0 dist/index.js",
+    "build:ts": "tsc",
+    "watch:ts": "tsc -w --inlineSources --inlineSourceMap",
     "test": "echo \"Error: no test specified\" && exit 0"
   }
 }

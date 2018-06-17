@@ -1,3 +1,10 @@
-.idea
-node_modules
+node_modules/
+.idea/
+.DS_Store
+.vscode/
+documentation/
+.sonar/
+.editorconfig
+dist/*
+config/local.yaml
 *.html
