@@ -16,16 +16,24 @@
       "required": [ "code", "description" ]
     },
     "data": {
-      "address": {
-        "type": "string"
-      },
-      "alias": {
-        "type": "string"
-      },
-      "abi": {
-        "type": "array"
-      },
-    "required": [ "address", "alias", "abi" ]
+      "list":{
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+            "type": "string"
+            },
+            "alias": {
+              "type": "string"
+            },
+            "abi": {
+              "type": "array"
+            },
+            "required": [ "address", "alias", "abi" ]
+          }
+        }
+      }
     }
   }
 }

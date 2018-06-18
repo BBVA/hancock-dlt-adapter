@@ -4,13 +4,16 @@
   "type": "object",
   "properties": {
     "address": {
-      "type": "string"
+      "type": "string",
+      "description": "Address of the Smart Contrant in the DLT"
     },
     "alias": {
-      "type": "string"
+      "type": "string",
+      "description": "Alias to use to register in Hancock"
     },
     "abi": {
-      "type": "array"
+      "type": "array",
+      "description": "Abi of the Smart Contract"
     }
   },
   "required": [ "address", "alias", "abi" ]

@@ -23,14 +23,4 @@ router.route('/:query').delete(smartContractDelete.deleteByQuery);
 router.route('/').get(smartContractRetrieves.find);
 router.route('/:query').get(smartContractRetrieves.findOne);
 
-//router.get('/:name', contract.contractInfo(request, reply, next));
-
-// Healthcheck
-router.get('/', (req, res) => {
-  res.json({
-    status: 'OK',
-    app: 'Ethereum Smart Contracts'
-  });
-});
-
 module.exports = router;

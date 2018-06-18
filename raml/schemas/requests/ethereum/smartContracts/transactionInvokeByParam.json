@@ -4,7 +4,8 @@
   "type": "object",
   "properties": {
     "method": {
-      "type": "string"
+      "type": "string",
+      "description": "Method to invoke in the smart contract"
     },
     "action": {
       "type": "string",
@@ -14,10 +15,12 @@
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "Params to pass to the method to invoke in the smart contract"
     },
     "from": {
-      "type": "string"
+      "type": "string",
+      "description": "Address that invoke the smart contract"
     }
   },
   "required": [ "method", "from" ]

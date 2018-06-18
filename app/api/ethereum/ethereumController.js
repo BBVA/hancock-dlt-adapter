@@ -17,18 +17,3 @@ exports.getBalance = (request, reply, next) => {
     }  
   })
 };
-
-exports.getIncentive = (request, reply, next) => {
-  reply.json({
-    status: 'OK',
-    app: 'GET Ethereum Incentive'
-  });
-};
-
-exports.getReceipt = (request, reply, next) => {
-  reply.json({
-    status: 'OK',
-    app: 'GET Ethereum Receipt'
-  });
-};
-
