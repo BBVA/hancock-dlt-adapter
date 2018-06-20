@@ -2,15 +2,15 @@ import * as crypto from 'crypto';
 import * as req from 'request';
 import * as uuid from 'uuid';
 
-function generateToken(bytes: any, format: any) {
+export function generateToken(bytes: any, format: any) {
   return crypto.randomBytes(bytes).toString(format);
 }
 
-function generateUuid() {
+export function generateUuid() {
   return uuid.v4();
 }
 
-function createResponseData(result: any, data: any) {
+export function createResponseData(result: any, data: any) {
   const response: any = {
     result,
   };
@@ -20,7 +20,7 @@ function createResponseData(result: any, data: any) {
   return response;
 }
 
-function createReply(reply: any, result: any, data: any) {
+export function createReply(reply: any, result?: any, data?: any) {
   let replyStatus;
   if (result) {
     const response: any = {
@@ -40,7 +40,7 @@ function createReply(reply: any, result: any, data: any) {
   return replyStatus;
 }
 
-function sendRequest(data: any) {
+export function sendRequest(data: any) {
   return new Promise((resolve: any, reject) => {
     req(data.reqData, (error: any, response: any, body: any) => {
       if (error) {
@@ -53,7 +53,7 @@ function sendRequest(data: any) {
   });
 }
 
-function randomAccountNum(length: number) {
+export function randomAccountNum(length: number) {
   const possible = '0123456789';
   let text = '';
 
@@ -64,6 +64,6 @@ function randomAccountNum(length: number) {
   return text;
 }
 
-function strToHex(str: string): string {
+export function strToHex(str: string): string {
   return '0x' + Buffer.from(str, 'utf8').toString('hex');
 }

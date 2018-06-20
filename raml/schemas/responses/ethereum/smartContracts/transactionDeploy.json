@@ -29,6 +29,9 @@
         },
         "gasPrice": {
           "type": "string"
+        },
+        "gas": {
+          "type": "string"
         }
       }
     }

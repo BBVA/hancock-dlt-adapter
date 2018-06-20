@@ -6,7 +6,7 @@
   "authors": [
     "Javier Moreno Molina <javier.moreno.molina@bbva.com",
     "Angel Manzano Alcaraz <angel.manzano.contractor@bbva.com>"
-    ],
+  ],
   "license": "Copyright",
   "dependencies": {
     "async": "^2.6.0",
@@ -23,7 +23,8 @@
     "method-override": "^2.3.10",
     "mongodb": "^2.2.33",
     "pino": "^4.11.0",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5",
     "semaphore": "latest",
     "solc": "^0.4.18",
     "uuid": "^3.1.0",
@@ -34,15 +35,19 @@
     "js-yaml": "3.10.0"
   },
   "devDependencies": {
+    "@types/compression": "0.0.36",
     "@types/config": "0.0.33",
+    "@types/cors": "^2.8.4",
     "@types/express": "4.11.0",
     "@types/mongodb": "2.2.18",
+    "@types/pino": "^4.16.0",
     "@types/request": "^2.47.0",
-    "nodemon": "1.14.12",    
+    "@types/request-promise-native": "^1.0.14",
+    "concurrently": "3.5.1",
     "isparta": "^4.0.0",
     "jshint": "2.x",
-    "concurrently": "3.5.1",
     "mkdirp": "0.5.1",
+    "nodemon": "1.14.12",
     "tslint": "5.8.0",
     "typescript": "2.6.2"
   },
@@ -50,7 +55,7 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "start": "npm run serve:dev", 
+    "start": "npm run serve:dev",
     "serve:dev": "concurrently \"npm run watch:ts\" \"sleep 3 && npm run serve:debug\"",
     "serve:prod": "node dist/index.js",
     "serve:debug": "nodemon --inspect=0.0.0.0 dist/index.js",

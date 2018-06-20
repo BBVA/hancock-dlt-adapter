@@ -1,14 +1,14 @@
 import { AppRouter } from './routes/index';
 import config from './utils/config';
 import { Database } from './utils/db';
-import { Ethereum } from './utils/ethereum';
+import { Ethereum } from './utils/ethereum/index';
 import { getApp } from './utils/express';
 import * as logger from './utils/logger';
 
 export async function run() {
 
-  CONF = config;
-  LOG = logger.init(config.server.host, config.application, config.logger.logLevel);
+  global.CONF = config;
+  global.LOG = logger.init(config.server.host, config.application, config.logger.logLevel);
 
   let credentials: string = '';
 
@@ -18,8 +18,8 @@ export async function run() {
 
   // tslint:disable-next-line:max-line-length
   const url: string = `${config.db.protocol}://${credentials}${config.db.host}:${config.db.port}/${config.db.database}?${config.db.params}`;
-  DB = new Database(url);
-  ETH = new Ethereum();
+  global.DB = new Database(url);
+  global.ETH = new Ethereum();
 
   return DB.connect(CONF.db.database).then(() => {
 
@@ -55,8 +55,9 @@ function exitHook(err?: any) {
     console.error(err);
   }
 
-  const db = DB.get();
-  db.close()
+  // const db = DB.get();
+
+  DB.close()
     .then(() => {
       LOG.info('MongoDB disconnected through app termination');
       process.exit(0);

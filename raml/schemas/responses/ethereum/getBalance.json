@@ -19,7 +19,8 @@
         "type": "object",
         "properties": {
           "balance": {
-            "type": "string"
+            "type": "string",
+            "description": "Balance in wei"
           }
         }
       }

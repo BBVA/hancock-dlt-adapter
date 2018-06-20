@@ -1,9 +1,9 @@
-import * as express from 'express';
-import * as cors from 'cors';
-import * as compression from 'compression';
 import * as bodyParser from 'body-parser';
-import * as methodOverride from 'method-override';
+import * as compression from 'compression';
+import * as cors from 'cors';
 import * as errorHandler from 'errorhandler';
+import * as express from 'express';
+import * as methodOverride from 'method-override';
 import * as middlewares from './middlewares';
 
 export function getApp() {
@@ -12,8 +12,8 @@ export function getApp() {
 
   app.use(cors());
   app.use(bodyParser.json());
-  
-  var env = app.get('env');
+
+  const env = app.get('env');
 
   app.use(cors());
   app.use(compression());
@@ -27,5 +27,4 @@ export function getApp() {
   }
 
   return app;
-};
-
+}
