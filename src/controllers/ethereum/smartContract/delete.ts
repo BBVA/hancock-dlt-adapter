@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import * as utils from '../../../components/utils';
 import * as domain from '../../../domain/ethereum';
-import { EthereumSmartContractInternalServerErrorResponse } from '../../../models/ethereum';
 
 export function deleteByQuery(req: Request, res: Response, next: NextFunction) {
 
@@ -10,6 +9,6 @@ export function deleteByQuery(req: Request, res: Response, next: NextFunction) {
   domain
     .deleteByQuery(query)
     .then(() => utils.createReply(res))
-    .catch(() => utils.createReply(res, EthereumSmartContractInternalServerErrorResponse));
+    .catch((err: any) => utils.createReply(res, err));
 
 }

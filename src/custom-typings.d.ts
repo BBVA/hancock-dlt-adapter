@@ -6,7 +6,7 @@ declare module 'web3-provider-engine/subproviders/subprovider' {
   class Subprovider {
     engine: any;
     constructor();
-    public emitPayload(): any;
+    public emitPayload(...args: any[]): any;
   }
   export = Subprovider;
 }
@@ -21,20 +21,10 @@ declare module 'errorhandler';
 
 declare module NodeJS  {
   interface Global {
-    CONF: any;
     LOG: any;
-    DB: any;
     ETH: any;
   }
 }
 
-declare var CONF: any;
 declare var LOG: any;
-declare var DB: any;
 declare var ETH: any;
-
-// declare global extends global {
-//   export const CONF: any;
-//   export const LOG: any;
-//   export const DB: any;
-// }

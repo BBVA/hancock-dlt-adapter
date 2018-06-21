@@ -1,6 +1,9 @@
 import { IEthereumSmartContractDeployModel } from '../../../models/ethereum';
-import { IEthereumSmartContractDeployRequest } from '../../../models/ethereum/smartContract';
-import { retrieveContractAbi, retrieveContractBinary } from '../common';
+import {
+  EthereumSmartContractSmartcontractErrorResponse,
+  IEthereumSmartContractDeployRequest,
+} from '../../../models/ethereum/smartContract';
+import { retrieveContractAbi, retrieveContractBinary } from '../smartContract/common';
 import { ContractAbi, ContractBin } from './../../../models/ethereum/common';
 
 export async function deploy(deployRequest: IEthereumSmartContractDeployRequest): Promise<any> {
@@ -22,7 +25,7 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
 
   } catch (e) {
 
-    LOG.debug(e);
+    LOG.error(e);
     throw e;
 
   }
@@ -56,7 +59,9 @@ async function adaptContractDeploy(contractDeployModel: IEthereumSmartContractDe
 
         }
       })
-      .on('error', console.error);
-
+      .on('error', (e: any) => {
+        LOG.error(e);
+        reject(EthereumSmartContractSmartcontractErrorResponse);
+      });
   });
 }

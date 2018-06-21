@@ -1,10 +1,8 @@
 app:
   server:
     protocol: HANCOCK_SERVER_PROTOCOL
-    # host: HANCOCK_SERVER_HOST
-    host: DLT_ADAPTER_PORT
-    # port: HANCOCK_SERVER_PORT
-    port: DLT_ADAPTER_PORT
+    host: HANCOCK_SERVER_HOST
+    port: HANCOCK_SERVER_PORT
     externalPort: HANCOCK_SERVER_EXTERNAL_PORT
     base: HANCOCK_SERVER_BASE
     externalBase: HANCOCK_SERVER_EXTERNAL_BASE
@@ -16,8 +14,7 @@ app:
     protocol: HANCOCK_DB_PROTOCOL
     host: HANCOCK_DB_HOST
     port: HANCOCK_DB_PORT
-    # database: HANCOCK_DB_DATABASE
-    database: DLT_ADAPTER_MONGO_DATABASE
+    database: HANCOCK_DB_DATABASE
     params: HANCOCK_DB_PARAMS
     user: HANCOCK_DB_USER
     pass: HANCOCK_DB_PASS

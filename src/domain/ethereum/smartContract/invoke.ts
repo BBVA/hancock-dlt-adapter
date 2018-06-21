@@ -4,7 +4,7 @@ import {
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
 } from '../../../models/ethereum/smartContract';
-import { adaptContractInvoke, retrieveContractAbi, retrieveContractAbiByAddressOrAlias } from '../common';
+import { adaptContractInvoke, retrieveContractAbi, retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
 import { ContractAbi } from './../../../models/ethereum/common';
 
 export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest): Promise<any> {
@@ -24,7 +24,7 @@ export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest)
 
   } catch (e) {
 
-    LOG.debug(e);
+    LOG.error(e);
     throw e;
 
   }
@@ -49,7 +49,7 @@ export async function invokeByQuery(addressOrAlias: string, invokeRequest: IEthe
 
   } catch (e) {
 
-    LOG.debug(e);
+    LOG.error(e);
     throw e;
 
   }

@@ -23,7 +23,7 @@ app:
     ethereum:
       database: hancock
       collections:
-        smartContracts: smartcontracts
+        contracts: smartcontracts
   logger:
     logLevel: debug
   protocol: 'hancock://qr?code=__CODE__'  

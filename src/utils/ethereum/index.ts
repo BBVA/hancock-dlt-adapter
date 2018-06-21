@@ -2,6 +2,7 @@
 // import Web3 from 'web3';
 import * as ProviderEngine from 'web3-provider-engine';
 import * as RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
+import config from '../config';
 import { TxAdapter } from './txAdapter';
 
 // Important: Test this... wrong official typings
@@ -22,7 +23,7 @@ export class Ethereum {
 
     // data source
     this.engine.addProvider(new RpcSubprovider({
-      rpcUrl: `http://${CONF.blockchain.ethereum.host}:${CONF.blockchain.ethereum.port}`,
+      rpcUrl: `http://${config.blockchain.ethereum.host}:${config.blockchain.ethereum.port}`,
     }));
 
     // network connectivity error

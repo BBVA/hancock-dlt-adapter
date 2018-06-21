@@ -1,54 +1,61 @@
-import { Collection, InsertOneWriteOpResult } from 'mongodb';
+import { InsertOneWriteOpResult } from 'mongodb';
+import * as db from '../../../db/ethereum';
 import {
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
 import { EthereumSmartContractConflictResponse } from '../../../models/ethereum/smartContract';
 
-export async function register(alias: string, address: string, abi: string): Promise<void> {
+export async function register(alias: string, address: string, abi: any[]): Promise<void> {
 
-  const db: any = DB.get();
-  const collection: Collection = db.collection(CONF.db.ethereum.collections.smartContracts);
+  let addressResult: IEthereumContractDbModel | null;
 
   try {
 
-    const addressResult: IEthereumContractDbModel = await collection.findOne({ address });
-
-    if (!addressResult) {
-
-      const aliasResult: IEthereumContractDbModel = await collection.findOne({ alias });
-
-      if (aliasResult) {
-
-        const numVersions = await collection.count({ alias: { $regex: `^${alias}@` } });
-        const newAlias = `${alias}@${numVersions + 1}`;
-
-        await collection.update({ alias }, { $set: { alias: newAlias } });
-
-      }
-
-      const insert: InsertOneWriteOpResult = await collection.insertOne({
-        abi,
-        address,
-        alias,
-      });
-
-      if (insert && insert.result.ok) {
-
-        LOG.info(`Smart contract registered as ${alias}`);
-
-      }
-
-    } else {
-
-      throw EthereumSmartContractConflictResponse;
-
-    }
+    addressResult = await db.getSmartContractByAddress(address);
 
   } catch (e) {
 
     LOG.error(`Smart contract ${alias} cannot be registered: ${e}`);
     throw EthereumSmartContractInternalServerErrorResponse;
+
+  }
+
+  if (!addressResult) {
+
+    await updateSmartContractVersion(alias);
+
+    const insert: InsertOneWriteOpResult = await db.insertSmartContract({
+      abi,
+      address,
+      alias,
+    });
+
+    if (insert && insert.result.ok) {
+
+      LOG.info(`Smart contract registered as ${alias}`);
+
+    }
+
+  } else {
+
+    LOG.error(`Smart contract ${alias} cannot be registered due to a conflict`);
+    throw EthereumSmartContractConflictResponse;
+
+  }
+
+}
+
+async function updateSmartContractVersion(alias: string) {
+
+  const aliasResult: IEthereumContractDbModel | null = await db.getSmartContractByAlias(alias);
+
+  if (aliasResult) {
+
+    const numVersions: number = await db.getCountVersionsByAlias(alias);
+    const newAlias: string = `${alias}@${numVersions + 1}`;
+
+    await db.updateSmartContractAlias(alias, newAlias);
 
   }
 }

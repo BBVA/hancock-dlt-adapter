@@ -49,13 +49,6 @@ export interface IEthereumSmartContractRegisterRequest {
   abi: string;
 }
 
-// export interface IEthereumSmartContractRegisterRequest {
-//   method: string;
-//   urlBase: string;
-//   from: string;
-//   params: string[];
-// }
-
 // RESPONSES
 
 export interface IEthereumSmartContractResponse {
@@ -172,7 +165,7 @@ export const EthereumSmartContractInvalidTransactionInvokationResponse: IEthereu
 // DDBB
 
 export interface IEthereumContractDbModel {
-  _id: any;
+  _id?: any;
   alias: string;
   address: string;
   abi: any[];

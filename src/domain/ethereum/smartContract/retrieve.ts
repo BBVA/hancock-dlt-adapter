@@ -1,18 +1,15 @@
-import { Collection } from 'mongodb';
+import * as db from '../../../db/ethereum';
 import {
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
-import { retrieveContractAbiByAddressOrAlias } from '../common';
+import { retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
 
 export async function find(): Promise<IEthereumContractDbModel[]> {
 
-  const db: any = DB.get();
-  const collection: Collection = db.collection(CONF.db.ethereum.collections.smartContracts);
-
   try {
 
-    const contractDbModel: IEthereumContractDbModel[] = await collection.find().project({ _id: 0 }).toArray();
+    const contractDbModel: IEthereumContractDbModel[] = await db.getAllSmartContracts();
     LOG.info(`Listing all resources`);
     return contractDbModel;
 
@@ -36,7 +33,7 @@ export async function findOne(addressOrAlias: string): Promise<IEthereumContract
   } catch (e) {
 
     LOG.error(`Error retrieving smart contract: ${e}`);
-    throw EthereumSmartContractInternalServerErrorResponse;
+    throw e;
 
   }
 }

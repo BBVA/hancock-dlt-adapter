@@ -7,9 +7,9 @@ export function register(req: Request, res: Response, next: NextFunction) {
 
   const params: IEthereumSmartContractRegisterRequest = req.body;
 
-  const alias = params.alias;
-  const address = params.address;
-  const abi = params.abi;
+  const alias: string = params.alias;
+  const address: string = params.address;
+  const abi: any[] = params.abi as any;
 
   domain
     .register(alias, address, abi)

@@ -9,7 +9,6 @@
   ],
   "license": "Copyright",
   "dependencies": {
-    "async": "^2.6.0",
     "bignumber": "^1.1.0",
     "body-parser": "^1.15.2",
     "change-case": "^3.0.1",

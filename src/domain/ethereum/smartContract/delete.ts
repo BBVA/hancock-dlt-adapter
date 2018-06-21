@@ -1,39 +1,32 @@
-import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
+import { FindAndModifyWriteOpResultObject } from 'mongodb';
+import * as db from '../../../db/ethereum';
 import { EthereumSmartContractInternalServerErrorResponse } from '../../../models/ethereum/smartContract';
-import config from '../../../utils/config';
 
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   LOG.info(`De-registering contract by query: ${addressOrAlias}`);
 
-  const db = DB.get();
-  const collection: Collection = db.collection(config.db.ethereum.collections.smartContracts);
+  try {
 
-  const addressPattern: RegExp = new RegExp(/^0x[a-fA-F0-9]{40}$/i);
-  const query: any = addressPattern.test(addressOrAlias) ? {address: addressOrAlias} : {alias: addressOrAlias};
+    const result: FindAndModifyWriteOpResultObject = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
 
-  collection
-    .findOneAndDelete(query)
-    .then((result: FindAndModifyWriteOpResultObject) => {
+    if (result.ok === 1) {
 
-      if (result.ok === 1) {
+      LOG.info(`Smart contract de-registered`);
+      return Promise.resolve();
 
-        LOG.info(`Smart contract de-registered`);
-        return Promise.resolve();
+    } else {
 
-      } else {
-
-        // tslint:disable-next-line:max-line-length
-        LOG.error(`Smart contract cannot be de-registered. Result code ${result.ok} and error ${JSON.stringify(result.lastErrorObject)}`);
-        return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
-
-      }
-
-    })
-    .catch((error: string) => {
-
-      LOG.error(`Smart contract cannot be de-registered: ${error}`);
+      // tslint:disable-next-line:max-line-length
+      LOG.error(`Smart contract cannot be de-registered. Result code ${result.ok} and error ${JSON.stringify(result.lastErrorObject)}`);
       return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
 
-    });
+    }
+
+  } catch (e) {
+
+    LOG.error(`Smart contract cannot be de-registered: ${e}`);
+    return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
+
+  }
 }

@@ -9,62 +9,17 @@
 import Subprovider = require('web3-provider-engine/subproviders/subprovider');
 import estimateGas = require('web3-provider-engine/util/estimate-gas');
 
-// intercepts the following methods:
-//   eth_sendTransaction
-//   eth_sign
-
-//
-// Tx Signature Flow
-//
-// handleRequest: eth_sendTransaction
-//   validateTransaction (basic validity check)
-//     validateSender (checks that sender is in accounts)
-//   processTransaction (sign tx and submit to network)
-//     approveTransaction (UI approval hook)
-//     checkApproval
-//     finalizeAndSubmitTx (tx signing)
-//       nonceLock.take (bottle neck to ensure atomic nonce)
-//         fillInTxExtras (set fallback gasPrice, nonce, etc)
-//         signTransaction (perform the signature)
-//         publishTransaction (publish signed tx to network)
-//
-
 export class TxAdapter extends Subprovider {
 
   constructor() {
     super();
-    /*const self = this;
-    // control flow
-    // data lookup
-    if (!opts.getSigner) throw new Error('ProviderEngine - TxAdapter - did not provide "getSigner" 
-    fn in constructor options');
-    self.getSigner = opts.getSigner;
-    // high level override
-    if (opts.processTransaction) self.processTransaction = opts.processTransaction;*/
-    /* if (opts.processMessage) self.processMessage = opts.processMessage;
-     if (opts.processPersonalMessage) self.processPersonalMessage = opts.processPersonalMessage;
-     if (opts.processTypedMessage) self.processTypedMessage = opts.processTypedMessage;*/
-    // approval hooks
-    /*self.approveTransaction = opts.approveTransaction || self.autoApprove;
-    self.approveMessage = opts.approveMessage || self.autoApprove;
-    self.approvePersonalMessage = opts.approvePersonalMessage || self.autoApprove;
-    self.approveTypedMessage = opts.approveTypedMessage || self.autoApprove;*/
-    // actually perform the signature
-    /*if (opts.signTransaction) self.signTransaction = opts.signTransaction;*/
-    /*  if (opts.signMessage) self.signMessage = opts.signMessage;
-      if (opts.signPersonalMessage) self.signPersonalMessage = opts.signPersonalMessage;
-      if (opts.signTypedMessage) self.signTypedMessage = opts.signTypedMessage;
-      if (opts.recoverPersonalSignature) self.recoverPersonalSignature = opts.recoverPersonalSignature;
-      // publish to network
-      if (opts.publishTransaction) self.publishTransaction = opts.publishTransaction*/
   }
 
-  public handleRequest(payload: any, next: any, end: any) {
-    const self = this;
+  public async handleRequest(payload: any, next: any, end: any) {
     switch (payload.method) {
       case 'eth_accounts':
         LOG.debug('Intercepted Ethereum Accounts');
-        self.getAccounts()
+        this.getAccounts()
           .then(end)
           .catch((error) => {
             LOG.error('Error getting accounts');
@@ -73,7 +28,7 @@ export class TxAdapter extends Subprovider {
       case 'eth_call':
         LOG.debug('Intercepted Ethereum Call');
         const call = payload.params[0];
-        self.fillInTxExtras(call)
+        this.fillInTxExtras(call)
           .then((rawTx) => {
             payload.params[0] = rawTx;
             next(null, payload);
@@ -87,7 +42,7 @@ export class TxAdapter extends Subprovider {
       case 'eth_sendTransaction':
         LOG.debug('Intercepted Ethereum Send Transaction');
         const tx = payload.params[0];
-        self.fillInTxExtras(tx)
+        this.fillInTxExtras(tx)
           .then((rawTx) => {
             end(null, rawTx);
           })
@@ -111,55 +66,63 @@ export class TxAdapter extends Subprovider {
   }
 
   public fillInTxExtras(txParams: any) {
-    const self = this;
     LOG.debug('Adding transaction extra params');
 
     const address: string = txParams.from;
     const reqs: any[] = [];
 
-    if (txParams.gasPrice === undefined) {
-      // console.log("need to get gasprice")
-      reqs.push(self.emitPayload.bind(self, { method: 'eth_gasPrice', params: [] }));
+    function callbackHandler(resolve: any, reject: any) {
+      return (error: any, data: any) => error ? reject(error) : resolve(data);
     }
 
-    if (txParams.nonce === undefined) {
-      // console.log("need to get nonce")
-      reqs.push(self.emitPayload.bind(self, { method: 'eth_getTransactionCount', params: [address, 'pending'] }));
-    }
+    reqs.push(
+      txParams.gasPrice === undefined
+        // tslint:disable-next-line:max-line-length
+        ? new Promise((resolve, reject) => this.emitPayload({ method: 'eth_gasPrice', params: [] }, callbackHandler(resolve, reject)))
+        : Promise.resolve(null),
+    );
 
-    if (txParams.gas === undefined) {
-      // console.log("need to get gas")
-      reqs.push(estimateGas.bind(null, self.engine, cloneTxParams(txParams)));
-    }
+    reqs.push(
+      txParams.nonce === undefined
+        // tslint:disable-next-line:max-line-length
+        ? new Promise((resolve, reject) => this.emitPayload({ method: 'eth_getTransactionCount', params: [address, 'pending'] }, callbackHandler(resolve, reject)))
+        : Promise.resolve(null),
+    );
 
-    return new Promise((resolve, reject) => {
-      Promise
-        .all(reqs)
-        .then((result: any[]) => {
+    reqs.push(
+      txParams.gas === undefined
+        // tslint:disable-next-line:max-line-length
+        ? new Promise((resolve, reject) => estimateGas(this.engine, this.cloneTxParams(txParams), callbackHandler(resolve, reject)))
+        : Promise.resolve(null),
+    );
 
-          const res: any = {};
-          if (result[0]) { res.gasPrice = result[0].result; }
-          if (result[1]) { res.nonce = result[1].result; }
-          if (result[2]) { res.gas = result[2]; }
+    return Promise
+      .all(reqs)
+      .then((result: any[]) => {
 
-          // TODO: Remove that and do a research about gas = undefined
-          // if(!res.gas) res.gas = '0x5208';
+        const res: any = {};
+        if (result[0]) { res.gasPrice = result[0].result; }
+        if (result[1]) { res.nonce = result[1].result; }
+        if (result[2]) { res.gas = result[2]; }
 
-          return Object.assign(txParams, res);
-        });
-    });
+        // TODO: Remove that and do a research about gas = undefined
+        // if(!res.gas) res.gas = '0x5208';
+
+        return Object.assign(txParams, res);
+      });
   }
-}
 
-// we use this to clean any custom params from the txParams
-function cloneTxParams(txParams: any) {
-  return {
-    data: txParams.data,
-    from: txParams.from,
-    gas: txParams.gas,
-    gasPrice: txParams.gasPrice,
-    nonce: txParams.nonce,
-    to: txParams.to,
-    value: txParams.value,
-  };
+  // we use this to clean any custom params from the txParams
+  private cloneTxParams(txParams: any) {
+    return {
+      data: txParams.data,
+      from: txParams.from,
+      gas: txParams.gas,
+      gasPrice: txParams.gasPrice,
+      nonce: txParams.nonce,
+      to: txParams.to,
+      value: txParams.value,
+    };
+  }
+
 }

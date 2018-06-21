@@ -2,8 +2,17 @@ import * as crypto from 'crypto';
 import * as req from 'request';
 import * as uuid from 'uuid';
 
-export function generateToken(bytes: any, format: any) {
+export function generateToken(bytes: any, format: any): string {
   return crypto.randomBytes(bytes).toString(format);
+}
+
+export function getScQueryByAddressOrAlias(addressOrAlias: string): {} {
+
+  const addressPattern: RegExp = new RegExp(/^0x[a-fA-F0-9]{40}$/i);
+  return addressPattern.test(addressOrAlias)
+    ? { address: addressOrAlias }
+    : { alias: addressOrAlias };
+
 }
 
 export function generateUuid() {
