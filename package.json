@@ -38,17 +38,21 @@
     "@types/config": "0.0.33",
     "@types/cors": "^2.8.4",
     "@types/express": "4.11.0",
+    "@types/jest": "^23.1.0",
     "@types/mongodb": "2.2.18",
     "@types/pino": "^4.16.0",
     "@types/request": "^2.47.0",
     "@types/request-promise-native": "^1.0.14",
     "concurrently": "3.5.1",
-    "isparta": "^4.0.0",
-    "jshint": "2.x",
+    "jest": "^23.1.0",
     "mkdirp": "0.5.1",
+    "raml2html": "6.4.2",
+    "raml2html-markdown-theme": "1.0.2",
+    "rimraf": "2.6.2",
     "nodemon": "1.14.12",
+    "ts-jest": "^22.4.6",
     "tslint": "5.8.0",
-    "typescript": "2.6.2"
+    "typescript": "^2.9.2"
   },
   "engines": {
     "node": ">=0.12.0"
@@ -60,6 +64,9 @@
     "serve:debug": "nodemon --inspect=0.0.0.0 dist/index.js",
     "build:ts": "tsc",
     "watch:ts": "tsc -w --inlineSources --inlineSourceMap",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "coverage": "jest --coverage",
+    "docs": "rimraf documentation && mkdirp documentation && raml2html --theme raml2html-markdown-theme raml/api.raml > documentation/api.md"
   }
 }
