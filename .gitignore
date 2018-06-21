@@ -5,6 +5,8 @@ node_modules/
 documentation/
 .sonar/
 .editorconfig
-dist/*
+dist/
 config/local.yaml
 *.html
+coverage/
+complexity/
