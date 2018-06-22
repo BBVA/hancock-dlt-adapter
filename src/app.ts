@@ -40,7 +40,7 @@ export async function run() {
 
 function exitHook(err?: any) {
 
-  console.log('Exiting gracefully...');
+  LOG.info('Exiting gracefully...');
 
   if (err) {
     console.error(err);

@@ -1,13 +1,13 @@
 {
   "name": "kst-lab-hancock-ms-dlt-adapter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
   "authors": [
     "Javier Moreno Molina <javier.moreno.molina@bbva.com",
     "Angel Manzano Alcaraz <angel.manzano.contractor@bbva.com>"
   ],
-  "license": "Copyright",
+  "license": "ISC",
   "dependencies": {
     "bignumber": "^1.1.0",
     "body-parser": "^1.15.2",

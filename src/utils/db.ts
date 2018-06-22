@@ -21,14 +21,14 @@ export async function connect(): Promise<Db> {
   // tslint:disable-next-line:max-line-length
   const url: string = `${config.db.protocol}://${credentials}${config.db.host}:${config.db.port}/${config.db.database}?${config.db.params}`;
 
-  console.log('connection string = ', url);
+  LOG.info('connection string = ', url);
 
   // Use connect method to connect to the server
   return MongoClient
     .connect(url)
     .then((mongoClient: Db) => {
 
-      console.log('Connected successfully to server');
+      LOG.info('Connected successfully to server');
 
       client = mongoClient;
       return client;
