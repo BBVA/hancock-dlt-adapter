@@ -1,5 +1,5 @@
-import * as utils from '../../components/utils';
 import { IEthereumTransferSendRequest } from '../../models/ethereum';
+import * as utils from '../../utils/utils';
 
 export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
 

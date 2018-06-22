@@ -1,8 +1,8 @@
-import { Collection, Db, FindAndModifyWriteOpResultObject, WriteOpResult, InsertOneWriteOpResult } from 'mongodb';
-import { getScQueryByAddressOrAlias } from '../components/utils';
+import { Collection, Db, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import { IEthereumContractDbModel } from '../models/ethereum';
 import config from '../utils/config';
 import * as db from '../utils/db';
+import { getScQueryByAddressOrAlias } from '../utils/utils';
 
 const database: string = config.db.ethereum.database;
 

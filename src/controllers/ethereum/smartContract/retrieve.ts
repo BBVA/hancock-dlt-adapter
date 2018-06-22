@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import * as utils from '../../../components/utils';
 import * as domain from '../../../domain/ethereum';
 import { EthereumSmartContractSuccessResponse } from '../../../models/ethereum';
+import * as utils from '../../../utils/utils';
 
 export function find(req: Request, res: Response, next: NextFunction) {
 

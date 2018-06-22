@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import * as utils from '../../../components/utils';
 import * as domain from '../../../domain/ethereum';
 import {
-  EthereumSmartContractSmartcontractErrorResponse,
   EthereumSmartContractSuccessResponse,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
 } from '../../../models/ethereum';
+import * as utils from '../../../utils/utils';
 
 export function invoke(req: Request, res: Response, next: NextFunction) {
 

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import * as utils from '../../components/utils';
 import * as domain from '../../domain/ethereum';
 import {
   EthereumTransferErrorResponse,
   EthereumTransferSyncOkResponse,
   IEthereumTransferSendRequest,
 } from '../../models/ethereum';
+import * as utils from '../../utils/utils';
 
 export function sendTransfer(req: Request, res: Response, next: NextFunction) {
 

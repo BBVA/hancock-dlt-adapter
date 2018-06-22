@@ -1,4 +1,4 @@
-import responses from '../components/responses';
+import responses from '../utils/responses';
 
 export interface IProtocolResponse {
   code: string;
