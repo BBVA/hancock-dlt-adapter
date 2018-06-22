@@ -1,10 +1,11 @@
-import { Collection, Db, FindAndModifyWriteOpResultObject, WriteOpResult, InsertOneWriteOpResult } from 'mongodb';
+import { Collection, Db, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import { getScQueryByAddressOrAlias } from '../components/utils';
 import { IEthereumContractDbModel } from '../models/ethereum';
 import config from '../utils/config';
 import * as db from '../utils/db';
 
 const database: string = config.db.ethereum.database;
+const contractsCollection: string = config.db.ethereum.collections.contracts;
 
 async function getCollection(collection: string): Promise<Collection> {
   return await db.getDb(database).then((client: Db) => client.collection(collection));
@@ -12,7 +13,7 @@ async function getCollection(collection: string): Promise<Collection> {
 
 export async function getAllSmartContracts(): Promise<IEthereumContractDbModel[]> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll
     .find({})
@@ -23,7 +24,7 @@ export async function getAllSmartContracts(): Promise<IEthereumContractDbModel[]
 // tslint:disable-next-line:max-line-length
 export async function getSmartContractByAddressOrAlias(addressOrAlias: string): Promise<IEthereumContractDbModel | null> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   const query: any = getScQueryByAddressOrAlias(addressOrAlias);
 
@@ -33,7 +34,7 @@ export async function getSmartContractByAddressOrAlias(addressOrAlias: string): 
 
 export async function getSmartContractByAddress(address: string): Promise<IEthereumContractDbModel | null> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll.findOne({ address });
 
@@ -41,7 +42,7 @@ export async function getSmartContractByAddress(address: string): Promise<IEther
 
 export async function getSmartContractByAlias(alias: string): Promise<IEthereumContractDbModel | null> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll.findOne({ alias });
 
@@ -50,7 +51,7 @@ export async function getSmartContractByAlias(alias: string): Promise<IEthereumC
 // tslint:disable-next-line:max-line-length
 export async function deleteSmartContractByAddressOrAlias(addressOrAlias: string): Promise<FindAndModifyWriteOpResultObject> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   const query: any = getScQueryByAddressOrAlias(addressOrAlias);
 
@@ -60,7 +61,7 @@ export async function deleteSmartContractByAddressOrAlias(addressOrAlias: string
 
 export async function getCountVersionsByAlias(alias: string): Promise<number> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll.count({ alias: { $regex: `^${alias}@` } });
 
@@ -68,7 +69,7 @@ export async function getCountVersionsByAlias(alias: string): Promise<number> {
 
 export async function updateSmartContractAlias(alias: string, newAlias: string): Promise<WriteOpResult> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll.update({ alias }, { $set: { alias: newAlias } });
 
@@ -76,7 +77,7 @@ export async function updateSmartContractAlias(alias: string, newAlias: string):
 
 export async function insertSmartContract(contract: IEthereumContractDbModel): Promise<InsertOneWriteOpResult> {
 
-  const coll: Collection = await getCollection(config.db.ethereum.collections.contracts);
+  const coll: Collection = await getCollection(contractsCollection);
 
   return coll.insertOne(contract);
 
