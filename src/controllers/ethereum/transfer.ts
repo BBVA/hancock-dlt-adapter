@@ -7,11 +7,11 @@ import {
 } from '../../models/ethereum';
 import * as utils from '../../utils/utils';
 
-export function sendTransfer(req: Request, res: Response, next: NextFunction) {
+export async function sendTransfer(req: Request, res: Response, next: NextFunction) {
 
   const transfer: IEthereumTransferSendRequest = req.body;
 
-  domain
+  return domain
     .sendTransfer(transfer)
     .then((result: any) => utils.createReply(res, EthereumTransferSyncOkResponse, result))
     .catch(() => utils.createReply(res, EthereumTransferErrorResponse));

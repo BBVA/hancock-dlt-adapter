@@ -10,6 +10,15 @@ module.exports = {
         "!**/node_modules/**",
         "!src/custom-typings.d.ts",
     ],
+    bail: true,
+    coverageThreshold: {
+      global: {
+        branches: 60,
+        functions: 60,
+        lines: 60,
+        statements: 60
+      }
+    }
     // coverageReporters: [
     //     "json",
     //     "lcov",

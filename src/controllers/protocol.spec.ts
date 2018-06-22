@@ -1,9 +1,9 @@
 
 import 'jest';
-import * as protocolController from '../controllers/protocol';
 import * as domain from '../domain/protocol';
 import { IProtocolDecodeRequest, IProtocolEncodeRequest, ProtocolRequestOkResponse } from '../models/protocol';
 import * as utils from '../utils/utils';
+import * as protocolController from './protocol';
 
 jest.mock('../domain/protocol');
 jest.mock('../utils/utils');
@@ -27,7 +27,7 @@ describe('protocolController', async () => {
 
   });
 
-  it('should encode the payload successfully', async () => {
+  it('should call domain.encode with the the payload successfully', async () => {
 
     req = {
       body: {} as IProtocolEncodeRequest,
@@ -45,7 +45,7 @@ describe('protocolController', async () => {
 
   });
 
-  it('should decode the payload successfully', async () => {
+  it('should call domain.decode with the the payload successfully', async () => {
 
     req = {
       body: {

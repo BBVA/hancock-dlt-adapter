@@ -1,13 +1,10 @@
 
 import 'jest';
-import { healthCheckController } from '../controllers/healthcheck';
-import config from '../utils/config';
+import { healthCheckController } from './healthcheck';
 
-jest.mock('../utils/config', () => ({
-  application: 'whatever',
-}));
+jest.mock('../utils/config');
 
-describe('protocolController', async () => {
+describe('healthcheckController', async () => {
   let req: any;
   let res: any;
   let next: any;
@@ -18,48 +15,23 @@ describe('protocolController', async () => {
 
     res = {
       json: jest.fn(),
-      status: jest.fn(),
+      status: jest.fn().mockImplementation(() => res),
     };
 
     next = jest.fn();
 
   });
 
-  it('should encode the payload successfully', async () => {
-
-    req = {
-      body: {} as IProtocolEncodeRequest,
-    };
-
-    const domainEncodeMock = (domain.encode as jest.Mock).mockReturnValue('mockResult');
+  it('should return 200 and the application name from config', async () => {
 
     await healthCheckController(req, res, next);
 
-    expect(domainEncodeMock.mock.calls.length).toBe(1);
-    expect(domainEncodeMock.mock.calls).toEqual([[req.body]]);
-
-    expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ProtocolRequestOkResponse, { qrEncode: 'mockResult' }]]);
-
-  });
-
-  it('should decode the payload successfully', async () => {
-
-    req = {
-      body: {
-        code: 'whatever',
-      } as IProtocolDecodeRequest,
-    };
-
-    const domainDecodeMock = (domain.decode as jest.Mock).mockReturnValue('mockResult');
-
-    await protocolController.decode(req, res, next);
-
-    expect(domainDecodeMock.mock.calls.length).toBe(1);
-    expect(domainDecodeMock.mock.calls).toEqual([[req.body.code]]);
-
-    expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ProtocolRequestOkResponse, 'mockResult']]);
+    expect(res.status.mock.calls).toEqual([[200]]);
+    expect(res.json.mock.calls).toEqual([[{
+      app: 'applicationName',
+      success: true,
+    }]]);
 
   });
+
 });
