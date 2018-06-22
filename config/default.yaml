@@ -1,0 +1,29 @@
+env: dev
+app:
+  application: 'hancock:ms-dlt-adapter'
+  server:
+    protocol: 'http'
+    host: 'localhost'
+    port: 3000
+    externalPort: 3000
+    base: ''
+    externalBase: ''
+  blockchain:
+    ethereum:
+      host: ganache
+      port: 8545
+  db:
+    protocol: mongodb
+    host: mongo
+    port: 27017
+    database: 'hancock'
+    params: ''
+    user: ''
+    pass: ''
+    ethereum:
+      database: hancock
+      collections:
+        contracts: smartcontracts
+  logger:
+    logLevel: debug
+  protocol: 'hancock://qr?code=__CODE__'  
