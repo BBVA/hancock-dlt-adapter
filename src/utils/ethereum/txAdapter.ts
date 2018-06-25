@@ -77,7 +77,6 @@ export class TxAdapter extends Subprovider {
 
     reqs.push(
       txParams.gasPrice === undefined
-        // tslint:disable-next-line:max-line-length
         ? new Promise((resolve, reject) => this.emitPayload({ method: 'eth_gasPrice', params: [] }, callbackHandler(resolve, reject)))
         : Promise.resolve(null),
     );
@@ -91,7 +90,6 @@ export class TxAdapter extends Subprovider {
 
     reqs.push(
       txParams.gas === undefined
-        // tslint:disable-next-line:max-line-length
         ? new Promise((resolve, reject) => estimateGas(this.engine, this.cloneTxParams(txParams), callbackHandler(resolve, reject)))
         : Promise.resolve(null),
     );

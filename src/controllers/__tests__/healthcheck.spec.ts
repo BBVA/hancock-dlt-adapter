@@ -1,8 +1,8 @@
 
 import 'jest';
-import { healthCheckController } from './healthcheck';
+import { healthCheckController } from '../healthcheck';
 
-jest.mock('../utils/config');
+jest.mock('../../utils/config');
 
 describe('healthcheckController', async () => {
   let req: any;

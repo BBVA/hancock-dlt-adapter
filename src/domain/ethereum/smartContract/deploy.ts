@@ -21,7 +21,7 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
       bin,
     } as IEthereumSmartContractDeployModel;
 
-    return await adaptContractDeploy(deployModel);
+    return await _adaptContractDeploy(deployModel);
 
   } catch (e) {
 
@@ -31,7 +31,8 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
   }
 }
 
-async function adaptContractDeploy(contractDeployModel: IEthereumSmartContractDeployModel): Promise<any> {
+// tslint:disable-next-line:variable-name
+export const _adaptContractDeploy = async (contractDeployModel: IEthereumSmartContractDeployModel): Promise<any> => {
 
   LOG.debug('Adapting contract deploy');
 
@@ -60,8 +61,10 @@ async function adaptContractDeploy(contractDeployModel: IEthereumSmartContractDe
         }
       })
       .on('error', (e: any) => {
+
         LOG.error(e);
         reject(EthereumSmartContractSmartcontractErrorResponse);
+
       });
   });
-}
+};

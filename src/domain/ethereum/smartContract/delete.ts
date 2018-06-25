@@ -17,7 +17,6 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
     } else {
 
-      // tslint:disable-next-line:max-line-length
       LOG.error(`Smart contract cannot be de-registered. Result code ${result.ok} and error ${JSON.stringify(result.lastErrorObject)}`);
       return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
 

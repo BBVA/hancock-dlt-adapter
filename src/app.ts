@@ -1,4 +1,4 @@
-import { AppRouter } from './routes/index';
+import { appRouter } from './routes/index';
 import config from './utils/config';
 import * as db from './utils/db';
 import { Ethereum } from './utils/ethereum/index';
@@ -17,7 +17,7 @@ export async function run() {
       LOG.info('MongoDB connection open');
 
       const app = getApp();
-      app.use(config.server.base, AppRouter);
+      app.use(config.server.base, appRouter);
       app.listen(config.server.port, (error: any) => {
 
         if (error) {

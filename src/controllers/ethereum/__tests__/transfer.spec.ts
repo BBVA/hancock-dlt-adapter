@@ -1,16 +1,16 @@
 
 import 'jest';
-import * as domain from '../../domain/ethereum';
+import * as domain from '../../../domain/ethereum';
 import {
   EthereumTransferErrorResponse,
   EthereumTransferSyncOkResponse,
   IEthereumTransferSendRequest,
-} from '../../models/ethereum';
-import * as utils from '../../utils/utils';
-import * as transferController from './transfer';
+} from '../../../models/ethereum';
+import * as utils from '../../../utils/utils';
+import * as transferController from '../transfer';
 
-jest.mock('../../domain/ethereum');
-jest.mock('../../utils/utils');
+jest.mock('../../../domain/ethereum');
+jest.mock('../../../utils/utils');
 
 describe('transferController', async () => {
   let req: any;

@@ -27,7 +27,6 @@ export async function findOne(addressOrAlias: string): Promise<IEthereumContract
 
     const contractDbModel: IEthereumContractDbModel = await retrieveContractAbiByAddressOrAlias(addressOrAlias);
     LOG.info('One contract found', contractDbModel);
-    delete contractDbModel._id;
     return contractDbModel;
 
   } catch (e) {

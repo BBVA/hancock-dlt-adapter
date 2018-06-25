@@ -7,23 +7,23 @@ import {
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 
-export function invoke(req: Request, res: Response, next: NextFunction) {
+export async function invoke(req: Request, res: Response, next: NextFunction) {
 
   const params: IEthereumSmartContractInvokeRequest = req.body;
 
-  domain
+  return domain
     .invoke(params)
     .then((result: any) => utils.createReply(res, EthereumSmartContractSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));
 
 }
 
-export function invokeByQuery(req: Request, res: Response, next: NextFunction) {
+export async function invokeByQuery(req: Request, res: Response, next: NextFunction) {
 
   const addressOrAlias: string = req.params.query;
   const params: IEthereumSmartContractInvokeByQueryRequest = req.body;
 
-  domain
+  return domain
     .invokeByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, EthereumSmartContractSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));

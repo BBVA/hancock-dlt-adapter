@@ -1,12 +1,12 @@
 
 import 'jest';
-import * as domain from '../domain/protocol';
-import { IProtocolDecodeRequest, IProtocolEncodeRequest, ProtocolRequestOkResponse } from '../models/protocol';
-import * as utils from '../utils/utils';
-import * as protocolController from './protocol';
+import * as domain from '../../domain/protocol';
+import { IProtocolDecodeRequest, IProtocolEncodeRequest, ProtocolRequestOkResponse } from '../../models/protocol';
+import * as utils from '../../utils/utils';
+import * as protocolController from '../protocol';
 
-jest.mock('../domain/protocol');
-jest.mock('../utils/utils');
+jest.mock('../../domain/protocol');
+jest.mock('../../utils/utils');
 
 describe('protocolController', async () => {
   let req: any;
