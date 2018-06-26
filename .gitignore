@@ -10,3 +10,4 @@ config/local.yaml
 *.html
 coverage/
 complexity/
+tests/reports
