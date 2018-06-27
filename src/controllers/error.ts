@@ -24,7 +24,7 @@ export const ErrorMap: IErrorMap = {
   PROVIDER_ERROR: { code_internal: 'DC5030', code_http: 503, message: 'Service Unavailable' },
 };
 
-export function ErrorController(error: any, req: Request, res: Response, next: NextFunction) {
+export function errorController(error: any, req: Request, res: Response, next: NextFunction) {
 
   const customError: ICustomError = ErrorMap[error.message] || ErrorMap[Errors.DEFAULT_ERROR];
   // const logger = loggerUtils.getLogger(customError.code_internal);

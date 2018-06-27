@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import config from '../utils/config';
 
-import { ErrorController } from '../controllers/error';
-import { FallbackController } from '../controllers/fallback';
-import { HealthCheckController } from '../controllers/healthcheck';
-import { ProtocolRouter } from './protocol';
+import { errorController } from '../controllers/error';
+import { fallbackController } from '../controllers/fallback';
+import { healthCheckController } from '../controllers/healthcheck';
+import { protocolRouter } from './protocol';
 
-export const AppRouter = Router();
+export const appRouter = Router();
 
 Object.keys(config.blockchain).forEach((dlt: string) => {
 
@@ -14,14 +14,14 @@ Object.keys(config.blockchain).forEach((dlt: string) => {
 
   if (router) {
 
-    AppRouter.use(`/${dlt}`, router);
+    appRouter.use(`/${dlt}`, router);
 
   }
 
 });
 
-AppRouter
-  .use('/health', HealthCheckController)
-  .use('/protocol', ProtocolRouter)
-  .use(FallbackController)
-  .use(ErrorController);
+appRouter
+  .use('/health', healthCheckController)
+  .use('/protocol', protocolRouter)
+  .use(fallbackController)
+  .use(errorController);

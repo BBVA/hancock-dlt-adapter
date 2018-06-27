@@ -30,7 +30,6 @@ export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest)
   }
 }
 
-// tslint:disable-next-line:max-line-length
 export async function invokeByQuery(addressOrAlias: string, invokeRequest: IEthereumSmartContractInvokeByQueryRequest): Promise<any> {
 
   LOG.info(`Contract invoke by query: ${addressOrAlias}`);

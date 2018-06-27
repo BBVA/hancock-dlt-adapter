@@ -1,5 +1,5 @@
-import * as utils from '../../components/utils';
 import { IEthereumTransferSendRequest } from '../../models/ethereum';
+import * as utils from '../../utils/utils';
 
 export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
 
@@ -12,7 +12,7 @@ export async function sendTransfer(transfer: IEthereumTransferSendRequest): Prom
     LOG.info(`Sending Transfer`, transfer);
 
     ETH.web3.eth.sendTransaction(transfer, (err: any, result: any) => err
-      ? reject()
+      ? reject(err)
       : resolve(result));
 
   });

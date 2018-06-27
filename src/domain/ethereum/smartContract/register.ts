@@ -1,10 +1,10 @@
-import { InsertOneWriteOpResult } from 'mongodb';
+import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../db/ethereum';
 import {
+  EthereumSmartContractConflictResponse,
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
-import { EthereumSmartContractConflictResponse } from '../../../models/ethereum/smartContract';
 
 export async function register(alias: string, address: string, abi: any[]): Promise<void> {
 
@@ -23,7 +23,7 @@ export async function register(alias: string, address: string, abi: any[]): Prom
 
   if (!addressResult) {
 
-    await updateSmartContractVersion(alias);
+    await _updateSmartContractVersion(alias);
 
     const insert: InsertOneWriteOpResult = await db.insertSmartContract({
       abi,
@@ -46,7 +46,8 @@ export async function register(alias: string, address: string, abi: any[]): Prom
 
 }
 
-async function updateSmartContractVersion(alias: string) {
+// tslint:disable-next-line:variable-name
+export const _updateSmartContractVersion = async (alias: string): Promise<WriteOpResult | void> => {
 
   const aliasResult: IEthereumContractDbModel | null = await db.getSmartContractByAlias(alias);
 
@@ -58,4 +59,4 @@ async function updateSmartContractVersion(alias: string) {
     await db.updateSmartContractAlias(alias, newAlias);
 
   }
-}
+};

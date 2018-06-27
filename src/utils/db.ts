@@ -2,12 +2,13 @@ import * as mongodb from 'mongodb';
 import { Db } from 'mongodb';
 import config from './config';
 
-let client: Db;
+// tslint:disable-next-line:variable-name
+export let _client: Db;
 
-export async function connect(): Promise<Db> {
+export const connect = async (): Promise<Db> => {
 
-  if (client) {
-    return Promise.resolve(client);
+  if (_client) {
+    return Promise.resolve(_client);
   }
 
   const MongoClient = mongodb.MongoClient;
@@ -18,7 +19,6 @@ export async function connect(): Promise<Db> {
   }
 
   // Connection URL
-  // tslint:disable-next-line:max-line-length
   const url: string = `${config.db.protocol}://${credentials}${config.db.host}:${config.db.port}/${config.db.database}?${config.db.params}`;
 
   LOG.info('connection string = ', url);
@@ -30,8 +30,8 @@ export async function connect(): Promise<Db> {
 
       LOG.info('Connected successfully to server');
 
-      client = mongoClient;
-      return client;
+      _client = mongoClient;
+      return _client;
 
     })
     .catch((err: any) => {
@@ -40,25 +40,25 @@ export async function connect(): Promise<Db> {
 
     });
 
-}
+};
 
 export async function close(): Promise<void> {
 
-  return client
-    ? client.close()
+  return _client
+    ? _client.close()
     : Promise.resolve();
 
 }
 
-export async function getClient(): Promise<Db> {
+export const getClient = async (): Promise<Db> => {
 
-  return client
-    ? client
+  return _client
+    ? _client
     : connect();
 
-}
+};
 
-export function getDb(database: string) {
+export function getDb(database: string): Promise<Db> {
 
   return getClient().then((cli: Db) => cli.db(database));
 

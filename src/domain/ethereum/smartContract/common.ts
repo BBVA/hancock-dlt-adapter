@@ -74,7 +74,6 @@ export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
 }
 
-// tslint:disable-next-line:max-line-length
 export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContractInvokeModel): Promise<IEthereumSmartContractRawTxResponse> {
 
   LOG.info('Adapting contract invoke');
@@ -93,7 +92,6 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
     switch (action) {
       case SC_REQUEST_ACTIONS.SEND:
 
-        // tslint:disable-next-line:max-line-length
         contractMethod[action].call(null, { from: contractInvokeReq.from }, (error: Error, result: IEthereumSmartContractRawTxResponse) => {
 
           LOG.info(`Adapt invoke (${action}) callback`);
