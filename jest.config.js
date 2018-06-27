@@ -7,8 +7,14 @@ module.exports = {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     collectCoverageFrom: [
         "src/**/*.ts",
-        "!**/node_modules/**",
-        "!src/custom-typings.d.ts",
+        '!**/*.d.ts',
+        "!**/node_modules/**"
+    ],
+    reporters: [ "default", [ "jest-junit", { output: "tests/reports/unit/junit.xml" } ] ],
+    coverageDirectory: 'tests/reports/coverage',
+    coverageReporters: [
+        "cobertura",
+        "lcov"
     ],
     bail: true,
     coverageThreshold: {
@@ -19,10 +25,4 @@ module.exports = {
         statements: 60
       }
     }
-    // coverageReporters: [
-    //     "json",
-    //     "lcov",
-    //     "text",
-    //     "cobertura"
-    //   ]
 };
