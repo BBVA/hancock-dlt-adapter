@@ -9,12 +9,6 @@ jest.mock('../config');
 
 describe('utilsDb', () => {
 
-  global.LOG = {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   const mongodbMongoClientConnectMock: jest.Mock = (mongodb.MongoClient.connect as any);
   const mongodbDbClient: Db = (mongodb as any).__dbClient__;
 

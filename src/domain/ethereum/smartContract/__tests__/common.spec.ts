@@ -18,11 +18,6 @@ jest.mock('../../../../db/ethereum');
 
 describe('ethereumScCommonDomain', () => {
 
-  global.LOG = {
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   describe('::retrieveContractAbiByAddressOrAlias', () => {
 
     const dbMock: jest.Mock = (db.getSmartContractByAddressOrAlias as jest.Mock);

@@ -11,11 +11,6 @@ jest.mock('../../../../db/ethereum');
 
 describe('ethereumScDeleteDomain', () => {
 
-  global.LOG = {
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   describe('::deleteByQuery', () => {
 
     const dbMock: jest.Mock = (db.deleteSmartContractByAddressOrAlias as jest.Mock);

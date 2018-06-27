@@ -12,12 +12,6 @@ jest.mock('../../../../db/ethereum');
 
 describe('ethereumScRetrieveDomain', () => {
 
-  global.LOG = {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   describe('::find', () => {
 
     const dbMock: jest.Mock = (db.getAllSmartContracts as any);

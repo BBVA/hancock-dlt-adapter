@@ -8,12 +8,6 @@ jest.mock('../../../../db/ethereum');
 
 describe('ethereumScRegisterDomain', () => {
 
-  global.LOG = {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   describe('::_updateSmartContractVersion', () => {
 
     const dbContractMock: jest.Mock = (db.getSmartContractByAlias as any);

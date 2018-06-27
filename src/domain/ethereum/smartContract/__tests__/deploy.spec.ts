@@ -12,12 +12,6 @@ jest.mock('../common');
 
 describe('ethereumScDeployDomain', () => {
 
-  global.LOG = {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  };
-
   describe('::deploy', () => {
 
     const retrieveAbiMock: jest.Mock = (ethereumScCommonDomain.retrieveContractAbi as any);

@@ -14,10 +14,6 @@ describe('transferDomain', () => {
 
   const sendTransactionMock: jest.Mock = jest.fn();
 
-  global.LOG = {
-    info: jest.fn(),
-  };
-
   global.ETH = {
     web3: {
       eth: {
