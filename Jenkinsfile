@@ -56,7 +56,7 @@ nodePipeline{
     deploy_shuttle_stage(project: "blockchainhub", environment: "qa", askForConfirmation: false)
 
     stage ('Functional Tests') {
-      build job: '/blockchainhub/kst-hancock-ms-dlr-adapter-tests/master'
+      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master'
     }
 
   }
