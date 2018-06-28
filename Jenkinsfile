@@ -32,7 +32,7 @@ nodePipeline{
   // ---- RELEASE ----
   if (env.BRANCH_NAME =~ 'release/*') {
 
-    /*stage('Install Dependencies'){
+    stage('Install Dependencies'){
       container('node'){
         sh """
           yarn cache clean --force
@@ -47,7 +47,7 @@ nodePipeline{
           yarn run coverage
         """
       }
-    }*/
+    }
 
     docker_shuttle_stage()
 
