@@ -1,6 +1,6 @@
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractInternalServerErrorResponse } from '../../../models/ethereum/smartContract';
+import { EthereumSmartContractInternalServerErrorResponse, IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
 
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
@@ -8,16 +8,23 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   try {
 
-    const result: FindAndModifyWriteOpResultObject = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
+    const contractModel: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
-    if (result.ok === 1) {
+    if (!contractModel) {
+      throw new Error('Contract doesnt exists');
+    }
+
+    const resultInstance: FindAndModifyWriteOpResultObject = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
+    const resultAbi: FindAndModifyWriteOpResultObject = await db.deleteSmartContracAbitByName(contractModel.abiName);
+
+    if (resultInstance.ok === 1 && resultAbi.ok === 1) {
 
       LOG.info(`Smart contract de-registered`);
       return Promise.resolve();
 
     } else {
 
-      LOG.error(`Smart contract cannot be de-registered. Result code ${result.ok} and error ${JSON.stringify(result.lastErrorObject)}`);
+      LOG.error(`Smart contract cannot be de-registered. Result code ${resultInstance.ok} and error ${JSON.stringify(resultInstance.lastErrorObject)}`);
       return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
 
     }

@@ -25,13 +25,18 @@ export async function register(alias: string, address: string, abi: any[]): Prom
 
     await _updateSmartContractVersion(alias);
 
-    const insert: InsertOneWriteOpResult = await db.insertSmartContract({
+    const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
       abi,
+      name: alias,
+    });
+
+    const insertInstance: InsertOneWriteOpResult = await db.insertSmartContract({
+      abiName: alias,
       address,
       alias,
     });
 
-    if (insert && insert.result.ok) {
+    if (insertAbi.result.ok && insertInstance.result.ok) {
 
       LOG.info(`Smart contract registered as ${alias}`);
 
