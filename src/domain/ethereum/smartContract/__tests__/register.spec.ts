@@ -65,6 +65,7 @@ describe('ethereumScRegisterDomain', () => {
     let _updateSmartContractVersionMock: jest.Mock;
     const dbContractMock: jest.Mock = (db.getSmartContractByAddress as any);
     const dbInsertMock: jest.Mock = (db.insertSmartContract as any);
+    const dbInsertAbiMock: jest.Mock = (db.insertSmartContractAbi as any);
 
     const alias: string = 'mockedAlias';
     const address: string = 'mockedAddress';
@@ -85,7 +86,7 @@ describe('ethereumScRegisterDomain', () => {
 
     });
 
-    it('should instert a new contractModel in ddbb if it does not exist yet and update the previous aliased one', async () => {
+    it('should insert a new contractModel in ddbb if it does not exist yet and update the previous aliased one', async () => {
 
       const contractModelResponseMock: IEthereumContractDbModel | null = null;
       const insertResponseMock: InsertOneWriteOpResult = {
@@ -93,15 +94,22 @@ describe('ethereumScRegisterDomain', () => {
           ok: 1,
         },
       } as any;
+      const insertAbiResponseMock: InsertOneWriteOpResult = {
+        result: {
+          ok: 1,
+        },
+      } as any;
 
       dbContractMock.mockResolvedValue(contractModelResponseMock);
       dbInsertMock.mockResolvedValue(insertResponseMock);
+      dbInsertAbiMock.mockResolvedValue(insertAbiResponseMock);
 
       const result: any = await ethereumScRegisterDomain.register(alias, address, abi);
 
       expect(dbContractMock).toHaveBeenCalledWith(address);
       expect(_updateSmartContractVersionMock).toHaveBeenCalledWith(alias);
-      expect(dbInsertMock).toHaveBeenCalledWith({ abi, address, alias });
+      expect(dbInsertAbiMock).toHaveBeenCalledWith({ abi, name: alias });
+      expect(dbInsertMock).toHaveBeenCalledWith({ abiName: alias, address, alias });
       expect(LOG.info).toHaveBeenCalledWith(`Smart contract registered as ${alias}`);
       expect(result).toBeUndefined();
 

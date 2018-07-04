@@ -15,7 +15,7 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
     }
 
     const resultInstance: FindAndModifyWriteOpResultObject = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
-    const resultAbi: FindAndModifyWriteOpResultObject = await db.deleteSmartContracAbitByName(contractModel.abiName);
+    const resultAbi: FindAndModifyWriteOpResultObject = await db.deleteSmartContracAbiByName(contractModel.abiName);
 
     if (resultInstance.ok === 1 && resultAbi.ok === 1) {
 

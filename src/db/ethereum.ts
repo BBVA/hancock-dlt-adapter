@@ -114,12 +114,10 @@ export async function insertSmartContractAbi(contractAbiModel: IEthereumContract
 
 }
 
-export async function deleteSmartContracAbitByName(name: string): Promise<FindAndModifyWriteOpResultObject> {
+export async function deleteSmartContracAbiByName(name: string): Promise<FindAndModifyWriteOpResultObject> {
 
   const coll: Collection = await _getCollection(contractsAbisCollection);
 
-  const query: any = { name };
-
-  return coll.findOneAndDelete(query);
+  return coll.findOneAndDelete({ name });
 
 }

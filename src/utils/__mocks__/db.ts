@@ -1,5 +1,12 @@
 // tslint:disable-next-line:variable-name
+export const __aggregationCursor__ = {
+  next: jest.fn(),
+  toArray: jest.fn(),
+};
+
+// tslint:disable-next-line:variable-name
 export const __collection__ = {
+  aggregate: jest.fn().mockReturnValue(__aggregationCursor__),
   count: jest.fn().mockReturnThis(),
   find: jest.fn().mockReturnThis(),
   findOne: jest.fn().mockReturnThis(),
