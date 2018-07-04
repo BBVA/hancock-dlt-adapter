@@ -10,10 +10,10 @@ dev: build-dev down-dev
 	${COMPOSE_DEV} run --rm --service-ports hancock_dlt_adapter dev
 
 test: build-dev down-dev
-	${COMPOSE_DEV} run --rm --service-ports hancock_dlt_adapter test
+	${COMPOSE_DEV} run --rm --no-deps --service-ports hancock_dlt_adapter test
 
 coverage: build-dev down-dev
-	${COMPOSE_DEV} run --rm --service-ports hancock_dlt_adapter coverage
+	${COMPOSE_DEV} run --rm --no-deps --service-ports hancock_dlt_adapter coverage
 
 shell: build-dev down-dev
 	${COMPOSE_DEV} run --rm --no-deps hancock_dlt_adapter /bin/bash
