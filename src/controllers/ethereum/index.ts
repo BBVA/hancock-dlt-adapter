@@ -16,3 +16,4 @@ export async function getBalance(req: Request, res: Response, next: NextFunction
 
 export * from './transfer';
 export * from './smartContract';
+export * from './token';

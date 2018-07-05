@@ -6,3 +6,4 @@ export async function getBalance(address: string): Promise<number> {
 
 export * from './transfer';
 export * from './smartContract';
+export * from './token';
