@@ -10,6 +10,7 @@ app:
     externalBase: ''
   blockchain:
     ethereum:
+      protocol: http
       host: ganache
       port: 8545
   db:
