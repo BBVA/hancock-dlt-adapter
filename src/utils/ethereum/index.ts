@@ -23,7 +23,7 @@ export class Ethereum {
 
     // data source
     this.engine.addProvider(new RpcSubprovider({
-      rpcUrl: `http://${config.blockchain.ethereum.host}:${config.blockchain.ethereum.port}`,
+      rpcUrl: `${config.blockchain.ethereum.protocol}://${config.blockchain.ethereum.host}:${config.blockchain.ethereum.port}`,
     }));
 
     // network connectivity error
