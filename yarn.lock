@@ -405,7 +405,7 @@ async-eventemitter@^0.2.2:
   dependencies:
     async "^2.4.0"
 
-"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
+async-eventemitter@ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c:
   version "0.2.3"
   resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
   dependencies:
@@ -6866,7 +6866,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-web3-bzz@^1.0.0-beta.26:
+web3-bzz@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-bzz/-/web3-bzz-1.0.0-beta.34.tgz#068d37777ab65e5c60f8ec8b9a50cfe45277929c"
   dependencies:
@@ -6917,7 +6917,7 @@ web3-core-subscriptions@1.0.0-beta.34:
     underscore "1.8.3"
     web3-core-helpers "1.0.0-beta.34"
 
-web3-core@1.0.0-beta.34, web3-core@^1.0.0-beta.26:
+web3-core@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-core/-/web3-core-1.0.0-beta.34.tgz#121be8555e9fb00d2c5d05ddd3381d0c9e46987e"
   dependencies:
@@ -6970,7 +6970,7 @@ web3-eth-iban@1.0.0-beta.34:
     bn.js "4.11.6"
     web3-utils "1.0.0-beta.34"
 
-web3-eth-personal@1.0.0-beta.34, web3-eth-personal@^1.0.0-beta.26:
+web3-eth-personal@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-eth-personal/-/web3-eth-personal-1.0.0-beta.34.tgz#9afba167342ebde5420bcd5895c3f6c34388f205"
   dependencies:
@@ -6980,7 +6980,7 @@ web3-eth-personal@1.0.0-beta.34, web3-eth-personal@^1.0.0-beta.26:
     web3-net "1.0.0-beta.34"
     web3-utils "1.0.0-beta.34"
 
-web3-eth@^1.0.0-beta.26:
+web3-eth@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-eth/-/web3-eth-1.0.0-beta.34.tgz#74086000850c6fe6f535ef49837d6d4bb6113268"
   dependencies:
@@ -6997,7 +6997,7 @@ web3-eth@^1.0.0-beta.26:
     web3-net "1.0.0-beta.34"
     web3-utils "1.0.0-beta.34"
 
-web3-net@1.0.0-beta.34, web3-net@^1.0.0-beta.26:
+web3-net@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-net/-/web3-net-1.0.0-beta.34.tgz#427cea2f431881449c8e38d523290f173f9ff63d"
   dependencies:
@@ -7052,7 +7052,7 @@ web3-providers-ws@1.0.0-beta.34:
     web3-core-helpers "1.0.0-beta.34"
     websocket "git://github.com/frozeman/WebSocket-Node.git#browserifyCompatible"
 
-web3-shh@^1.0.0-beta.26:
+web3-shh@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-shh/-/web3-shh-1.0.0-beta.34.tgz#975061d71eaec42ccee576f7bd8f70f03844afe0"
   dependencies:
@@ -7061,7 +7061,7 @@ web3-shh@^1.0.0-beta.26:
     web3-core-subscriptions "1.0.0-beta.34"
     web3-net "1.0.0-beta.34"
 
-web3-utils@1.0.0-beta.34, web3-utils@^1.0.0-beta.26:
+web3-utils@1.0.0-beta.34:
   version "1.0.0-beta.34"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.0.0-beta.34.tgz#9411fc39aaef39ca4e06169f762297d9ff020970"
   dependencies:
@@ -7073,17 +7073,17 @@ web3-utils@1.0.0-beta.34, web3-utils@^1.0.0-beta.26:
     underscore "1.8.3"
     utf8 "2.1.1"
 
-web3@1.0.0-beta.26:
-  version "1.0.0-beta.26"
-  resolved "https://registry.yarnpkg.com/web3/-/web3-1.0.0-beta.26.tgz#bb46daf6aefc313f768b3de39d7f4a8d7bd06663"
+web3@^1.0.0-beta.26:
+  version "1.0.0-beta.34"
+  resolved "https://registry.yarnpkg.com/web3/-/web3-1.0.0-beta.34.tgz#347e561b784098cb5563315f490479a1d91f2ab1"
   dependencies:
-    web3-bzz "^1.0.0-beta.26"
-    web3-core "^1.0.0-beta.26"
-    web3-eth "^1.0.0-beta.26"
-    web3-eth-personal "^1.0.0-beta.26"
-    web3-net "^1.0.0-beta.26"
-    web3-shh "^1.0.0-beta.26"
-    web3-utils "^1.0.0-beta.26"
+    web3-bzz "1.0.0-beta.34"
+    web3-core "1.0.0-beta.34"
+    web3-eth "1.0.0-beta.34"
+    web3-eth-personal "1.0.0-beta.34"
+    web3-net "1.0.0-beta.34"
+    web3-shh "1.0.0-beta.34"
+    web3-utils "1.0.0-beta.34"
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
