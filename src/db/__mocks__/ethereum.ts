@@ -8,3 +8,7 @@ export const getCountVersionsByAlias = jest.fn();
 export const updateSmartContractAlias = jest.fn();
 export const insertSmartContract = jest.fn();
 export const insertSmartContractAbi = jest.fn();
+export const getAbiByName = jest.fn();
+export const getCountVersionsAbiByName = jest.fn();
+export const updateSmartContractAbiName = jest.fn();
+export const updateAbiAlias = jest.fn();

@@ -142,6 +142,18 @@ describe('dbEthereum', async () => {
 
     });
 
+    it('::getAbiByName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+
+      await ethereumDb.getAbiByName(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { name: mockedAlias });
+      expect(cursor.next).toHaveBeenCalled();
+
+    });
+
     it('::deleteSmartContractByAddressOrAlias should call getCollection and call dbClient.findOneAndDelete with params', async () => {
 
       const mockedAddressOrAlias: string = 'mockAddressOrAlias';
@@ -167,6 +179,17 @@ describe('dbEthereum', async () => {
 
     });
 
+    it('::getCountVersionsAbiByName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+
+      await ethereumDb.getCountVersionsAbiByName(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.count).toHaveBeenCalledWith({ name: { $regex: `^${mockedAlias}@` } });
+
+    });
+
     it('::updateSmartContractAlias should call getCollection and call dbClient.findOne with params', async () => {
 
       const mockedAlias: string = 'mockAlias';
@@ -176,6 +199,30 @@ describe('dbEthereum', async () => {
 
       expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(coll.update).toHaveBeenCalledWith({ alias: mockedAlias }, { $set: { alias: mockedNewAlias } });
+
+    });
+
+    it('::updateSmartContractAbiName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+      const mockedNewAlias: string = 'mockNewAlias';
+
+      await ethereumDb.updateSmartContractAbiName(mockedAlias, mockedNewAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.update).toHaveBeenCalledWith({ abiName: mockedAlias }, { $set: { abiName: mockedNewAlias } });
+
+    });
+
+    it('::updateAbiAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+      const mockedNewAlias: string = 'mockNewAlias';
+
+      await ethereumDb.updateAbiAlias(mockedAlias, mockedNewAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.update).toHaveBeenCalledWith({ name: mockedAlias }, { $set: { name: mockedNewAlias } });
 
     });
 

@@ -59,10 +59,64 @@ describe('ethereumScRegisterDomain', () => {
 
   });
 
+  describe('::_updateAbiVersion', () => {
+
+    const dbAbiMock: jest.Mock = (db.getAbiByName as any);
+    const dbCountAbiMock: jest.Mock = (db.getCountVersionsAbiByName as any);
+    const dbUpdateSmartConctracAbiMock: jest.Mock = (db.updateSmartContractAbiName as any);
+    const dbUpdateAbiAliasMock: jest.Mock = (db.updateAbiAlias as any);
+    beforeEach(() => {
+
+      dbAbiMock.mockReset();
+      dbCountAbiMock.mockReset();
+      dbUpdateSmartConctracAbiMock.mockReset();
+      dbUpdateAbiAliasMock.mockReset();
+
+    });
+
+    it('should update the abiName version in ddbb', async () => {
+
+      const alias: string = 'mockedAlias';
+
+      const contracModelResponse: IEthereumContractDbModel | null = {} as any;
+      dbAbiMock.mockResolvedValue(contracModelResponse);
+
+      dbCountAbiMock.mockResolvedValue(10);
+
+      const expectedResponse: WriteOpResult | void = {} as any;
+      dbUpdateSmartConctracAbiMock.mockResolvedValue(expectedResponse);
+
+      await ethereumScRegisterDomain._updateAbiVersion(alias);
+
+      expect(dbAbiMock).toHaveBeenCalledWith(alias);
+      expect(dbCountAbiMock).toHaveBeenCalledWith(alias);
+
+      const expectedCallArg: string = `${alias}@11`;
+      expect(dbUpdateSmartConctracAbiMock).toHaveBeenCalledWith(alias, expectedCallArg);
+
+    });
+
+    it('should not update the abiName version if the contractModel is not found ', async () => {
+
+      const alias: string = 'mockedAlias';
+      dbAbiMock.mockResolvedValue(null);
+
+      await ethereumScRegisterDomain._updateAbiVersion(alias);
+
+      expect(dbAbiMock).toHaveBeenCalledWith(alias);
+      expect(dbCountAbiMock).not.toHaveBeenCalled();
+      expect(dbUpdateSmartConctracAbiMock).not.toHaveBeenCalled();
+
+    });
+
+  });
+
   describe('::register', () => {
 
     // tslint:disable-next-line:variable-name
     let _updateSmartContractVersionMock: jest.Mock;
+    // tslint:disable-next-line:variable-name
+    let _updateAbiVersionMock: jest.Mock;
     const dbContractMock: jest.Mock = (db.getSmartContractByAddress as any);
     const dbInsertMock: jest.Mock = (db.insertSmartContract as any);
     const dbInsertAbiMock: jest.Mock = (db.insertSmartContractAbi as any);
@@ -75,6 +129,8 @@ describe('ethereumScRegisterDomain', () => {
 
       (ethereumScRegisterDomain._updateSmartContractVersion as any) = jest.fn();
       _updateSmartContractVersionMock = (ethereumScRegisterDomain._updateSmartContractVersion as any);
+      (ethereumScRegisterDomain._updateAbiVersion as any) = jest.fn();
+      _updateAbiVersionMock = (ethereumScRegisterDomain._updateAbiVersion as any);
 
     });
 
@@ -83,6 +139,7 @@ describe('ethereumScRegisterDomain', () => {
       dbContractMock.mockReset();
       dbInsertMock.mockReset();
       _updateSmartContractVersionMock.mockReset();
+      _updateAbiVersionMock.mockReset();
 
     });
 
@@ -108,6 +165,7 @@ describe('ethereumScRegisterDomain', () => {
 
       expect(dbContractMock).toHaveBeenCalledWith(address);
       expect(_updateSmartContractVersionMock).toHaveBeenCalledWith(alias);
+      expect(_updateAbiVersionMock).toHaveBeenCalledWith(alias);
       expect(dbInsertAbiMock).toHaveBeenCalledWith({ abi, name: alias });
       expect(dbInsertMock).toHaveBeenCalledWith({ abiName: alias, address, alias });
       expect(LOG.info).toHaveBeenCalledWith(`Smart contract registered as ${alias}`);
@@ -130,6 +188,7 @@ describe('ethereumScRegisterDomain', () => {
 
         expect(dbContractMock).toHaveBeenCalledWith(address);
         expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
+        expect(_updateAbiVersionMock).not.toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
         expect(LOG.error).toHaveBeenCalled();
 
