@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "description": "GetBalanceTokenResponse Response Schema",
+    "type": "object",
+    "properties": {
+      "result": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [ "code", "description" ]
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "string",
+            "description": "Get the token balance for account"
+          }
+        }
+      }
+    },
+    "required": [ "result", "data" ]
+  }
+  
