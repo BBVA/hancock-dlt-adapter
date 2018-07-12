@@ -216,9 +216,9 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
-    /{address|alias}:
+    /{scAddress}:
       uriParameters:
-        address|alias:
+        scAddress:
           type: string
       /balance:
         /{address}:
