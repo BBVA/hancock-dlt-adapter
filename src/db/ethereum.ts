@@ -72,6 +72,14 @@ export async function getSmartContractByAlias(alias: string): Promise<IEthereumC
 
 }
 
+export async function getAbiByName(name: string): Promise<IEthereumContractDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsAbisCollection);
+
+  return _aggregateCollections(coll, { name }).next();
+
+}
+
 export async function deleteSmartContractByAddressOrAlias(addressOrAlias: string): Promise<FindAndModifyWriteOpResultObject> {
 
   const coll: Collection = await _getCollection(contractsInstancesCollection);
@@ -90,11 +98,35 @@ export async function getCountVersionsByAlias(alias: string): Promise<number> {
 
 }
 
+export async function getCountVersionsAbiByName(name: string): Promise<number> {
+
+  const coll: Collection = await _getCollection(contractsAbisCollection);
+
+  return coll.count({ name: { $regex: `^${name}@` } });
+
+}
+
 export async function updateSmartContractAlias(alias: string, newAlias: string): Promise<WriteOpResult> {
 
   const coll: Collection = await _getCollection(contractsInstancesCollection);
 
   return coll.update({ alias }, { $set: { alias: newAlias } });
+
+}
+
+export async function updateSmartContractAbiName(name: string, newName: string): Promise<WriteOpResult> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.update({ abiName: name }, { $set: { abiName: newName } });
+
+}
+
+export async function updateAbiAlias(name: string, newName: string): Promise<WriteOpResult> {
+
+  const coll: Collection = await _getCollection(contractsAbisCollection);
+
+  return coll.update({ name }, { $set: { name: newName } });
 
 }
 
