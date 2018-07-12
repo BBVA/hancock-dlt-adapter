@@ -19,8 +19,8 @@ export async function tokenTransfer(transferRequest: IEthereumERC20TransferReque
       from: transferRequest.from,
       method: 'transfer',
       params: [transferRequest.to, transferRequest.value],
-      to: transferRequest.smarcContractAddress,
-    } as IEthereumSmartContractInvokeModel;
+      to: transferRequest.smartContractAddress,
+    };
 
     return await adaptContractInvoke(invokeModel);
 

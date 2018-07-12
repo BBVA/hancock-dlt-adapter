@@ -15,5 +15,6 @@
     "smartContractAddress": {
       "type": "string"
     }
-  }
+  },
+  "required": [ "from", "to", "value", "smartContractAddress" ]
 }

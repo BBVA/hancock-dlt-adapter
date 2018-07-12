@@ -4,7 +4,7 @@ export interface IEthereumERC20TransferRequest {
   from: string;
   to: string;
   value: string;
-  smarcContractAddress: string;
+  smartContractAddress: string;
 }
 
 export interface IEthereumTokenResponse {
