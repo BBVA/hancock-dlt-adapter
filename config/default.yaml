@@ -10,6 +10,7 @@ app:
     externalBase: ''
   blockchain:
     ethereum:
+      protocol: http
       host: ganache
       port: 8545
   db:
@@ -23,7 +24,8 @@ app:
     ethereum:
       database: hancock
       collections:
-        contracts: smartcontracts
+        contractAbis: sc_abi
+        contractInstances: sc_instance
   logger:
     logLevel: debug
   protocol: 'hancock://qr?code=__CODE__'  

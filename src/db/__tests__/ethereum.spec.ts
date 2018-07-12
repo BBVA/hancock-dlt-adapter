@@ -1,4 +1,6 @@
 import 'jest';
+import { AggregationCursor, Collection } from '../../../../kst-hancock-ms-dlt-broker/node_modules/@types/mongodb';
+import { IEthereumContractAbiDbModel, IEthereumContractInstanceDbModel } from '../../models/ethereum';
 import * as db from '../../utils/db';
 import * as utils from '../../utils/utils';
 import * as ethereumDb from '../ethereum';
@@ -17,27 +19,69 @@ describe('dbEthereum', async () => {
 
     await ethereumDb._getCollection('whateverCollectionToRetrieve');
 
-    expect(getDbMock.mock.calls.length).toBe(1);
-    expect(getDbMock.mock.calls).toEqual([['mockDatabase']]);
+    expect(getDbMock).toHaveBeenCalled();
+    expect(getDbMock).toHaveBeenCalledWith('mockDatabase');
 
-    expect(dbClientMock.collection.mock.calls.length).toBe(1);
-    expect(dbClientMock.collection.mock.calls).toEqual([['whateverCollectionToRetrieve']]);
+    expect(dbClientMock.collection).toHaveBeenCalled();
+    expect(dbClientMock.collection).toHaveBeenCalledWith('whateverCollectionToRetrieve');
+
+  });
+
+  describe('_aggregateCollections', async () => {
+
+    it('::should return the mongodb aggregationCursor successfully filtering by query', async () => {
+
+      const collMock: Collection = ((db as any).__collection__);
+      const cursorMock: AggregationCursor = ((db as any).__aggregationCursor__);
+      const queryMock: any = {};
+
+      const result = await ethereumDb._aggregateCollections(collMock, queryMock);
+
+      expect(collMock.aggregate).toHaveBeenCalled();
+      expect(result).toEqual(cursorMock);
+
+      const firstCallArg = (collMock.aggregate as jest.Mock).mock.calls[0][0];
+      expect(firstCallArg[0]).toHaveProperty('$match', queryMock);
+
+    });
+
+    it('::should return the mongodb aggregationCursor successfully without filter', async () => {
+
+      const collMock: Collection = ((db as any).__collection__);
+      const cursorMock: AggregationCursor = ((db as any).__aggregationCursor__);
+
+      const result = await ethereumDb._aggregateCollections(collMock);
+
+      expect(collMock.aggregate).toHaveBeenCalled();
+      expect(result).toEqual(cursorMock);
+
+      const firstCallArg = (collMock.aggregate as jest.Mock).mock.calls[0][0];
+      expect(firstCallArg).not.toHaveProperty('$match');
+
+    });
 
   });
 
   describe('with contracts collection', async () => {
 
-    let getColl: jest.Mock;
+    let getCollMock: jest.Mock;
+    let aggregateCollMock: jest.Mock;
+
     let coll: any;
+    let cursor: any;
     let getScQuery: jest.Mock;
-    const collName: string = 'mockDatabaseCollectionContracts';
+    const collNameInstances: string = 'mockDatabaseCollectionContractInstances';
+    const collNameAbis: string = 'mockDatabaseCollectionContractAbis';
 
     beforeAll(() => {
 
       coll = ((db as any).__collection__);
+      cursor = ((db as any).__aggregationCursor__);
 
-      (ethereumDb._getCollection as any) = jest.fn().mockResolvedValue(coll);
-      getColl = (ethereumDb._getCollection as jest.Mock);
+      getCollMock = jest.spyOn(ethereumDb, '_getCollection').mockResolvedValue(coll);
+      aggregateCollMock = jest.spyOn(ethereumDb, '_aggregateCollections').mockReturnValue(cursor);
+      // getCollMock = (ethereumDb._getCollection as jest.Mock);
+      // aggregateCollMock = (ethereumDb._aggregateCollections as jest.Mock);
 
       getScQuery = (utils.getScQueryByAddressOrAlias as jest.Mock);
 
@@ -53,12 +97,9 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.getAllSmartContracts();
 
-      expect(getColl).toHaveBeenCalledTimes(1);
-      expect(getColl).toHaveBeenCalledWith(collName);
-
-      expect(coll.find).toHaveBeenCalledTimes(1);
-      expect(coll.find).toHaveBeenCalledWith({});
-      expect(coll.toArray).toHaveBeenCalledTimes(1);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll);
+      expect(cursor.toArray).toHaveBeenCalled();
 
     });
 
@@ -70,9 +111,10 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.getSmartContractByAddressOrAlias(mockedAddressOrAlias);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(getScQuery).toHaveBeenCalledWith(mockedAddressOrAlias);
-      expect(coll.findOne).toHaveBeenCalledWith(mockedQuery);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll, mockedQuery);
+      expect(cursor.next).toHaveBeenCalled();
 
     });
 
@@ -82,8 +124,9 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.getSmartContractByAddress(mockedAddress);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
-      expect(coll.findOne).toHaveBeenCalledWith({ address: mockedAddress });
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { address: mockedAddress });
+      expect(cursor.next).toHaveBeenCalled();
 
     });
 
@@ -93,12 +136,25 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.getSmartContractByAlias(mockedAlias);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
-      expect(coll.findOne).toHaveBeenCalledWith({ alias: mockedAlias });
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { alias: mockedAlias });
+      expect(cursor.next).toHaveBeenCalled();
 
     });
 
-    it('::deleteSmartContractByAddressOrAlias should call getCollection and call dbClient.findOne with params', async () => {
+    it('::getAbiByName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+
+      await ethereumDb.getAbiByName(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { name: mockedAlias });
+      expect(cursor.next).toHaveBeenCalled();
+
+    });
+
+    it('::deleteSmartContractByAddressOrAlias should call getCollection and call dbClient.findOneAndDelete with params', async () => {
 
       const mockedAddressOrAlias: string = 'mockAddressOrAlias';
       const mockedQuery: any = {};
@@ -106,7 +162,7 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.deleteSmartContractByAddressOrAlias(mockedAddressOrAlias);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(getScQuery).toHaveBeenCalledWith(mockedAddressOrAlias);
       expect(coll.findOneAndDelete).toHaveBeenCalledWith(mockedQuery);
 
@@ -118,8 +174,19 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.getCountVersionsByAlias(mockedAlias);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(coll.count).toHaveBeenCalledWith({ alias: { $regex: `^${mockedAlias}@` } });
+
+    });
+
+    it('::getCountVersionsAbiByName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+
+      await ethereumDb.getCountVersionsAbiByName(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.count).toHaveBeenCalledWith({ name: { $regex: `^${mockedAlias}@` } });
 
     });
 
@@ -130,19 +197,65 @@ describe('dbEthereum', async () => {
 
       await ethereumDb.updateSmartContractAlias(mockedAlias, mockedNewAlias);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(coll.update).toHaveBeenCalledWith({ alias: mockedAlias }, { $set: { alias: mockedNewAlias } });
+
+    });
+
+    it('::updateSmartContractAbiName should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+      const mockedNewAlias: string = 'mockNewAlias';
+
+      await ethereumDb.updateSmartContractAbiName(mockedAlias, mockedNewAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.update).toHaveBeenCalledWith({ abiName: mockedAlias }, { $set: { abiName: mockedNewAlias } });
+
+    });
+
+    it('::updateAbiAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockAlias';
+      const mockedNewAlias: string = 'mockNewAlias';
+
+      await ethereumDb.updateAbiAlias(mockedAlias, mockedNewAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.update).toHaveBeenCalledWith({ name: mockedAlias }, { $set: { name: mockedNewAlias } });
 
     });
 
     it('::insertSmartContract should call getCollection and call dbClient.findOne with params', async () => {
 
-      const mockedContract: any = {};
+      const mockedContract: IEthereumContractInstanceDbModel = {} as any;
 
       await ethereumDb.insertSmartContract(mockedContract);
 
-      expect(getColl).toHaveBeenCalledWith(collName);
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(coll.insertOne).toHaveBeenCalledWith(mockedContract);
+
+    });
+
+    it('::insertSmartContractAbi should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAbiModel: IEthereumContractAbiDbModel = {} as any;
+
+      await ethereumDb.insertSmartContractAbi(mockedAbiModel);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.insertOne).toHaveBeenCalledWith(mockedAbiModel);
+
+    });
+
+    it('::deleteSmartContracAbiByName should call getCollection and call dbClient.findOneAndDelete with params', async () => {
+
+      const mockedName: string = 'mockedAbiName';
+
+      await ethereumDb.deleteSmartContracAbiByName(mockedName);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
+      expect(coll.findOneAndDelete).toHaveBeenCalledWith({ name: mockedName });
 
     });
 

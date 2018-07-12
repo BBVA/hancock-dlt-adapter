@@ -61,4 +61,13 @@ nodePipeline{
 
   }
 
+  // ---- DEMO ----
+  if (env.BRANCH_NAME == 'demo') {
+
+    docker_shuttle_stage()
+
+    deploy_shuttle_stage(project: "blockchainhub", environment: "demo", askForConfirmation: false)
+
+  }
+
 }

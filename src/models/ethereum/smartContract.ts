@@ -164,9 +164,22 @@ export const EthereumSmartContractInvalidTransactionInvokationResponse: IEthereu
 
 // DDBB
 
-export interface IEthereumContractDbModel {
+export interface IEthereumContractInstanceDbModel {
   _id?: any;
   alias: string;
   address: string;
+  abiName: string;
+}
+
+export interface IEthereumContractAbiDbModel {
+  _id?: any;
+  name: string;
+  abi: any[];
+}
+
+export interface IEthereumContractDbModel {
+  alias: string;
+  address: string;
+  abiName: string;
   abi: any[];
 }

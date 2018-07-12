@@ -24,14 +24,20 @@ export async function register(alias: string, address: string, abi: any[]): Prom
   if (!addressResult) {
 
     await _updateSmartContractVersion(alias);
+    await _updateAbiVersion(alias);
 
-    const insert: InsertOneWriteOpResult = await db.insertSmartContract({
+    const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
       abi,
+      name: alias,
+    });
+
+    const insertInstance: InsertOneWriteOpResult = await db.insertSmartContract({
+      abiName: alias,
       address,
       alias,
     });
 
-    if (insert && insert.result.ok) {
+    if (insertAbi.result.ok && insertInstance.result.ok) {
 
       LOG.info(`Smart contract registered as ${alias}`);
 
@@ -57,6 +63,22 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
     const newAlias: string = `${alias}@${numVersions + 1}`;
 
     await db.updateSmartContractAlias(alias, newAlias);
+
+  }
+};
+
+// tslint:disable-next-line:variable-name
+export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | void> => {
+
+  const aliasResult: IEthereumContractDbModel | null = await db.getAbiByName(name);
+
+  if (aliasResult) {
+
+    const numVersionsAbi: number = await db.getCountVersionsAbiByName(name);
+    const newName: string = `${name}@${numVersionsAbi + 1}`;
+
+    await db.updateSmartContractAbiName(name, newName);
+    await db.updateAbiAlias(name, newName);
 
   }
 };

@@ -15,27 +15,14 @@ web3.eth
 
     console.log('accounts => \n', accounts);
 
-    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/EIP20.abi', 'utf8'));
-    const bytecode = fs.readFileSync(__dirname + '/contracts/EIP20.bin', 'utf8');
-
-    var contract = new web3.eth.Contract(abi);
-    const coinbase = accounts[0];
-    // const coinbase = web3.eth.coinbase;
-
-    const tokenSupply = 1000;
-    const tokenName = 'Token';
-    const tokenDecimals = 0;
-    const tokenSymbol = 'TKN';
-
-    contract.deploy({
-      data: bytecode,
-      arguments: [tokenSupply, tokenName, tokenDecimals, tokenSymbol]
+    web3.eth.sendTransaction({
+      "from": "0x6c0a14f7561898b9ddc0c57652a53b2c6665443e",
+      "data": "0xa9059cbb000000000000000000000000f01b3c2131fb5bd8d1d1e5d44f8ad14a2728ec910000000000000000000000000000000000000000000000000000000000000005",
+      "gasPrice": "0x4A817C800",
+      "gas": "0xc7c5",
+      "to": "0x6144e332f11fac05c20375e59ee696ddfe483de0",
+      "nonce": "0x2"
     })
-      .send({
-        from: coinbase,
-        gas: 1500000,
-        gasPrice: '30000000000000'
-      })
       .on('error', function (error) {
 
         console.error(error);
@@ -47,13 +34,12 @@ web3.eth
       })
       .on('receipt', function (receipt) {
 
-        console.log('address => ' + receipt.contractAddress) // contains the new contract address
+        console.log('address => ' + receipt)
 
       })
-      // .on('confirmation', function(confirmationNumber, receipt){ ... })
       .then(function (newContractInstance) {
 
-        console.log('new instasnce => ' + newContractInstance.options.address) // instance with the new contract address
+        console.log('new instasnce => ' + newContractInstance)
         process.exit();
 
       });

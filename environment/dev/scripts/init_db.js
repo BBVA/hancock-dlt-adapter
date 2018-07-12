@@ -1,27 +1,43 @@
 
 try {
-  
-  function initDltAdapterDB() {
 
-    const abi = JSON.parse(cat('/scripts/adapter/contracts/EIP20.abi'));
+  function initSmartContractInstancesDB() {
 
-    constractsDb = db.getSiblingDB("hancock");
-    collection = constractsDb.smartcontracts;
+    hancockDb = db.getSiblingDB("hancock");
+    collection = hancockDb.sc_instance;
 
     let res = [
       collection.drop(),
       collection.createIndex({ 'alias': 1 }, { unique: true }),
       collection.createIndex({ 'address': 1 }, { unique: true }),
-      collection.createIndex({ 'abi': 1 }),
-      collection.insert({ "alias": "eip20", "address": "0x9DeE2e4F57ddb4bC86d53EAd86a5DB718Ea64C00", "abi": abi }),
+      collection.createIndex({ 'abiName': 1 }),
+      collection.insert({ "alias": "erc20-tkn", "address": "0x9dee2e4f57ddb4bc86d53ead86a5db718ea64c00", "abiName": "erc20" }),
     ];
 
     printjson(res);
   }
 
-  initDltAdapterDB();
+  function initSmartContractAbisDB() {
 
-} catch(error) {
+    const abi = JSON.parse(cat('/scripts/adapter/contracts/EIP20.abi'));
+
+    hancockDb = db.getSiblingDB("hancock");
+    collection = hancockDb.sc_abi;
+
+    let res = [
+      collection.drop(),
+      collection.createIndex({ 'name': 1 }, { unique: true }),
+      collection.createIndex({ 'abi': 1 }),
+      collection.insert({ "name": "erc20", "abi": abi }),
+    ];
+
+    printjson(res);
+  }
+
+  initSmartContractAbisDB();
+  initSmartContractInstancesDB();
+
+} catch (error) {
 
   print('Error, exiting', error);
   quit(1);
