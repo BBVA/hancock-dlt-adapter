@@ -10,4 +10,5 @@ const schemaPath: string = path.normalize(__dirname + '/../../../../raml/schemas
 const TransferTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transfer.json`, 'utf-8'));
 
 TokenRouter
+  .get(':scaddress|alias/balance/:address', smartContractController.getTokenBalance)
   .post('/transfer', validate({body: TransferTokenSchema}), smartContractController.tokenTransfer);
