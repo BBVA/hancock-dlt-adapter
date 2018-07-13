@@ -200,6 +200,26 @@ securitySchemes:
                 type: GetBalanceResponse
 
   /token:
+    /{scAddress|alias}: 
+      uriParameters: 
+        scAddress|alias: 
+          type: string 
+      /balance: 
+        /{address}: 
+          uriParameters: 
+            address: 
+              type: string 
+          get: 
+            description: Obtain the native ERC20 token currency balance of an address 
+            responses: 
+              200: 
+                body: 
+                  application/json: 
+                    type: GetBalanceTokenResponse 
+              500: 
+                body: 
+                  application/json: 
+                    type: GenericResponse   
     /transfer:
       post:
         description: Transfer ERC20 tokens between two addresses
