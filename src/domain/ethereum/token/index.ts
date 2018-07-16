@@ -1,23 +1,21 @@
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel,
-  IEthereumERC20TransferRequest, IEthereumSmartContractInvokeModel } from '../../../models/ethereum';
-import { adaptContractInvoke, retrieveContractAbiByAddressOrAlias  } from '../smartContract/common';
+import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel } from '../../../models/ethereum';
 
 
 export * from './transfer';
 
-export async function getTokenBalance(address: string, scaddress: string): Promise<number> {
+export async function getTokenBalance(address: string, addressOrAlias: string): Promise<number> {
 
   LOG.info(`Token balance`);
 
   try {
 
-    const abi: IEthereumContractDbModel | null = await db.getAbiByName('erc20');
+    const abi: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
     if (abi) {
 
       return new Promise<number>((resolve, reject) => {
-        ETH.web3.eth.contract(abi.abi).at(scaddress).balanceOf(address, (err: any, result: number) => err ? reject(err) : resolve(result));
+        ETH.web3.eth.contract(abi.abi, abi.address).balanceOf(address, (err: any, result: number) => err ? reject(err) : resolve(result));
       });
     } else {
 

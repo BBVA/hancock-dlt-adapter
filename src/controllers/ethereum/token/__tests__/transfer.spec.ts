@@ -7,6 +7,7 @@ import * as ethereumTokenTransferController from '../index';
 
 jest.mock('../../../../domain/ethereum');
 jest.mock('../../../../utils/utils');
+jest.mock('../../../../domain/ethereum/token');
 
 describe('tokenTransferController', async () => {
   let req: any;

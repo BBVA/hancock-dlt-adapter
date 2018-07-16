@@ -3,31 +3,33 @@ import 'jest';
 import * as tokenDomain from '../../../ethereum/token';
 import * as db from '../../../../db/ethereum';
 
-jest.mock('../transfer');
-jest.mock('../smartContract');
-jest.mock('../token');
-jest.mock('../../../utils/utils');
+//jest.mock('../../token');
+jest.mock('../../../../utils/utils');
+jest.mock('../../../../db/ethereum');
 
 describe('tokenDomain', () => {
 
-  const dbMock: jest.Mock = (db.getAbiByName as any);
-  let iEthereumContractDbModel;
+  const dbMock: jest.Mock = (db.getSmartContractByAddressOrAlias as any);
   const address: string = '0xWhatever';
-  const scAddress: string = '0xTokenever';
+  const addressOrAlias: string = '0xTokenever';
+  let iEthereumContractDbModel;
 
-  const getBalanceMock: jest.Mock = jest.fn();
+  const getTokenBalanceMock: jest.Mock = jest.fn();
+  const contractMock: jest.Mock = jest.fn().mockReturnValue({
+    balanceOf: getTokenBalanceMock,
+  });
 
   global.ETH = {
     web3: {
       eth: {
-        getBalance: getBalanceMock,
+        contract: contractMock,
       },
     },
   };
 
   beforeEach(() => {
 
-    getBalanceMock.mockReset();
+    getTokenBalanceMock.mockReset();
     dbMock.mockReset();
 
     iEthereumContractDbModel = {
@@ -39,19 +41,19 @@ describe('tokenDomain', () => {
 
   });
 
-  it('should call the db.getAbiByName method and retrieve the balance of token', async () => {
+  it('should call the db.getSmartContractByAddressOrAlias method and retrieve the balance of token', async () => {
 
     const response: any = 'whatever';
     dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
 
-    getBalanceMock.mockImplementationOnce((addr, callbacks) => {
+    getTokenBalanceMock.mockImplementationOnce((addr, callbacks) => {
       callbacks(null, response);
     });
 
-    const result: any = await tokenDomain.getTokenBalance(address,scAddress);
+    const result: any = await tokenDomain.getTokenBalance(address,addressOrAlias);
 
     expect(dbMock).toHaveBeenCalledTimes(1);
-    const firstCall = getBalanceMock.mock.calls[0];
+    const firstCall = getTokenBalanceMock.mock.calls[0];
     expect(firstCall[0]).toEqual(address);
     expect(result).toEqual(response);
 
@@ -61,18 +63,20 @@ describe('tokenDomain', () => {
 
     const throwedError = new Error('Boom!');
 
-    getBalanceMock.mockImplementationOnce((addr, callbacks) => {
+    dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
+
+    getTokenBalanceMock.mockImplementationOnce((addr, callbacks) => {
       callbacks(throwedError, undefined);
     });
 
     try {
 
-      await tokenDomain.getTokenBalance(address,scAddress);
+      await tokenDomain.getTokenBalance(address,addressOrAlias);
       fail('it should fail');
 
     } catch (e) {
-
-      const firstCall = getBalanceMock.mock.calls[0];
+      
+      const firstCall = getTokenBalanceMock.mock.calls[0];
       expect(firstCall[0]).toEqual(address);
       expect(e).toEqual(throwedError);
 

@@ -8,12 +8,10 @@ export * from './transfer';
 export async function getTokenBalance(req: Request, res: Response, next: NextFunction) {
 
     const address: string = req.params.address;
-    const scaddress: string = req.params.scaddress;
-    //const alias: string = req.params.alias;
-  
+    const addressOrAlias: string = req.params.scaddress;
+
     return domain
-      .getTokenBalance(address,scaddress)
+      .getTokenBalance(address, addressOrAlias)
       .then((balance: number) => utils.createReply(res, EthereumOkTokenResponse, { balance }))
       .catch(() => utils.createReply(res, EthereumErrorTokenResponse));
-  
   }
