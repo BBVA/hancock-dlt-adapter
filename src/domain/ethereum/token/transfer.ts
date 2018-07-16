@@ -1,6 +1,6 @@
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel,
-  IEthereumSmartContractInvokeModel, IEthereumTokenRequest } from '../../../models/ethereum';
+import { EthereumSmartContractNotFoundResponse, IEthereumContractAbiDbModel,
+  IEthereumSmartContractInvokeModel, IEthereumTokenRequest  } from '../../../models/ethereum';
 import { adaptContractInvoke, retrieveContractAbiByAddressOrAlias  } from '../smartContract/common';
 
 export async function tokenTransfer(transferRequest: IEthereumTokenRequest): Promise<any> {
@@ -9,7 +9,7 @@ export async function tokenTransfer(transferRequest: IEthereumTokenRequest): Pro
 
   try {
 
-    const abi: IEthereumContractDbModel | null = await db.getAbiByName('erc20');
+    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
 
     if (abi) {
 
