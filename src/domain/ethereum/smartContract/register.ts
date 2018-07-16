@@ -1,56 +1,116 @@
 import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../db/ethereum';
 import {
+  EthereumSmartContractAbiNameNotFoundResponse,
   EthereumSmartContractConflictResponse,
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
+  IEthereumContractInstanceDbModel,
 } from '../../../models/ethereum/smartContract';
 
-export async function register(alias: string, address: string, abi: any[]): Promise<void> {
+export async function register(alias: string, address: string, abi: any[], abiName?: string): Promise<void> {
 
-  let addressResult: IEthereumContractDbModel | null;
+  if (abiName) {
 
-  try {
+    await registerInstance(alias, address, abiName);
 
-    addressResult = await db.getSmartContractByAddress(address);
+  } else {
 
-  } catch (e) {
+    const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
 
-    LOG.error(`Smart contract ${alias} cannot be registered: ${e}`);
-    throw EthereumSmartContractInternalServerErrorResponse;
+    if (!instanceResult) {
+
+      await registerAbi(alias, abi);
+      await registerInstance(alias, address, alias);
+
+    } else {
+
+      LOG.error(`Smart contract ${alias} cannot be registered due to a conflict`);
+      throw EthereumSmartContractConflictResponse;
+
+    }
 
   }
 
-  if (!addressResult) {
+}
 
-    await _updateSmartContractVersion(alias);
-    await _updateAbiVersion(alias);
+export async function registerAbi(name: string, abi: any[]): Promise<void> {
 
-    const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
-      abi,
-      name: alias,
-    });
+  await _updateAbiVersion(name);
 
-    const insertInstance: InsertOneWriteOpResult = await db.insertSmartContract({
-      abiName: alias,
-      address,
-      alias,
-    });
+  const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
+    abi,
+    name,
+  });
 
-    if (insertAbi.result.ok && insertInstance.result.ok) {
+  if (insertAbi.result.ok) {
 
-      LOG.info(`Smart contract registered as ${alias}`);
+    LOG.info(`Smart contract abi registered as ${name}`);
+
+  }
+
+}
+
+export async function registerInstance(alias: string, address: string, abiName: string): Promise<void> {
+
+  const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
+
+  if (!instanceResult) {
+
+    let insertInstance: InsertOneWriteOpResult | null = null;
+    const abi: IEthereumContractDbModel | null = await db.getAbiByName(abiName);
+
+    if (abi) {
+
+      await _updateSmartContractVersion(alias);
+
+      insertInstance = await db.insertSmartContract({
+        abiName,
+        address,
+        alias,
+      });
+
+    } else {
+
+      LOG.error(`Smart contract instance ${alias} cannot be registered, (abiName not found)`);
+      throw EthereumSmartContractAbiNameNotFoundResponse;
+
+    }
+
+    if (insertInstance && insertInstance.result.ok) {
+
+      LOG.info(`Smart contract instance registered as ${alias}`);
 
     }
 
   } else {
 
-    LOG.error(`Smart contract ${alias} cannot be registered due to a conflict`);
+    LOG.error(`Smart contract instance ${alias} cannot be registered due to a conflict`);
     throw EthereumSmartContractConflictResponse;
 
   }
 
 }
+
+// tslint:disable-next-line:variable-name
+export const _retrieveSmartContractInstance = async (address: string): Promise<IEthereumContractInstanceDbModel | null> => {
+
+  let instanceResult: IEthereumContractInstanceDbModel | null;
+
+  try {
+
+    instanceResult = await db.getSmartContractByAddress(address);
+
+  } catch (e) {
+
+    LOG.error(`Smart contract ${address} cannot be registered: ${e}`);
+    throw EthereumSmartContractInternalServerErrorResponse;
+
+  }
+
+  return instanceResult;
+
+};
 
 // tslint:disable-next-line:variable-name
 export const _updateSmartContractVersion = async (alias: string): Promise<WriteOpResult | void> => {
