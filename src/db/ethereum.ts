@@ -72,7 +72,7 @@ export async function getSmartContractByAlias(alias: string): Promise<IEthereumC
 
 }
 
-export async function getAbiByName(name: string): Promise<IEthereumContractDbModel | null> {
+export async function getAbiByName(name: string): Promise<IEthereumContractAbiDbModel | null> {
 
   const coll: Collection = await _getCollection(contractsAbisCollection);
 

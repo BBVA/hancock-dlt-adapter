@@ -4,6 +4,7 @@ import {
   EthereumSmartContractAbiNameNotFoundResponse,
   EthereumSmartContractConflictResponse,
   EthereumSmartContractInternalServerErrorResponse,
+  IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
 } from '../../../models/ethereum/smartContract';
@@ -34,7 +35,7 @@ export async function register(alias: string, address: string, abi: any[], abiNa
 
 }
 
-export async function registerAbi(name: string, abi: any[]): Promise<void> {
+export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
   await _updateAbiVersion(name);
 
@@ -49,16 +50,16 @@ export async function registerAbi(name: string, abi: any[]): Promise<void> {
 
   }
 
-}
+};
 
-export async function registerInstance(alias: string, address: string, abiName: string): Promise<void> {
+export const registerInstance = async (alias: string, address: string, abiName: string): Promise<void> => {
 
   const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
 
   if (!instanceResult) {
 
     let insertInstance: InsertOneWriteOpResult | null = null;
-    const abi: IEthereumContractDbModel | null = await db.getAbiByName(abiName);
+    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName(abiName);
 
     if (abi) {
 
@@ -90,7 +91,7 @@ export async function registerInstance(alias: string, address: string, abiName: 
 
   }
 
-}
+};
 
 // tslint:disable-next-line:variable-name
 export const _retrieveSmartContractInstance = async (address: string): Promise<IEthereumContractInstanceDbModel | null> => {
@@ -130,7 +131,7 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 // tslint:disable-next-line:variable-name
 export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | void> => {
 
-  const aliasResult: IEthereumContractDbModel | null = await db.getAbiByName(name);
+  const aliasResult: IEthereumContractAbiDbModel | null = await db.getAbiByName(name);
 
   if (aliasResult) {
 

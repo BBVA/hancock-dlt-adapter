@@ -19,7 +19,7 @@ declare module 'uuid';
 declare module 'method-override';
 declare module 'errorhandler';
 
-declare module NodeJS  {
+declare module NodeJS {
   interface Global {
     LOG: any;
     ETH: any;

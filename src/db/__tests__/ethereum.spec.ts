@@ -154,6 +154,42 @@ describe('dbEthereum', async () => {
 
     });
 
+    it('::getInstanceByAddressOrAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAddressOrAlias: string = 'mockedAddressOrAlias';
+      const mockedQuery: any = {};
+      getScQuery.mockReturnValue(mockedQuery);
+
+      await ethereumDb.getInstanceByAddressOrAlias(mockedAddressOrAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(getScQuery).toHaveBeenCalledWith(mockedAddressOrAlias);
+      expect(coll.findOne).toHaveBeenCalledWith(mockedQuery);
+
+    });
+
+    it('::getInstanceByAddress should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAddress: string = 'mockedAddress';
+
+      await ethereumDb.getInstanceByAddress(mockedAddress);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.findOne).toHaveBeenCalledWith({ address: mockedAddress });
+
+    });
+
+    it('::getInstanceByAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockedAlias';
+
+      await ethereumDb.getInstanceByAlias(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.findOne).toHaveBeenCalledWith({ alias: mockedAlias });
+
+    });
+
     it('::deleteSmartContractByAddressOrAlias should call getCollection and call dbClient.findOneAndDelete with params', async () => {
 
       const mockedAddressOrAlias: string = 'mockAddressOrAlias';
