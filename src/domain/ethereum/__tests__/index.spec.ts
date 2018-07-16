@@ -4,6 +4,7 @@ import * as ethereumDomain from '../../ethereum';
 
 jest.mock('../transfer');
 jest.mock('../smartContract');
+jest.mock('../token');
 jest.mock('../../../utils/utils');
 
 describe('ethereumDomain', () => {

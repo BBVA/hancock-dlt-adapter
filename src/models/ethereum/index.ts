@@ -27,3 +27,4 @@ export const EthereumOkResponse: IEthereumResponse = {
 export * from './common';
 export * from './transfer';
 export * from './smartContract';
+export * from './token';
