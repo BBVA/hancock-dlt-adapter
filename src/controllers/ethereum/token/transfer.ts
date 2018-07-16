@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import * as domain from '../../../domain/ethereum';
 import {
   EthereumTokenTransferSuccessResponse,
-  IEthereumERC20TransferRequest,
+  IEthereumTokenRequest,
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 
 export async function tokenTransfer(req: Request, res: Response, next: NextFunction) {
 
-  const params: IEthereumERC20TransferRequest = req.body;
+  const params: IEthereumTokenRequest = req.body;
 
   return domain
     .tokenTransfer(params)

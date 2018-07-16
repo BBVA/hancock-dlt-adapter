@@ -1,6 +1,6 @@
 import responses from '../../utils/responses';
 
-export interface IEthereumERC20TransferRequest {
+export interface IEthereumTokenRequest {
   from: string;
   to: string;
   value: string;
@@ -18,6 +18,7 @@ export const EthereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   message: 'Token Transfer - Success',
   statusCode: 200,
 };
+
 export const EthereumTokenTransferBadRequestResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token Transfer - Bad request',

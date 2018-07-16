@@ -1,9 +1,9 @@
 import * as db from '../../../db/ethereum';
 import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel,
-  IEthereumERC20TransferRequest, IEthereumSmartContractInvokeModel } from '../../../models/ethereum';
+  IEthereumSmartContractInvokeModel, IEthereumTokenRequest } from '../../../models/ethereum';
 import { adaptContractInvoke, retrieveContractAbiByAddressOrAlias  } from '../smartContract/common';
 
-export async function tokenTransfer(transferRequest: IEthereumERC20TransferRequest): Promise<any> {
+export async function tokenTransfer(transferRequest: IEthereumTokenRequest): Promise<any> {
 
   LOG.info(`Token transfer`);
 
