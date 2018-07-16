@@ -8,6 +8,7 @@ import {
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
 } from '../../../models/ethereum/smartContract';
+import { IEthereumContractAbiDbModel } from '../../../models/ethereum';
 
 export async function register(alias: string, address: string, abi: any[], abiName?: string): Promise<void> {
 

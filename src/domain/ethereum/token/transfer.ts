@@ -1,7 +1,11 @@
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel,
-  IEthereumSmartContractInvokeModel, IEthereumTokenTransferRequest } from '../../../models/ethereum';
-import { adaptContractInvoke, retrieveContractAbiByAddressOrAlias  } from '../smartContract/common';
+import {
+  EthereumSmartContractNotFoundResponse,
+  IEthereumContractAbiDbModel,
+  IEthereumSmartContractInvokeModel,
+  IEthereumTokenTransferRequest,
+} from '../../../models/ethereum';
+import { adaptContractInvoke } from '../smartContract/common';
 
 export async function tokenTransfer(transferRequest: IEthereumTokenTransferRequest): Promise<any> {
 
@@ -9,20 +13,20 @@ export async function tokenTransfer(transferRequest: IEthereumTokenTransferReque
 
   try {
 
-    const abi: IEthereumContractDbModel | null = await db.getAbiByName('erc20');
+    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
 
     if (abi) {
 
-    const invokeModel: IEthereumSmartContractInvokeModel = {
-      abi: abi.abi ,
-      action: 'send',
-      from: transferRequest.from,
-      method: 'transfer',
-      params: [transferRequest.to, transferRequest.value],
-      to: transferRequest.smartContractAddress,
-    };
+      const invokeModel: IEthereumSmartContractInvokeModel = {
+        abi: abi.abi,
+        action: 'send',
+        from: transferRequest.from,
+        method: 'transfer',
+        params: [transferRequest.to, transferRequest.value],
+        to: transferRequest.smartContractAddress,
+      };
 
-    return await adaptContractInvoke(invokeModel);
+      return await adaptContractInvoke(invokeModel);
 
     } else {
 

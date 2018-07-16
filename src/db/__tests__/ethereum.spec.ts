@@ -149,8 +149,7 @@ describe('dbEthereum', async () => {
       await ethereumDb.getAbiByName(mockedAlias);
 
       expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
-      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { name: mockedAlias });
-      expect(cursor.next).toHaveBeenCalled();
+      expect(coll.findOne).toHaveBeenCalledWith({ name: mockedAlias });
 
     });
 

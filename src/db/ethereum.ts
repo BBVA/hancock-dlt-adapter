@@ -76,7 +76,7 @@ export async function getAbiByName(name: string): Promise<IEthereumContractAbiDb
 
   const coll: Collection = await _getCollection(contractsAbisCollection);
 
-  return _aggregateCollections(coll, { name }).next();
+  return coll.findOne({ name });
 
 }
 
