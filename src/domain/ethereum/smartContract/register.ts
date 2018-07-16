@@ -5,6 +5,7 @@ import {
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
+import { IEthereumContractAbiDbModel } from '../../../models/ethereum';
 
 export async function register(alias: string, address: string, abi: any[]): Promise<void> {
 
@@ -70,7 +71,7 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 // tslint:disable-next-line:variable-name
 export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | void> => {
 
-  const aliasResult: IEthereumContractDbModel | null = await db.getAbiByName(name);
+  const aliasResult: IEthereumContractAbiDbModel | null = await db.getAbiByName(name);
 
   if (aliasResult) {
 
