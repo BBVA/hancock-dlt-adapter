@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Register Token schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "Address of the Smart Contrant in the DLT"
+    },
+    "alias": {
+      "type": "string",
+      "description": "Alias to use to register in Hancock"
+    }
+  },
+  "required": [
+    "address",
+    "alias"
+  ]
+}
