@@ -149,8 +149,43 @@ describe('dbEthereum', async () => {
       await ethereumDb.getAbiByName(mockedAlias);
 
       expect(getCollMock).toHaveBeenCalledWith(collNameAbis);
-      expect(aggregateCollMock).toHaveBeenCalledWith(coll, { name: mockedAlias });
-      expect(cursor.next).toHaveBeenCalled();
+      expect(coll.findOne).toHaveBeenCalledWith({ name: mockedAlias });
+
+    });
+
+    it('::getInstanceByAddressOrAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAddressOrAlias: string = 'mockedAddressOrAlias';
+      const mockedQuery: any = {};
+      getScQuery.mockReturnValue(mockedQuery);
+
+      await ethereumDb.getInstanceByAddressOrAlias(mockedAddressOrAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(getScQuery).toHaveBeenCalledWith(mockedAddressOrAlias);
+      expect(coll.findOne).toHaveBeenCalledWith(mockedQuery);
+
+    });
+
+    it('::getInstanceByAddress should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAddress: string = 'mockedAddress';
+
+      await ethereumDb.getInstanceByAddress(mockedAddress);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.findOne).toHaveBeenCalledWith({ address: mockedAddress });
+
+    });
+
+    it('::getInstanceByAlias should call getCollection and call dbClient.findOne with params', async () => {
+
+      const mockedAlias: string = 'mockedAlias';
+
+      await ethereumDb.getInstanceByAlias(mockedAlias);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.findOne).toHaveBeenCalledWith({ alias: mockedAlias });
 
     });
 

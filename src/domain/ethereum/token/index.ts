@@ -1,7 +1,7 @@
 import * as db from '../../../db/ethereum';
 import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel } from '../../../models/ethereum';
 
-
+export * from './register';
 export * from './transfer';
 
 export async function getTokenBalance(address: string, addressOrAlias: string): Promise<number> {

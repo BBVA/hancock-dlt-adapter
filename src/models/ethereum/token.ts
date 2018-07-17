@@ -1,10 +1,25 @@
 import responses from '../../utils/responses';
 
-export interface IEthereumERC20TransferRequest {
+export enum TokenNames {
+  ERC20 = 'erc20',
+}
+
+export interface IEthereumTokenTransferRequest {
   from: string;
   to: string;
   value: string;
   smartContractAddress: string;
+}
+
+export interface IEthereumTokenTransferByQueryRequest {
+  from: string;
+  to: string;
+  value: string;
+}
+
+export interface IEthereumTokenRegisterRequest {
+  address: string;
+  alias: string;
 }
 
 export interface IEthereumTokenResponse {
@@ -31,11 +46,18 @@ export const EthereumOkTokenResponse: IEthereumTokenResponse = {
   statusCode: 202,
 };
 
+export const EthereumTokenRegisterSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Register - Success',
+  statusCode: 200,
+};
+
 export const EthereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Transfer - Success',
   statusCode: 200,
 };
+
 export const EthereumTokenTransferBadRequestResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token Transfer - Bad request',

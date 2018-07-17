@@ -16,11 +16,15 @@ describe('tokenTransferController', async () => {
 
   const utilsCreateReplyMock = (utils.createReply as jest.Mock);
   const domainTokenTransferMock = (domain.tokenTransfer as jest.Mock);
+  const domainTokenTransferByQueryMock = (domain.tokenTransferByQuery as jest.Mock);
 
   beforeEach(() => {
 
     req = {
       body: 'mockedQuery',
+      params: {
+        query: 'mockedAddress',
+      },
     };
 
     res = {
@@ -31,6 +35,7 @@ describe('tokenTransferController', async () => {
 
     utilsCreateReplyMock.mockReset();
     domainTokenTransferMock.mockReset();
+    domainTokenTransferByQueryMock.mockReset();
 
   });
 
@@ -57,6 +62,35 @@ describe('tokenTransferController', async () => {
 
     expect(domainTokenTransferMock).toHaveBeenCalledTimes(1);
     expect(domainTokenTransferMock).toHaveBeenCalledWith('mockedQuery');
+
+    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+
+  });
+
+  it('should call domain.tokenTransferByQuery and return the response', async () => {
+
+    domainTokenTransferByQueryMock.mockResolvedValue('mockResult');
+
+    await ethereumTokenTransferController.tokenTransferByQuery(req, res, next);
+
+    expect(domainTokenTransferByQueryMock).toHaveBeenCalledTimes(1);
+    expect(domainTokenTransferByQueryMock).toHaveBeenCalledWith('mockedAddress', 'mockedQuery');
+
+    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenTransferSuccessResponse, 'mockResult');
+
+  });
+
+  it('should call domain.tokenTransferByQuery and fail if there is a problem', async () => {
+
+    const errThrowed = new Error('Boom!');
+    domainTokenTransferByQueryMock.mockRejectedValue(errThrowed);
+
+    await ethereumTokenTransferController.tokenTransferByQuery(req, res, next);
+
+    expect(domainTokenTransferByQueryMock).toHaveBeenCalledTimes(1);
+    expect(domainTokenTransferByQueryMock).toHaveBeenCalledWith('mockedAddress', 'mockedQuery');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
     expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);

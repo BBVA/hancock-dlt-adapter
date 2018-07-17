@@ -72,11 +72,37 @@ export async function getSmartContractByAlias(alias: string): Promise<IEthereumC
 
 }
 
-export async function getAbiByName(name: string): Promise<IEthereumContractDbModel | null> {
+export async function getAbiByName(name: string): Promise<IEthereumContractAbiDbModel | null> {
 
   const coll: Collection = await _getCollection(contractsAbisCollection);
 
-  return _aggregateCollections(coll, { name }).next();
+  return coll.findOne({ name });
+
+}
+
+export async function getInstanceByAddressOrAlias(addressOrAlias: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  const query: any = getScQueryByAddressOrAlias(addressOrAlias);
+
+  return coll.findOne(query);
+
+}
+
+export async function getInstanceByAddress(address: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.findOne({ address });
+
+}
+
+export async function getInstanceByAlias(alias: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.findOne({ alias });
 
 }
 
