@@ -20,16 +20,16 @@ export async function tokenTransfer(transferRequest: IEthereumTokenTransferReque
 
     if (abi) {
 
-    const invokeModel: IEthereumSmartContractInvokeModel = {
-      abi: abi.abi ,
-      action: 'send',
-      from: transferRequest.from,
-      method: 'transfer',
-      params: [transferRequest.to, transferRequest.value],
-      to: transferRequest.smartContractAddress,
-    };
+      const invokeModel: IEthereumSmartContractInvokeModel = {
+        abi: abi.abi,
+        action: 'send',
+        from: transferRequest.from,
+        method: 'transfer',
+        params: [transferRequest.to, transferRequest.value],
+        to: transferRequest.smartContractAddress,
+      };
 
-    return await adaptContractInvoke(invokeModel);
+      return await adaptContractInvoke(invokeModel);
 
     } else {
 

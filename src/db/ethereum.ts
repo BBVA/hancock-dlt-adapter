@@ -80,6 +80,32 @@ export async function getAbiByName(name: string): Promise<IEthereumContractAbiDb
 
 }
 
+export async function getInstanceByAddressOrAlias(addressOrAlias: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  const query: any = getScQueryByAddressOrAlias(addressOrAlias);
+
+  return coll.findOne(query);
+
+}
+
+export async function getInstanceByAddress(address: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.findOne({ address });
+
+}
+
+export async function getInstanceByAlias(alias: string): Promise<IEthereumContractInstanceDbModel | null> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.findOne({ alias });
+
+}
+
 export async function deleteSmartContractByAddressOrAlias(addressOrAlias: string): Promise<FindAndModifyWriteOpResultObject> {
 
   const coll: Collection = await _getCollection(contractsInstancesCollection);
