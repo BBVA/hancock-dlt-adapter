@@ -11,6 +11,12 @@ export interface IEthereumTokenTransferRequest {
   smartContractAddress: string;
 }
 
+export interface IEthereumTokenTransferByQueryRequest {
+  from: string;
+  to: string;
+  value: string;
+}
+
 export interface IEthereumTokenRegisterRequest {
   address: string;
   alias: string;

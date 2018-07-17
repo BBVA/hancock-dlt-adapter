@@ -17,6 +17,7 @@ types:
   ProtocolEncodeModelRequest: !include schemas/requests/protocol/encode.json
   ProtocolDecodeModelRequest: !include schemas/requests/protocol/decode.json
   TransferTokenRequest: !include schemas/requests/ethereum/token/transfer.json
+  TransferTokenByQueryRequest: !include schemas/requests/ethereum/token/transferByQuery.json
   RegisterTokenRequest: !include schemas/requests/ethereum/token/register.json
 
   GenericResponse: !include schemas/responses/generic.json
@@ -28,6 +29,7 @@ types:
   GetBalanceResponse: !include schemas/responses/ethereum/getBalance.json
   ProtocolDecodeModelResponse: !include schemas/responses/protocol/decode.json
   TransferTokenResponse: !include schemas/responses/ethereum/token/transfer.json
+  TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
   RegisterTokenResponse: !include schemas/responses/ethereum/token/register.json
 
@@ -219,7 +221,7 @@ securitySchemes:
                 type: GenericResponse
     /transfer:
       post:
-        description: Transfer ERC20 tokens between two addresses
+        description: Transfer ERC20 tokens between two addresses 
         body: 
           application/json:
             type: TransferTokenRequest
@@ -253,6 +255,23 @@ securitySchemes:
                 body:
                   application/json:
                     type: GenericResponse
+
+      /transfer:
+        post:
+          description: Transfer ERC20 tokens between two addresses by Query
+          body: 
+            application/json:
+              type: TransferTokenByQueryRequest
+          responses:
+            200:
+            body:
+              application/json:
+                type: TransferTokenByQueryResponse
+            400:
+            500:
+              body:
+                application/json:
+                  type: GenericResponse
 
 
 /protocol:
