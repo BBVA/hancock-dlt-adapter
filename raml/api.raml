@@ -220,7 +220,7 @@ securitySchemes:
                 type: GenericResponse
     /transfer:
       post:
-        description: Transfer ERC20 tokens between two addresses for 
+        description: Transfer ERC20 tokens between two addresses 
         body: 
           application/json:
             type: TransferTokenRequest
@@ -255,10 +255,6 @@ securitySchemes:
                   application/json:
                     type: GenericResponse
 
-    /{address|alias}:
-        uriParameters:
-          address|alias:
-            type: string
       /transfer:
         post:
           description: Transfer ERC20 tokens between two addresses by Query
