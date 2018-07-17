@@ -28,6 +28,11 @@ export interface IEthereumTokenResponse {
   statusCode: number;
 }
 
+export interface IEthereumTokenBalanceResponse {
+  balance: number;
+  accuracy: number;
+}
+
 export const EthereumBadRequestTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token ERC20 - Bad request',

@@ -47,7 +47,7 @@ describe('tokenController', async () => {
     expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress', 'mockedAddressAlias');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumOkTokenResponse, {balance: 'mockResult'});
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumOkTokenResponse, 'mockResult');
 
   });
 
