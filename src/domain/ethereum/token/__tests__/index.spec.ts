@@ -84,4 +84,23 @@ describe('tokenDomain', () => {
 
   });
 
+  it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+    const throwedError: Error = new Error('Boom!');
+    dbMock.mockRejectedValueOnce(throwedError);
+
+    try {
+
+      await tokenDomain.getTokenBalance(address,addressOrAlias);
+      fail('It should fail');
+
+    } catch (e) {
+
+      expect(dbMock).toHaveBeenCalledTimes(1);
+      expect(e).toEqual(throwedError);
+
+    }
+
+  });
+
 });
