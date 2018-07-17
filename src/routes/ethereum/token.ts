@@ -8,6 +8,8 @@ export const TokenRouter = ExpressRouter();
 
 const schemaPath: string = path.normalize(__dirname + '/../../../../raml/schemas');
 const TransferTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transfer.json`, 'utf-8'));
+const TransferTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transferByQuery.json`, 'utf-8'));
 
 TokenRouter
-  .post('/transfer', validate({body: TransferTokenSchema}), smartContractController.tokenTransfer);
+  .post('/transfer', validate({body: TransferTokenSchema}), smartContractController.tokenTransfer)
+  .post('/:query/transfer', validate({body: TransferTokenByQuerySchema}), smartContractController.tokenTransferByQuery);

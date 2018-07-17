@@ -1,10 +1,16 @@
 import responses from '../../utils/responses';
 
-export interface IEthereumTokenRequest {
+export interface IEthereumTokenTransferRequest {
   from: string;
   to: string;
   value: string;
   smartContractAddress: string;
+}
+
+export interface IEthereumTokenTransferByQueryRequest {
+  from: string;
+  to: string;
+  value: string;
 }
 
 export interface IEthereumTokenResponse {

@@ -3,13 +3,16 @@ import * as db from '../../../../db/ethereum';
 import {
   EthereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
+  IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
 } from '../../../../models/ethereum';
 import * as commonDomain from '../../smartContract/common';
+import { invokeByQuery } from '../../smartContract/invoke';
 import * as tokenTransferDomain from '../transfer';
 
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
+jest.mock('../../smartContract/invoke');
 
 describe('tokenTransferDomain', () => {
 
@@ -17,12 +20,15 @@ describe('tokenTransferDomain', () => {
 
     const dbMock: jest.Mock = (db.getAbiByName as any);
     const commonMock: jest.Mock = (commonDomain.adaptContractInvoke as any);
+    const invokeMock: jest.Mock = (invokeByQuery as any);
     let iEthereumERC20TransferRequest;
     let iEthereumContractDbModel;
+    let iEthereumSmartContractRawTxResponse;
 
     beforeEach(() => {
 
       dbMock.mockReset();
+      invokeMock.mockReset();
 
       iEthereumERC20TransferRequest = {
         from: 'mockFrom',
@@ -38,6 +44,15 @@ describe('tokenTransferDomain', () => {
         alias: 'mockAlias',
       };
 
+      iEthereumSmartContractRawTxResponse =  {
+        data: 'mockData',
+        from: 'mockFrom',
+        gas: 'mockGas',
+        gasPrice: 'mockGasPrice',
+        to: 'mockTo',
+        value: 'mockValue',
+      };
+
     });
 
     it('should call the db.getAbiByName method and return an adapted transfer', async () => {
@@ -49,15 +64,6 @@ describe('tokenTransferDomain', () => {
         method: 'transfer',
         params: [iEthereumERC20TransferRequest.to, iEthereumERC20TransferRequest.value],
         to: iEthereumERC20TransferRequest.smartContractAddress,
-      };
-
-      const iEthereumSmartContractRawTxResponse =  {
-        data: 'mockData',
-        from: 'mockFrom',
-        gas: 'mockGas',
-        gasPrice: 'mockGasPrice',
-        to: 'mockTo',
-        value: 'mockValue',
       };
 
       dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
@@ -84,6 +90,43 @@ describe('tokenTransferDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
+        expect(e).toEqual(throwedError);
+
+      }
+
+    });
+
+    it('should call invokeByQuery method and return an adapted transfer', async () => {
+
+      const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
+        action: 'send',
+        from: iEthereumERC20TransferRequest.from,
+        method: 'transfer',
+        params: [iEthereumERC20TransferRequest.to, iEthereumERC20TransferRequest.value],
+      };
+
+      invokeMock.mockResolvedValueOnce(iEthereumSmartContractRawTxResponse);
+
+      const result = await tokenTransferDomain.tokenTransferByQuery('mockedAddress', iEthereumERC20TransferRequest);
+
+      expect(invokeMock).toHaveBeenCalledWith('mockedAddress', invokeModel);
+      expect(result).toEqual(iEthereumSmartContractRawTxResponse);
+
+    });
+
+    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+      const throwedError: Error = new Error('Boom!');
+      invokeMock.mockRejectedValueOnce(throwedError);
+
+      try {
+
+        await tokenTransferDomain.tokenTransferByQuery('mockedAddress', iEthereumERC20TransferRequest);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(invokeMock).toHaveBeenCalledTimes(1);
         expect(e).toEqual(throwedError);
 
       }
