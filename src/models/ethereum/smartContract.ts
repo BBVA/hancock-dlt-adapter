@@ -120,6 +120,12 @@ export const EthereumSmartContractSourcecodeNotFoundErrorResponse: IEthereumSmar
   statusCode: 404,
 };
 
+export const EthereumSmartContractAbiNameNotFoundResponse: IEthereumSmartContractResponse = {
+  code: responses.ndbgeneral404.code,
+  message: 'Smart Contract - Abi name not found',
+  statusCode: 404,
+};
+
 export const EthereumSmartContractConflictResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract409.code,
   message: 'Smart Contract - Alias or address in use',
