@@ -29,6 +29,7 @@ types:
   GetBalanceResponse: !include schemas/responses/ethereum/getBalance.json
   ProtocolDecodeModelResponse: !include schemas/responses/protocol/decode.json
   TransferTokenResponse: !include schemas/responses/ethereum/token/transfer.json
+  TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
   RegisterTokenResponse: !include schemas/responses/ethereum/token/register.json
 
@@ -265,7 +266,7 @@ securitySchemes:
             200:
             body:
               application/json:
-                type: TransferTokenResponse
+                type: TransferTokenByQueryResponse
             400:
             500:
               body:
