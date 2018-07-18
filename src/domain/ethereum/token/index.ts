@@ -16,8 +16,6 @@ export async function getTokenBalance(address: string, addressOrAlias: string): 
 
     if (abi) {
 
-        //ETH.web3.eth.contract(abi.abi, abi.address).methods.balanceOf(address, (err: any, result: number) => err ? reject(err) : resolve(result));
-
           const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
             action: 'call',
             from: abi.address,
