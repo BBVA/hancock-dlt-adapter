@@ -6,8 +6,9 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 ADD package*.json ./
-RUN yarn install
+ADD yarn.lock ./
 RUN yarn cache clean --force
+RUN yarn install
 
 ENV NODE_ENV production
 
