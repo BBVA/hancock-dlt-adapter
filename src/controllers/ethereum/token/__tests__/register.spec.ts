@@ -3,9 +3,10 @@ import 'jest';
 import * as domain from '../../../../domain/ethereum';
 import { EthereumTokenRegisterSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
-import * as ethereumTokenRegisterController from '../index';
+import * as ethereumTokenRegisterController from '../register';
 
 jest.mock('../../../../domain/ethereum');
+jest.mock('../../../../domain/ethereum/token');
 jest.mock('../../../../utils/utils');
 
 describe('tokenRegisterController', async () => {
