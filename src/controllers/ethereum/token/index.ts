@@ -10,10 +10,10 @@ export * from './transfer';
 export async function getTokenBalance(req: Request, res: Response, next: NextFunction) {
 
     const address: string = req.params.address;
-    const addressOrAlias: string = req.params.scaddress;
+    const addressOrAlias: string = req.params.query;
 
     return domain
-      .getTokenBalance(address, addressOrAlias)
+      .getTokenBalance(addressOrAlias, address)
       .then((result: IEthereumTokenBalanceResponse) => utils.createReply(res, EthereumOkTokenResponse, result ))
       .catch(() => utils.createReply(res, EthereumErrorTokenResponse));
   }

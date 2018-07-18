@@ -6,7 +6,7 @@ import { invokeByQuery } from '../smartContract/invoke';
 export * from './register';
 export * from './transfer';
 
-export async function getTokenBalance(address: string, addressOrAlias: string): Promise<IEthereumTokenBalanceResponse> {
+export async function getTokenBalance(addressOrAlias: string, address: string): Promise<IEthereumTokenBalanceResponse> {
 
   LOG.info(`Token balance`);
 

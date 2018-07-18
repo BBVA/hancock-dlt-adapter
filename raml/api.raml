@@ -203,9 +203,9 @@ securitySchemes:
                 type: GetBalanceResponse
 
   /token:
-    /{scAddress|alias}: 
+    /{query}: 
       uriParameters: 
-        scAddress|alias: 
+        query: 
           type: string 
       /balance: 
         /{address}: 

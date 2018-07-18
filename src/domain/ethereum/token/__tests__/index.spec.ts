@@ -63,7 +63,7 @@ describe('tokenDomain', () => {
       callbacks(null, response);
     });
 
-    const result: any = await tokenDomain.getTokenBalance(address, addressOrAlias);
+    const result: any = await tokenDomain.getTokenBalance(addressOrAlias, address);
 
     expect(dbMock).toHaveBeenCalledTimes(1);
     expect(invokeMock).toHaveBeenCalledWith(addressOrAlias, invokeModel);
@@ -82,7 +82,7 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(address, addressOrAlias);
+      await tokenDomain.getTokenBalance(addressOrAlias, address);
       fail('it should fail');
 
     } catch (e) {
@@ -101,7 +101,7 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(address, addressOrAlias);
+      await tokenDomain.getTokenBalance(addressOrAlias, address);
       fail('It should fail');
 
     } catch (e) {

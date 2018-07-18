@@ -22,7 +22,7 @@ describe('tokenController', async () => {
     req = {
       params: {
         address: 'mockedAddress',
-        scaddress: 'mockedAddressAlias',
+        query: 'mockedAddressAlias',
       },
     };
 
@@ -44,7 +44,7 @@ describe('tokenController', async () => {
     await ethereumTokenController.getTokenBalance(req, res, next);
 
     expect(domainTokenMock).toHaveBeenCalledTimes(1);
-    expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress', 'mockedAddressAlias');
+    expect(domainTokenMock).toHaveBeenCalledWith('mockedAddressAlias', 'mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
     expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumOkTokenResponse, 'mockResult');
@@ -58,7 +58,7 @@ describe('tokenController', async () => {
     await ethereumTokenController.getTokenBalance(req, res, next);
 
     expect(domainTokenMock).toHaveBeenCalledTimes(1);
-    expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress', 'mockedAddressAlias');
+    expect(domainTokenMock).toHaveBeenCalledWith('mockedAddressAlias', 'mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
     expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumErrorTokenResponse);

@@ -12,7 +12,7 @@ const TransferTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethe
 const TransferTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transferByQuery.json`, 'utf-8'));
 
 TokenRouter
-  .get(':scaddress|alias/balance/:address', smartContractController.getTokenBalance)
+  .get(':query/balance/:address', smartContractController.getTokenBalance)
   .post('/transfer', validate({body: TransferTokenSchema}), smartContractController.tokenTransfer)
   .post('/register', validate({body: RegisterTokenSchema}), smartContractController.tokenRegister)
   .post('/:query/transfer', validate({body: TransferTokenByQuerySchema}), smartContractController.tokenTransferByQuery);
