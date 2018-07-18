@@ -29,7 +29,7 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
             action: 'call',
             from: abi.address,
             method: 'decimals',
-            params: [address],
+            params: [],
           };
 
           const decimal = await invokeByQuery(addressOrAlias, invokeModelb);

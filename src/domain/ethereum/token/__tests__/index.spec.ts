@@ -53,7 +53,7 @@ describe('tokenDomain', () => {
       action: 'call',
       from: 'mockAddress',
       method: 'decimals',
-      params: ['0xWhatever'],
+      params: [],
     };
 
     invokeMock.mockResolvedValueOnce('mockBalance');
