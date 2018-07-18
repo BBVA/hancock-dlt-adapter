@@ -222,7 +222,23 @@ securitySchemes:
               500: 
                 body: 
                   application/json: 
-                    type: GenericResponse   
+                    type: GenericResponse
+      /transfer:
+        post:
+          description: Transfer ERC20 tokens between two addresses by Query
+          body: 
+            application/json:
+              type: TransferTokenByQueryRequest
+          responses:
+            200:
+            body:
+              application/json:
+                type: TransferTokenByQueryResponse
+            400:
+            500:
+              body:
+                application/json:
+                  type: GenericResponse 
     /register:
       post:
         description: Register new ERC20 tokens in hancock to be invoked by alias or address
