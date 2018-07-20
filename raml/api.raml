@@ -32,6 +32,7 @@ types:
   TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
   RegisterTokenResponse: !include schemas/responses/ethereum/token/register.json
+  GetMetadataTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
 
 securitySchemes:
   oauth_2_0: !include ./securitySchemes/oauth_2_0.yml
@@ -219,6 +220,22 @@ securitySchemes:
                 body: 
                   application/json: 
                     type: GetBalanceTokenResponse 
+              500: 
+                body: 
+                  application/json: 
+                    type: GenericResponse
+      /metadata: 
+        /{address}: 
+          uriParameters: 
+            address: 
+              type: string 
+          get: 
+            description: Obtain the info associated to the ERC20 Token: name, symbol, decimals
+            responses: 
+              200: 
+                body: 
+                  application/json: 
+                    type: GetMetadataTokenResponse 
               500: 
                 body: 
                   application/json: 
