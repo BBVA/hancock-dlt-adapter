@@ -26,10 +26,14 @@ export async function getTokenMetadata(addressOrAlias: string): Promise<IEthereu
           const invokeModelDecimal: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'decimals', []);
           const decimals = await invokeByQuery(addressOrAlias, invokeModelDecimal);
 
+          const invokeModelTotalSupply: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'totalSupply', []);
+          const totalSupply = await invokeByQuery(addressOrAlias, invokeModelTotalSupply);
+
           const object: IEthereumTokenMetadataResponse = {
             decimals,
             name,
             symbol,
+            totalSupply,
           };
 
           return object;

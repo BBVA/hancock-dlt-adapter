@@ -2,29 +2,25 @@
 import 'jest';
 import * as db from '../../../../db/ethereum';
 import { IEthereumSmartContractInvokeByQueryRequest } from '../../../../models/ethereum';
-import * as tokenDomain from '../../../ethereum/token';
+import * as metadataDomain from '../../../ethereum/token';
 import { invokeByQuery } from '../../smartContract/invoke';
+import { getRequestModel } from '../common';
 
 jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/invoke');
+jest.mock('../common.ts');
 
-describe('tokenDomain', () => {
+describe('metadataDomain', () => {
 
   const dbMock: jest.Mock = (db.getSmartContractByAddressOrAlias as any);
-  const address: string = '0xWhatever';
-  const addressOrAlias: string = '0xTokenever';
+  const addressOrAlias: string = 'myToken';
   let iEthereumContractDbModel;
   const invokeMock: jest.Mock = (invokeByQuery as any);
-
-  const getTokenBalanceMock: jest.Mock = jest.fn();
-  const contractMock: jest.Mock = jest.fn().mockReturnValue({
-    balanceOf: getTokenBalanceMock,
-  });
+  const getRequestModelMock: jest.Mock = (getRequestModel as any);
 
   beforeEach(() => {
 
-    getTokenBalanceMock.mockReset();
     dbMock.mockReset();
     invokeMock.mockReset();
 
@@ -39,35 +35,59 @@ describe('tokenDomain', () => {
 
   it('should call the db.getSmartContractByAddressOrAlias method and retrieve the balance of token', async () => {
 
-    const response = {accuracy: 'mockAccuracy', balance: 'mockBalance'};
+    const response = {
+      decimals: 10,
+      name: 'mockName',
+      symbol: 'mockSymbol',
+      totalSupply: 1000,
+    };
     dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
 
-    const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
+    const invokeModelName: IEthereumSmartContractInvokeByQueryRequest = {
       action: 'call',
       from: 'mockAddress',
-      method: 'balanceOf',
-      params: ['0xWhatever'],
+      method: 'name',
+      params: [],
     };
 
-    const invokeModelb: IEthereumSmartContractInvokeByQueryRequest = {
+    const invokeModelSymbol: IEthereumSmartContractInvokeByQueryRequest = {
+      action: 'call',
+      from: 'mockAddress',
+      method: 'symbol',
+      params: [],
+    };
+
+    const invokeModelDecimals: IEthereumSmartContractInvokeByQueryRequest = {
       action: 'call',
       from: 'mockAddress',
       method: 'decimals',
       params: [],
     };
 
-    invokeMock.mockResolvedValueOnce('mockBalance');
-    invokeMock.mockResolvedValueOnce('mockAccuracy');
+    const invokeModelTotalSupply: IEthereumSmartContractInvokeByQueryRequest = {
+      action: 'call',
+      from: 'mockAddress',
+      method: 'totalSupply',
+      params: [],
+    };
 
-    getTokenBalanceMock.mockImplementationOnce((addr, callbacks) => {
-      callbacks(null, response);
-    });
+    getRequestModelMock.mockReturnValueOnce(invokeModelName)
+    .mockReturnValueOnce(invokeModelSymbol)
+    .mockReturnValueOnce(invokeModelDecimals)
+    .mockReturnValueOnce(invokeModelTotalSupply);
 
-    const result: any = await tokenDomain.getTokenBalance(addressOrAlias, address);
+    invokeMock.mockResolvedValueOnce('mockName')
+    .mockResolvedValueOnce('mockSymbol')
+    .mockResolvedValueOnce(10)
+    .mockResolvedValueOnce(1000);
+
+    const result: any = await metadataDomain.getTokenMetadata(addressOrAlias);
 
     expect(dbMock).toHaveBeenCalledTimes(1);
-    expect(invokeMock).toHaveBeenCalledWith(addressOrAlias, invokeModel);
-    expect(invokeMock).toHaveBeenCalledWith(addressOrAlias, invokeModelb);
+    expect(invokeMock).toHaveBeenNthCalledWith(1, addressOrAlias, invokeModelName);
+    expect(invokeMock).toHaveBeenNthCalledWith(2, addressOrAlias, invokeModelSymbol);
+    expect(invokeMock).toHaveBeenNthCalledWith(3, addressOrAlias, invokeModelDecimals);
+    expect(invokeMock).toHaveBeenNthCalledWith(4, addressOrAlias, invokeModelTotalSupply);
     expect(result).toEqual(response);
 
   });
@@ -82,7 +102,7 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      await metadataDomain.getTokenMetadata(addressOrAlias);
       fail('it should fail');
 
     } catch (e) {
@@ -101,7 +121,7 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      await metadataDomain.getTokenMetadata(addressOrAlias);
       fail('It should fail');
 
     } catch (e) {

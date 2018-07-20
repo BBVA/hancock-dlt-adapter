@@ -37,6 +37,7 @@ export interface IEthereumTokenMetadataResponse {
   name: string;
   symbol: string;
   decimals: string;
+  totalSupply: string;
 }
 
 export const EthereumBadRequestTokenResponse: IEthereumTokenResponse = {
