@@ -18,6 +18,8 @@ types:
   ProtocolDecodeModelRequest: !include schemas/requests/protocol/decode.json
   TransferTokenRequest: !include schemas/requests/ethereum/token/transfer.json
   TransferTokenByQueryRequest: !include schemas/requests/ethereum/token/transferByQuery.json
+  ApproveTransferTokenRequest: !include schemas/requests/ethereum/token/approveTransfer.json
+  ApproveTransferTokenByQueryRequest: !include schemas/requests/ethereum/token/approveTransferByQuery.json
   RegisterTokenRequest: !include schemas/requests/ethereum/token/register.json
 
   GenericResponse: !include schemas/responses/generic.json
@@ -30,6 +32,8 @@ types:
   ProtocolDecodeModelResponse: !include schemas/responses/protocol/decode.json
   TransferTokenResponse: !include schemas/responses/ethereum/token/transfer.json
   TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
+  ApproveTransferTokenResponse: !include schemas/responses/ethereum/token/approveTransfer.json
+  ApproveTransferTokenByQueryResponse: !include schemas/responses/ethereum/token/approveTransferByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
   RegisterTokenResponse: !include schemas/responses/ethereum/token/register.json
 
@@ -225,7 +229,7 @@ securitySchemes:
                     type: GenericResponse
       /transfer:
         post:
-          description: Transfer ERC20 tokens between two addresses by Query
+          description: Transfer ERC20 tokens between two addresses by Query 
           body: 
             application/json:
               type: TransferTokenByQueryRequest
@@ -239,6 +243,22 @@ securitySchemes:
               body:
                 application/json:
                   type: GenericResponse 
+      /approve:
+        post:
+          description: Token ERC20 owner can approve for spender to transfer tokens from the token owner's account by query
+          body: 
+            application/json:
+              type: ApproveTransferTokenByQueryRequest
+          responses:
+            200:
+            body:
+              application/json:
+                type: ApproveTransferTokenByQueryResponse
+            400:
+            500:
+            body:
+              application/json:
+                type: GenericResponse 
     /register:
       post:
         description: Register new ERC20 tokens in hancock to be invoked by alias or address
@@ -271,6 +291,22 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
+    /approve:
+      post:
+        description: Token ERC20 owner can approve for spender to transfer tokens from the token owner's account
+        body: 
+          application/json:
+            type: ApproveTransferTokenRequest
+        responses:
+          200:
+          body:
+            application/json:
+              type: ApproveTransferTokenResponse
+          400:
+          500:
+          body:
+            application/json:
+              type: GenericResponse                 
 
 /protocol:
   displayName: Protocol
