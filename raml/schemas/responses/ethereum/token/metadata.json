@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Metadata Token Response Schema",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "description"
+      ]
+    },
+    "data": {
+      "name": {
+        "type": "string",
+        "description": "name of the erc20 token"
+      },
+      "symbol": {
+        "type": "string",
+        "description": "short name of the erc20 token"
+      },
+      "decimals": {
+        "type": "string",
+        "description": "number of decimals places"
+      },
+      "required": [
+        "address",
+        "alias"
+      ]
+    }
+  },
+  "required": [ "result", "data" ]
+}
