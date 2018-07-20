@@ -31,9 +31,15 @@
         "type": "string",
         "description": "number of decimals places"
       },
+      "totalSupply": {
+        "type": "string",
+        "description": "total supply of the erc20 token"
+      },
       "required": [
-        "address",
-        "alias"
+        "name",
+        "symbol",
+        "decimals",
+        "totalSupply"
       ]
     }
   },
