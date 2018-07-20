@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Approve Transfer Token schema",
+  "type": "object",
+  "properties": {
+    "from": {
+      "type": "string"
+    },
+    "spender": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "required": [ "from", "spender", "value" ]
+}
