@@ -225,21 +225,17 @@ securitySchemes:
                   application/json: 
                     type: GenericResponse
       /metadata: 
-        /{address}: 
-          uriParameters: 
-            address: 
-              type: string 
-          get: 
-            description: Obtain the info associated to the ERC20 Token: name, symbol, decimals and totalSupply
-            responses: 
-              200: 
-                body: 
-                  application/json: 
-                    type: GetMetadataTokenResponse 
-              500: 
-                body: 
-                  application/json: 
-                    type: GenericResponse
+        get: 
+          description: Obtain the info associated to the ERC20 Token: name, symbol, decimals and totalSupply
+          responses: 
+            200: 
+              body: 
+                application/json: 
+                  type: GetMetadataTokenResponse 
+            500: 
+              body: 
+                application/json: 
+                  type: GenericResponse
       /transfer:
         post:
           description: Transfer ERC20 tokens between two addresses by Query
