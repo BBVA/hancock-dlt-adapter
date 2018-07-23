@@ -1,42 +1,46 @@
 import * as db from '../../../db/ethereum';
 import { EthereumSmartContractNotFoundResponse,
+  IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
-  IEthereumSmartContractRequestAction } from '../../../models/ethereum';
+  IEthereumSmartContractInvokeModel,
+  IEthereumSmartContractRequestAction,
+} from '../../../models/ethereum';
 import { IEthereumTokenMetadataResponse } from '../../../models/ethereum/token';
+import { adaptContractInvoke } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-import { getRequestModel } from './common';
+import { getAdaptRequestModel, getRequestModel } from './common';
 
-export async function getTokenMetadata(addressOrAlias: string): Promise<IEthereumTokenMetadataResponse> {
+export const getTokenMetadata = async (address: string): Promise<any> => {
 
   LOG.info(`Token Metadata`);
 
   try {
 
-    const abi: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
+    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
 
     if (abi) {
 
-          const invokeModelName: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'name', []);
-          const name = await invokeByQuery(addressOrAlias, invokeModelName);
+      const invokeModelName: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'name', [], address);
+      const name = await adaptContractInvoke(invokeModelName);
 
-          const invokeModelSymbol: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'symbol', []);
-          const symbol = await invokeByQuery(addressOrAlias, invokeModelSymbol);
+      const invokeModelSymbol: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'symbol', [], address);
+      const symbol = await adaptContractInvoke(invokeModelSymbol);
 
-          const invokeModelDecimal: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'decimals', []);
-          const decimals = await invokeByQuery(addressOrAlias, invokeModelDecimal);
+      const invokeModelDecimals: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'decimals', [], address);
+      const decimals = await adaptContractInvoke(invokeModelDecimals);
 
-          const invokeModelTotalSupply: IEthereumSmartContractInvokeByQueryRequest = getRequestModel('call', abi.address, 'totalSupply', []);
-          const totalSupply = await invokeByQuery(addressOrAlias, invokeModelTotalSupply);
+      const invokeModelTotalSupply: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'totalSupply', [], address);
+      const totalSupply = await adaptContractInvoke(invokeModelTotalSupply);
 
-          const object: IEthereumTokenMetadataResponse = {
-            decimals,
-            name,
-            symbol,
-            totalSupply,
-          };
+      const object = {
+        decimals,
+        name,
+        symbol,
+        totalSupply,
+      };
 
-          return object;
+      return object;
 
     } else {
 
@@ -51,4 +55,31 @@ export async function getTokenMetadata(addressOrAlias: string): Promise<IEthereu
     throw e;
 
   }
-}
+};
+
+export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<IEthereumTokenMetadataResponse> => {
+
+  LOG.info(`Token Metadata By Query`);
+
+  try {
+
+    const abi: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
+
+    if (abi) {
+
+      return await getTokenMetadata(abi.address);
+
+    } else {
+
+      LOG.info('Contract not found');
+      throw EthereumSmartContractNotFoundResponse;
+
+    }
+
+  } catch (e) {
+
+    LOG.error(e);
+    throw e;
+
+  }
+};

@@ -284,6 +284,23 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
+    /metadata: 
+      get:
+        queryParameters:
+          address: 
+            type: string
+            description: address of the erc20
+            required: true
+        description: Obtain the info associated to the ERC20 Token: name, symbol, decimals and totalSupply
+        responses: 
+          200: 
+            body: 
+              application/json: 
+                type: GetMetadataTokenResponse 
+          500: 
+            body: 
+              application/json: 
+                type: GenericResponse
 
 /protocol:
   displayName: Protocol
