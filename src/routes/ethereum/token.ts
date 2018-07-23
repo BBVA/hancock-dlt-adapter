@@ -13,6 +13,8 @@ const TransferTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/reques
 
 TokenRouter
   .get('/:query/balance/:address', smartContractController.getTokenBalance)
+  .get('/:query/metadata', smartContractController.getTokenMetadataByQuery)
+  .post('/:query/transfer', validate({body: TransferTokenByQuerySchema}), smartContractController.tokenTransferByQuery)
+  .get('/metadata', smartContractController.getTokenMetadata)
   .post('/transfer', validate({body: TransferTokenSchema}), smartContractController.tokenTransfer)
-  .post('/register', validate({body: RegisterTokenSchema}), smartContractController.tokenRegister)
-  .post('/:query/transfer', validate({body: TransferTokenByQuerySchema}), smartContractController.tokenTransferByQuery);
+  .post('/register', validate({body: RegisterTokenSchema}), smartContractController.tokenRegister);

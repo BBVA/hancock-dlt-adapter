@@ -33,6 +33,13 @@ export interface IEthereumTokenBalanceResponse {
   accuracy: number;
 }
 
+export interface IEthereumTokenMetadataResponse {
+  name: string;
+  symbol: string;
+  decimals: string;
+  totalSupply: string;
+}
+
 export const EthereumBadRequestTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token ERC20 - Bad request',
@@ -54,6 +61,12 @@ export const EthereumOkTokenResponse: IEthereumTokenResponse = {
 export const EthereumTokenRegisterSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Register - Success',
+  statusCode: 200,
+};
+
+export const EthereumTokenMetadataSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Metadata - Success',
   statusCode: 200,
 };
 
