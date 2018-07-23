@@ -1,8 +1,8 @@
 import { Router as ExpressRouter } from 'express';
 import * as ethereumController from '../../controllers/ethereum';
 import { SmartContractRouter } from './smartContract';
-import { TransferRouter } from './transfer';
 import { TokenRouter } from './token';
+import { TransferRouter } from './transfer';
 
 export const Router = ExpressRouter();
 
