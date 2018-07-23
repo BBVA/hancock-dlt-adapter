@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum/token';
-import { EthereumErrorTokenResponse, EthereumTokenMetadataSuccessResponse } from '../../../../models/ethereum';
+import { ethereumErrorTokenResponse, ethereumTokenMetadataSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumTokenController from '../index';
 
@@ -58,13 +58,13 @@ describe('metadataController', async () => {
       expect(domainTokenByQueryMock).toHaveBeenCalledWith('mockedAddressAlias');
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenMetadataSuccessResponse, response);
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumTokenMetadataSuccessResponse, response);
 
     });
 
     it('should call domain.getTokenMetadata and fail if there is a problem', async () => {
 
-      domainTokenByQueryMock.mockRejectedValue(EthereumErrorTokenResponse);
+      domainTokenByQueryMock.mockRejectedValue(ethereumErrorTokenResponse);
 
       await ethereumTokenController.getTokenMetadataByQuery(req, res, next);
 
@@ -72,7 +72,7 @@ describe('metadataController', async () => {
       expect(domainTokenByQueryMock).toHaveBeenCalledWith('mockedAddressAlias');
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumErrorTokenResponse);
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
 
     });
 
@@ -97,13 +97,13 @@ describe('metadataController', async () => {
       expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress');
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenMetadataSuccessResponse, response);
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumTokenMetadataSuccessResponse, response);
 
     });
 
     it('should call domain.getTokenMetadata and fail if there is a problem', async () => {
 
-      domainTokenMock.mockRejectedValue(EthereumErrorTokenResponse);
+      domainTokenMock.mockRejectedValue(ethereumErrorTokenResponse);
 
       await ethereumTokenController.getTokenMetadata(req, res, next);
 
@@ -111,7 +111,7 @@ describe('metadataController', async () => {
       expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress');
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumErrorTokenResponse);
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
 
     });
 

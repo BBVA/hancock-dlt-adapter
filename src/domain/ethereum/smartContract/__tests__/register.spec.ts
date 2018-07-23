@@ -2,9 +2,9 @@ import 'jest';
 import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../../db/ethereum';
 import {
-  EthereumSmartContractAbiNameNotFoundResponse,
-  EthereumSmartContractConflictResponse,
-  EthereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractAbiNameNotFoundResponse,
+  ethereumSmartContractConflictResponse,
+  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
@@ -157,7 +157,7 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbContractMock).toHaveBeenCalledWith(address);
         expect(LOG.error).toHaveBeenCalled();
 
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 
@@ -276,7 +276,7 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbInsertMock).not.toHaveBeenCalled();
         expect(LOG.error).toHaveBeenCalled();
 
-        expect(e).toEqual(EthereumSmartContractConflictResponse);
+        expect(e).toEqual(ethereumSmartContractConflictResponse);
 
       }
 
@@ -303,7 +303,7 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbInsertMock).not.toHaveBeenCalled();
         expect(LOG.error).toHaveBeenCalled();
 
-        expect(e).toEqual(EthereumSmartContractAbiNameNotFoundResponse);
+        expect(e).toEqual(ethereumSmartContractAbiNameNotFoundResponse);
 
       }
 
@@ -381,7 +381,7 @@ describe('ethereumScRegisterDomain', () => {
         expect(registerInstanceMock).not.toHaveBeenCalled();
         expect(LOG.error).toHaveBeenCalled();
 
-        expect(e).toEqual(EthereumSmartContractConflictResponse);
+        expect(e).toEqual(ethereumSmartContractConflictResponse);
 
       }
 

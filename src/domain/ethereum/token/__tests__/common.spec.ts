@@ -1,6 +1,5 @@
 import 'jest';
 import { IEthereumSmartContractInvokeByQueryRequest, IEthereumSmartContractRequestAction } from '../../../../models/ethereum';
-import * as scRegisterDomain from '../../smartContract/register';
 import * as common from '../common';
 
 jest.mock('../../smartContract/register');

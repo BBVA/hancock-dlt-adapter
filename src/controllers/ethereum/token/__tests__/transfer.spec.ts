@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum';
-import { EthereumTokenTransferSuccessResponse } from '../../../../models/ethereum';
+import { ethereumTokenTransferSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumTokenTransferController from '../index';
 
@@ -49,7 +49,7 @@ describe('tokenTransferController', async () => {
     expect(domainTokenTransferMock).toHaveBeenCalledWith('mockedQuery');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenTransferSuccessResponse, 'mockResult');
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumTokenTransferSuccessResponse, 'mockResult');
 
   });
 
@@ -78,7 +78,7 @@ describe('tokenTransferController', async () => {
     expect(domainTokenTransferByQueryMock).toHaveBeenCalledWith('mockedAddress', 'mockedQuery');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenTransferSuccessResponse, 'mockResult');
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumTokenTransferSuccessResponse, 'mockResult');
 
   });
 

@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum';
-import { EthereumSmartContractSuccessResponse } from '../../../../models/ethereum';
+import { ethereumSmartContractSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumScRegisterController from '../index';
 
@@ -47,7 +47,7 @@ describe('ethereumScRegisterController', async () => {
     expect(domainRegisterMock).toHaveBeenCalledWith(req.body.alias, req.body.address, req.body.abi);
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumSmartContractSuccessResponse, 'mockResult');
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
 
   });
 

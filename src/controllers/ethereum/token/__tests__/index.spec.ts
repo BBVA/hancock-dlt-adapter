@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum/token';
-import { EthereumErrorTokenResponse, EthereumOkTokenResponse } from '../../../../models/ethereum';
+import { ethereumErrorTokenResponse, ethereumOkTokenResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumTokenController from '../index';
 
@@ -47,13 +47,13 @@ describe('tokenController', async () => {
     expect(domainTokenMock).toHaveBeenCalledWith('mockedAddressAlias', 'mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumOkTokenResponse, 'mockResult');
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumOkTokenResponse, 'mockResult');
 
   });
 
   it('should call domain.getTokenBalance and fail if there is a problem', async () => {
 
-    domainTokenMock.mockRejectedValue(EthereumErrorTokenResponse);
+    domainTokenMock.mockRejectedValue(ethereumErrorTokenResponse);
 
     await ethereumTokenController.getTokenBalance(req, res, next);
 
@@ -61,7 +61,7 @@ describe('tokenController', async () => {
     expect(domainTokenMock).toHaveBeenCalledWith('mockedAddressAlias', 'mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumErrorTokenResponse);
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
 
   });
 

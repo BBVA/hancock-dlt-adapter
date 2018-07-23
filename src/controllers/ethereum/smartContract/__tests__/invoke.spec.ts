@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum';
-import { EthereumSmartContractSuccessResponse } from '../../../../models/ethereum';
+import { ethereumSmartContractSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumScInvokeController from '../index';
 
@@ -51,7 +51,7 @@ describe('ethereumScInvokeController', async () => {
       expect(domainInvokeMock).toHaveBeenCalledWith(req.body);
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumSmartContractSuccessResponse, 'mockResult');
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
 
     });
 
@@ -99,7 +99,7 @@ describe('ethereumScInvokeController', async () => {
       expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.query, req.body);
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumSmartContractSuccessResponse, 'mockResult');
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
 
     });
 

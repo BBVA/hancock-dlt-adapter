@@ -1,7 +1,7 @@
 
 import 'jest';
 import {
-  EthereumSmartContractSmartcontractErrorResponse,
+  ethereumSmartContractSmartcontractErrorResponse,
   IEthereumSmartContractDeployModel,
   IEthereumSmartContractDeployRequest,
 } from '../../../../models/ethereum';
@@ -228,7 +228,7 @@ describe('ethereumScDeployDomain', () => {
         expect(contractInstanceDeployWeb3WrapperMock.send.mock.calls[0][0]).toEqual({ from: contractDeployModelMock.from });
 
         // rejected error is ok
-        expect(e).toEqual(EthereumSmartContractSmartcontractErrorResponse);
+        expect(e).toEqual(ethereumSmartContractSmartcontractErrorResponse);
 
         expect(LOG.error).toHaveBeenCalledWith(throwedError);
 
