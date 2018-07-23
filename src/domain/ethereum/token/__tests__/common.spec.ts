@@ -9,7 +9,7 @@ describe('commonDomain', () => {
 
   describe('::getRequestModel', () => {
 
-    it('should call getRequestModel method and register the model', async () => {
+    it('should call getRequestModel method', async () => {
 
       const action: IEthereumSmartContractRequestAction = 'call';
       const callParams = {
@@ -20,6 +20,28 @@ describe('commonDomain', () => {
       };
       const result: IEthereumSmartContractInvokeByQueryRequest =
       common.getRequestModel(callParams.action, callParams.from, callParams.method, callParams.params);
+
+      expect(result).toEqual(callParams);
+
+    });
+
+  });
+
+  describe('::getAdaptRequestModel', () => {
+
+    it('should call getAdaptRequestModel method', async () => {
+
+      const action: IEthereumSmartContractRequestAction = 'call';
+      const callParams = {
+        abi: [],
+        action,
+        from: '',
+        method: 'testMethod',
+        params: [],
+        to: 'mockedTo',
+      };
+      const result: IEthereumSmartContractInvokeByQueryRequest =
+      common.getAdaptRequestModel(callParams.abi, callParams.action, callParams.method, callParams.params, callParams.to);
 
       expect(result).toEqual(callParams);
 
