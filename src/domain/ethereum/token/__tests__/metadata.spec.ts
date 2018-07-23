@@ -123,7 +123,7 @@ describe('metadataDomain', () => {
 
       } catch (e) {
 
-        expect(adaptMock).toHaveBeenCalledTimes(1);
+        expect(adaptMock).toHaveBeenCalledTimes(4);
         expect(e).toEqual(throwedError);
 
       }

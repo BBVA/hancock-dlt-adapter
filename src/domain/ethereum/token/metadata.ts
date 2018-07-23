@@ -22,22 +22,24 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
     if (abi) {
 
       const invokeModelName: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'name', [], address);
-      const name = await adaptContractInvoke(invokeModelName);
+      const name = adaptContractInvoke(invokeModelName);
 
       const invokeModelSymbol: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'symbol', [], address);
-      const symbol = await adaptContractInvoke(invokeModelSymbol);
+      const symbol = adaptContractInvoke(invokeModelSymbol);
 
       const invokeModelDecimals: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'decimals', [], address);
-      const decimals = await adaptContractInvoke(invokeModelDecimals);
+      const decimals = adaptContractInvoke(invokeModelDecimals);
 
       const invokeModelTotalSupply: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'totalSupply', [], address);
-      const totalSupply = await adaptContractInvoke(invokeModelTotalSupply);
+      const totalSupply = adaptContractInvoke(invokeModelTotalSupply);
+
+      const promiseValues = await Promise.all([name, symbol, decimals, totalSupply]);
 
       const object = {
-        decimals,
-        name,
-        symbol,
-        totalSupply,
+        decimals: promiseValues[2],
+        name: promiseValues[0],
+        symbol: promiseValues[1],
+        totalSupply: promiseValues[3],
       };
 
       return object;
