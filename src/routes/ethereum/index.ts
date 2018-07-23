@@ -1,13 +1,13 @@
 import { Router as ExpressRouter } from 'express';
 import * as ethereumController from '../../controllers/ethereum';
-import { SmartContractRouter } from './smartContract';
-import { TokenRouter } from './token';
-import { TransferRouter } from './transfer';
+import { smartContractRouter } from './smartContract';
+import { tokenRouter } from './token';
+import { transferRouter } from './transfer';
 
-export const Router = ExpressRouter();
+export const router = ExpressRouter();
 
-Router
-  .use('/smartcontracts', SmartContractRouter)
-  .use('/transfers', TransferRouter)
+router
+  .use('/smartcontracts', smartContractRouter)
+  .use('/transfers', transferRouter)
   .get('/balance/:address', ethereumController.getBalance)
-  .use('/token', TokenRouter);
+  .use('/token', tokenRouter);

@@ -1,9 +1,9 @@
 import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../db/ethereum';
 import {
-  EthereumSmartContractAbiNameNotFoundResponse,
-  EthereumSmartContractConflictResponse,
-  EthereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractAbiNameNotFoundResponse,
+  ethereumSmartContractConflictResponse,
+  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
@@ -27,7 +27,7 @@ export async function register(alias: string, address: string, abi: any[], abiNa
     } else {
 
       LOG.error(`Smart contract ${alias} cannot be registered due to a conflict`);
-      throw EthereumSmartContractConflictResponse;
+      throw ethereumSmartContractConflictResponse;
 
     }
 
@@ -74,7 +74,7 @@ export const registerInstance = async (alias: string, address: string, abiName: 
     } else {
 
       LOG.error(`Smart contract instance ${alias} cannot be registered, (abiName not found)`);
-      throw EthereumSmartContractAbiNameNotFoundResponse;
+      throw ethereumSmartContractAbiNameNotFoundResponse;
 
     }
 
@@ -87,7 +87,7 @@ export const registerInstance = async (alias: string, address: string, abiName: 
   } else {
 
     LOG.error(`Smart contract instance ${alias} cannot be registered due to a conflict`);
-    throw EthereumSmartContractConflictResponse;
+    throw ethereumSmartContractConflictResponse;
 
   }
 
@@ -105,7 +105,7 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
   } catch (e) {
 
     LOG.error(`Smart contract ${address} cannot be registered: ${e}`);
-    throw EthereumSmartContractInternalServerErrorResponse;
+    throw ethereumSmartContractInternalServerErrorResponse;
 
   }
 

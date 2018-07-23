@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as domain from '../../../domain/ethereum';
 import {
-  EthereumSmartContractSuccessResponse,
+  ethereumSmartContractSuccessResponse,
   IEthereumSmartContractDeployRequest,
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
@@ -12,7 +12,7 @@ export async function deploy(req: Request, res: Response, next: NextFunction) {
 
   return domain
     .deploy(params)
-    .then((result: any) => utils.createReply(res, EthereumSmartContractSuccessResponse, result))
+    .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));
 
 }

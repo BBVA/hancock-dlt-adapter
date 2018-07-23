@@ -1,15 +1,12 @@
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractNotFoundResponse,
+import { ethereumSmartContractNotFoundResponse,
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
-  IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
-  IEthereumSmartContractRequestAction,
 } from '../../../models/ethereum';
 import { IEthereumTokenMetadataResponse } from '../../../models/ethereum/token';
 import { adaptContractInvoke } from '../smartContract/common';
-import { invokeByQuery } from '../smartContract/invoke';
-import { getAdaptRequestModel, getRequestModel } from './common';
+import { getAdaptRequestModel } from './common';
 
 export const getTokenMetadata = async (address: string): Promise<any> => {
 
@@ -47,7 +44,7 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
     } else {
 
       LOG.info('Contract not found');
-      throw EthereumSmartContractNotFoundResponse;
+      throw ethereumSmartContractNotFoundResponse;
 
     }
 
@@ -74,7 +71,7 @@ export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<I
     } else {
 
       LOG.info('Contract not found');
-      throw EthereumSmartContractNotFoundResponse;
+      throw ethereumSmartContractNotFoundResponse;
 
     }
 

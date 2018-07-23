@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as domain from '../../../domain/ethereum';
 import {
-  EthereumTokenTransferSuccessResponse,
+  ethereumTokenTransferSuccessResponse,
   IEthereumTokenTransferByQueryRequest,
   IEthereumTokenTransferRequest,
 } from '../../../models/ethereum';
@@ -13,7 +13,7 @@ export async function tokenTransfer(req: Request, res: Response, next: NextFunct
 
   return domain
     .tokenTransfer(params)
-    .then((result: any) => utils.createReply(res, EthereumTokenTransferSuccessResponse, result))
+    .then((result: any) => utils.createReply(res, ethereumTokenTransferSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));
 
 }
@@ -25,7 +25,7 @@ export async function tokenTransferByQuery(req: Request, res: Response, next: Ne
 
   return domain
     .tokenTransferByQuery(addressOrAlias, params)
-    .then((result: any) => utils.createReply(res, EthereumTokenTransferSuccessResponse, result))
+    .then((result: any) => utils.createReply(res, ethereumTokenTransferSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));
 
 }

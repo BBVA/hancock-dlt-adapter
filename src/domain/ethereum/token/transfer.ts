@@ -1,13 +1,13 @@
 import * as db from '../../../db/ethereum';
 import {
-  EthereumSmartContractNotFoundResponse,
+  ethereumSmartContractNotFoundResponse,
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
   IEthereumTokenTransferByQueryRequest,
   IEthereumTokenTransferRequest,
 } from '../../../models/ethereum';
-import { adaptContractInvoke, retrieveContractAbiByAddressOrAlias  } from '../smartContract/common';
+import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
 
 export async function tokenTransfer(transferRequest: IEthereumTokenTransferRequest): Promise<any> {
@@ -34,7 +34,7 @@ export async function tokenTransfer(transferRequest: IEthereumTokenTransferReque
     } else {
 
       LOG.info('Contract not found');
-      throw EthereumSmartContractNotFoundResponse;
+      throw ethereumSmartContractNotFoundResponse;
 
     }
 
