@@ -17,6 +17,7 @@ export interface IEthereumTokenTransferByQueryRequest {
   value: string;
 }
 
+<<<<<<< HEAD
 export interface IEthereumTokenApproveTransferRequest {
   from: string;
   spender: string;
@@ -28,6 +29,14 @@ export interface IEthereumTokenApproveTransferByQueryRequest {
   from: string;
   spender: string;
   value: string;
+=======
+export interface IEthereumTokenTransferFromRequest extends IEthereumTokenTransferRequest {
+  sender: string;
+}
+
+export interface IEthereumTokenTransferFromByQueryRequest extends IEthereumTokenTransferByQueryRequest {
+  sender: string;
+>>>>>>> origin/develop
 }
 
 export interface IEthereumTokenRegisterRequest {
@@ -51,6 +60,19 @@ export interface IEthereumTokenMetadataResponse {
   symbol: string;
   decimals: string;
   totalSupply: string;
+}
+
+export interface IEthereumTokenAllowanceRequest {
+  from: string;
+  tokenOwner: string;
+  spender: string;
+  smartContractAddress: string;
+}
+
+export interface IEthereumTokenAllowanceByQueryRequest {
+  from: string;
+  tokenOwner: string;
+  spender: string;
 }
 
 export const ethereumBadRequestTokenResponse: IEthereumTokenResponse = {
@@ -95,6 +117,12 @@ export const ethereumTokenApproveTransferSuccessResponse: IEthereumTokenResponse
   statusCode: 200,
 };
 
+export const ethereumTokenAllowanceSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Allowance - Success',
+  statusCode: 200,
+};
+
 export const ethereumTokenTransferBadRequestResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token Transfer - Bad request',
@@ -111,4 +139,10 @@ export const ethereumTokenTransferInternalServerErrorResponse: IEthereumTokenRes
   code: responses.ndbgeneral500.code,
   message: 'Token Transfer - Internal Server Error',
   statusCode: 500,
+};
+
+export const ethereumTokenTransferFromSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token TransferFrom - Success',
+  statusCode: 200,
 };

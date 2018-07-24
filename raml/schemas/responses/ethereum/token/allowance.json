@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Allowance Token Response Schema",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [ "code", "description" ]
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "nonce": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "gas": {
+          "type": "string"
+        },
+        "spender": {
+          "type": "string"
+        },
+        "gasPrice": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [ "result", "data" ]
+}

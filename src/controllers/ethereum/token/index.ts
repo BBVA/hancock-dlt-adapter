@@ -7,7 +7,9 @@ import * as utils from '../../../utils/utils';
 export * from './register';
 export * from './transfer';
 export * from './approve';
+export * from './transferFrom';
 export * from './metadata';
+export * from './allowance';
 
 export async function getTokenBalance(req: Request, res: Response, next: NextFunction) {
 
