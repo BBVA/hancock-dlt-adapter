@@ -18,7 +18,7 @@ export async function getTokenMetadataByQuery(req: Request, res: Response, next:
 
 export async function getTokenMetadata(req: Request, res: Response, next: NextFunction) {
 
-  const address: string = req.params.address;
+  const address: string = req.query.address;
 
   return domain
     .getTokenMetadata(address)
