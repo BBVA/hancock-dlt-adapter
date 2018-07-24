@@ -18,16 +18,16 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
     if (abi) {
 
-      const invokeModelName: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'name', [], address);
+      const invokeModelName: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'name', [], address);
       const name = adaptContractInvoke(invokeModelName);
 
-      const invokeModelSymbol: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'symbol', [], address);
+      const invokeModelSymbol: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'symbol', [], address);
       const symbol = adaptContractInvoke(invokeModelSymbol);
 
-      const invokeModelDecimals: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'decimals', [], address);
+      const invokeModelDecimals: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'decimals', [], address);
       const decimals = adaptContractInvoke(invokeModelDecimals);
 
-      const invokeModelTotalSupply: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'send', 'totalSupply', [], address);
+      const invokeModelTotalSupply: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'totalSupply', [], address);
       const totalSupply = adaptContractInvoke(invokeModelTotalSupply);
 
       const promiseValues = await Promise.all([name, symbol, decimals, totalSupply]);
