@@ -4,13 +4,16 @@
   "type": "object",
   "properties": {
     "from": {
-      "type": "string"
+      "type": "string",
+      "description": "The address which invoke the method"
     },
     "sender": {
-      "type": "string"
+      "type": "string",
+      "description": "The address which is transferring the tokens"
     },
     "to": {
-      "type": "string"
+      "type": "string",
+      "description": "The address which is receiving the tokens"
     },
     "value": {
       "type": "string"
