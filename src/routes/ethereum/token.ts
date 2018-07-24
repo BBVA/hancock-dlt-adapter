@@ -10,6 +10,8 @@ const schemaPath: string = path.normalize(__dirname + '/../../../../raml/schemas
 const registerTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/register.json`, 'utf-8'));
 const transferTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transfer.json`, 'utf-8'));
 const transferTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transferByQuery.json`, 'utf-8'));
+const transferApproveTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/approveTransfer.json`, 'utf-8'));
+const transferApproveTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/approveTransferByQuery.json`, 'utf-8'));
 const allowanceTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/allowance.json`, 'utf-8'));
 const allowanceTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/allowanceByQuery.json`, 'utf-8'));
 const transferFromTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transferFrom.json`, 'utf-8'));
@@ -17,6 +19,8 @@ const transferFromTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/re
 
 tokenRouter
   .get('/:query/balance/:address', smartContractController.getTokenBalance)
+  .post('/approve', validate({body: transferApproveTokenSchema}), smartContractController.tokenApproveTransfer)
+  .post('/:query/approve', validate({body: transferApproveTokenByQuerySchema}), smartContractController.tokenApproveTransferByQuery)
   .get('/:query/metadata', smartContractController.getTokenMetadataByQuery)
   .post('/:query/transfer', validate({body: transferTokenByQuerySchema}), smartContractController.tokenTransferByQuery)
   .post('/:query/transferFrom', validate({body: transferFromTokenByQuerySchema}), smartContractController.tokenTransferFromByQuery)

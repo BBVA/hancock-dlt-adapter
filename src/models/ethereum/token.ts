@@ -17,6 +17,19 @@ export interface IEthereumTokenTransferByQueryRequest {
   value: string;
 }
 
+export interface IEthereumTokenApproveTransferRequest {
+  from: string;
+  spender: string;
+  value: string;
+  smartContractAddress: string;
+}
+
+export interface IEthereumTokenApproveTransferByQueryRequest {
+  from: string;
+  spender: string;
+  value: string;
+}
+
 export interface IEthereumTokenTransferFromRequest extends IEthereumTokenTransferRequest {
   sender: string;
 }
@@ -94,6 +107,12 @@ export const ethereumTokenMetadataSuccessResponse: IEthereumTokenResponse = {
 export const ethereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Transfer - Success',
+  statusCode: 200,
+};
+
+export const ethereumTokenApproveTransferSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Approve Transfer - Success',
   statusCode: 200,
 };
 
