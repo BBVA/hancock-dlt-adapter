@@ -1,6 +1,6 @@
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractInternalServerErrorResponse, IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
+import { ethereumSmartContractInternalServerErrorResponse, IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
 
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
@@ -25,14 +25,14 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
     } else {
 
       LOG.error(`Smart contract cannot be de-registered. Result code ${resultInstance.ok} and error ${JSON.stringify(resultInstance.lastErrorObject)}`);
-      return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
+      return Promise.reject(ethereumSmartContractInternalServerErrorResponse);
 
     }
 
   } catch (e) {
 
     LOG.error(`Smart contract cannot be de-registered: ${e}`);
-    return Promise.reject(EthereumSmartContractInternalServerErrorResponse);
+    return Promise.reject(ethereumSmartContractInternalServerErrorResponse);
 
   }
 }

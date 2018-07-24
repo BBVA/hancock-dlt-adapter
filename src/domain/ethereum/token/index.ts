@@ -1,11 +1,12 @@
 import * as db from '../../../db/ethereum';
-import { EthereumSmartContractNotFoundResponse, IEthereumContractDbModel, IEthereumSmartContractInvokeByQueryRequest } from '../../../models/ethereum';
+import { ethereumSmartContractNotFoundResponse, IEthereumContractDbModel, IEthereumSmartContractInvokeByQueryRequest } from '../../../models/ethereum';
 import { IEthereumTokenBalanceResponse } from '../../../models/ethereum/token';
 import { invokeByQuery } from '../smartContract/invoke';
 
 export * from './register';
 export * from './transfer';
 export * from './approve';
+export * from './metadata';
 
 export async function getTokenBalance(addressOrAlias: string, address: string): Promise<IEthereumTokenBalanceResponse> {
 
@@ -45,7 +46,7 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
     } else {
 
       LOG.info('Contract not found');
-      throw EthereumSmartContractNotFoundResponse;
+      throw ethereumSmartContractNotFoundResponse;
 
     }
 

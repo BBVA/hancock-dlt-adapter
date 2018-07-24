@@ -1,8 +1,6 @@
 import 'jest';
 import * as db from '../../../../db/ethereum';
 import {
-  EthereumSmartContractInternalServerErrorResponse,
-  IEthereumContractDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
 } from '../../../../models/ethereum';

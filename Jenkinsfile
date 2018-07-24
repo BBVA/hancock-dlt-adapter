@@ -1,8 +1,20 @@
+def lint() {
+  stage('Linter'){
+    container('node'){
+      sh """
+        yarn run lint
+      """
+    }
+  }
+}
+
 nodePipeline{
 
   // ---- DEVELOP ----
   if (env.BRANCH_NAME == 'develop') {
 
+    // sonar_shuttle_stage()
+
     stage('Install Dependencies'){
       container('node'){
         sh """
@@ -11,6 +23,8 @@ nodePipeline{
         """
       }
     }
+
+    lint()
 
     stage('Unit tests'){
       container('node'){
@@ -22,15 +36,17 @@ nodePipeline{
 
     docker_shuttle_stage()
 
-    // We dont have test by the moment
-    // qa_data_shuttle_stage()
+    qa_data_shuttle_stage()
 
     deploy_shuttle_stage(project: "blockchainhub", environment: "develop", askForConfirmation: false)
+
 
   }
 
   // ---- RELEASE ----
-  if (env.BRANCH_NAME =~ 'release/*') {
+  if (env.BRANCH_NAME == 'qa' ||env.BRANCH_NAME =~ 'release/*') {
+
+    // sonar_shuttle_stage()
 
     stage('Install Dependencies'){
       container('node'){
@@ -41,6 +57,8 @@ nodePipeline{
       }
     }
 
+    lint()
+
     stage('Unit tests'){
       container('node'){
         sh """
@@ -49,11 +67,17 @@ nodePipeline{
       }
     }
 
+    check_unlocked_in_RC_shuttle_stage()
+
     docker_shuttle_stage()
 
-    //qa_data_shuttle_stage()
+    qa_data_shuttle_stage()
+
+    logic_label_shuttle_stage()
 
     deploy_shuttle_stage(project: "blockchainhub", environment: "qa", askForConfirmation: false)
+
+    set2rc_shuttle_stage()
 
     stage ('Functional Tests') {
       build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master'

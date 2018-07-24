@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../domain/ethereum';
-import { EthereumErrorResponse, EthereumOkResponse } from '../../../models/ethereum';
+import { ethereumErrorResponse, ethereumOkResponse } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 import * as ethereumController from '../index';
 
@@ -48,7 +48,7 @@ describe('ethereumController', async () => {
     expect(domainGetBalanceMock).toHaveBeenCalledWith('mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumOkResponse, {balance: 'mockResult'});
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumOkResponse, {balance: 'mockResult'});
 
   });
 
@@ -62,7 +62,7 @@ describe('ethereumController', async () => {
     expect(domainGetBalanceMock).toHaveBeenCalledWith('mockedAddress');
 
     expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumErrorResponse);
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorResponse);
 
   });
 

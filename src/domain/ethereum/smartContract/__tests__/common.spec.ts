@@ -4,9 +4,9 @@ import * as request from 'request-promise-native';
 import * as db from '../../../../db/ethereum';
 import {
   ContractAbi,
-  EthereumSmartContractInternalServerErrorResponse,
-  EthereumSmartContractNotFoundResponse,
-  EthereumSmartContractSourcecodeNotFoundErrorResponse,
+  ethereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractNotFoundResponse,
+  ethereumSmartContractSourcecodeNotFoundErrorResponse,
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeModel,
   IEthereumSmartContractRawTxResponse,
@@ -56,7 +56,7 @@ describe('ethereumScCommonDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(EthereumSmartContractNotFoundResponse);
+        expect(e).toEqual(ethereumSmartContractNotFoundResponse);
 
       }
 
@@ -76,7 +76,7 @@ describe('ethereumScCommonDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 
@@ -123,7 +123,7 @@ describe('ethereumScCommonDomain', () => {
       } catch (e) {
 
         expect(requestMock).toHaveBeenLastCalledWith(`${urlBase}.abi`);
-        expect(e).toEqual(EthereumSmartContractSourcecodeNotFoundErrorResponse);
+        expect(e).toEqual(ethereumSmartContractSourcecodeNotFoundErrorResponse);
 
       }
 
@@ -169,7 +169,7 @@ describe('ethereumScCommonDomain', () => {
       } catch (e) {
 
         expect(requestMock).toHaveBeenLastCalledWith(`${urlBase}.bin`);
-        expect(e).toEqual(EthereumSmartContractSourcecodeNotFoundErrorResponse);
+        expect(e).toEqual(ethereumSmartContractSourcecodeNotFoundErrorResponse);
 
       }
 

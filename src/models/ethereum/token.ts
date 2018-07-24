@@ -46,55 +46,68 @@ export interface IEthereumTokenBalanceResponse {
   accuracy: number;
 }
 
-export const EthereumBadRequestTokenResponse: IEthereumTokenResponse = {
+export interface IEthereumTokenMetadataResponse {
+  name: string;
+  symbol: string;
+  decimals: string;
+  totalSupply: string;
+}
+
+export const ethereumBadRequestTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token ERC20 - Bad request',
   statusCode: 400,
 };
 
-export const EthereumErrorTokenResponse: IEthereumTokenResponse = {
+export const ethereumErrorTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Token ERC20 - Blockchain request error',
   statusCode: 500,
 };
 
-export const EthereumOkTokenResponse: IEthereumTokenResponse = {
+export const ethereumOkTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'Token ERC20 - Operation successfully requested',
   statusCode: 202,
 };
 
-export const EthereumTokenRegisterSuccessResponse: IEthereumTokenResponse = {
+export const ethereumTokenRegisterSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Register - Success',
   statusCode: 200,
 };
 
-export const EthereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
+export const ethereumTokenMetadataSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Metadata - Success',
+  statusCode: 200,
+};
+
+export const ethereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Transfer - Success',
   statusCode: 200,
 };
 
-export const EthereumTokenApproveTransferSuccessResponse: IEthereumTokenResponse = {
+export const ethereumTokenApproveTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Approve Transfer - Success',
   statusCode: 200,
 };
 
-export const EthereumTokenTransferBadRequestResponse: IEthereumTokenResponse = {
+export const ethereumTokenTransferBadRequestResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token Transfer - Bad request',
   statusCode: 400,
 };
 
-export const EthereumTokenTransferNotFoundResponse: IEthereumTokenResponse = {
+export const ethereumTokenTransferNotFoundResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral404.code,
   message: 'Token Transfer - Not Found',
   statusCode: 404,
 };
 
-export const EthereumTokenTransferInternalServerErrorResponse: IEthereumTokenResponse = {
+export const ethereumTokenTransferInternalServerErrorResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral500.code,
   message: 'Token Transfer - Internal Server Error',
   statusCode: 500,

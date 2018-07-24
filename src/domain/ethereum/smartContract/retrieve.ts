@@ -1,6 +1,6 @@
 import * as db from '../../../db/ethereum';
 import {
-  EthereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
 import { retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
@@ -16,7 +16,7 @@ export async function find(): Promise<IEthereumContractDbModel[]> {
   } catch (e) {
 
     LOG.error(`Error retrieving smart contract: ${e}`);
-    throw EthereumSmartContractInternalServerErrorResponse;
+    throw ethereumSmartContractInternalServerErrorResponse;
 
   }
 }

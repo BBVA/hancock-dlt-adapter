@@ -1,10 +1,10 @@
 import * as request from 'request-promise-native';
 import * as db from '../../../db/ethereum';
 import { ContractAbi, IEthereumSmartContractInvokeModel, SC_DEFAULT_ACTION } from '../../../models/ethereum';
-import { EthereumSmartContractNotFoundResponse } from '../../../models/ethereum/smartContract';
+import { ethereumSmartContractNotFoundResponse } from '../../../models/ethereum/smartContract';
 import {
-  EthereumSmartContractInternalServerErrorResponse,
-  EthereumSmartContractSourcecodeNotFoundErrorResponse,
+  ethereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractSourcecodeNotFoundErrorResponse,
   IEthereumContractDbModel,
   IEthereumSmartContractRawTxResponse,
   IEthereumSmartContractRequestAction,
@@ -24,14 +24,14 @@ export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string
   } catch (e) {
 
     LOG.error(`Error retrieving contract from ddbb: ${e}`);
-    throw EthereumSmartContractInternalServerErrorResponse;
+    throw ethereumSmartContractInternalServerErrorResponse;
 
   }
 
   if (!contractDbModel) {
 
     LOG.info('Contract not found');
-    throw EthereumSmartContractNotFoundResponse;
+    throw ethereumSmartContractNotFoundResponse;
 
   } else {
 
@@ -52,7 +52,7 @@ export async function retrieveContractAbi(urlBase: string): Promise<ContractAbi>
 
   } catch (e) {
 
-    throw EthereumSmartContractSourcecodeNotFoundErrorResponse;
+    throw ethereumSmartContractSourcecodeNotFoundErrorResponse;
 
   }
 
@@ -68,7 +68,7 @@ export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
   } catch (e) {
 
-    throw EthereumSmartContractSourcecodeNotFoundErrorResponse;
+    throw ethereumSmartContractSourcecodeNotFoundErrorResponse;
 
   }
 
