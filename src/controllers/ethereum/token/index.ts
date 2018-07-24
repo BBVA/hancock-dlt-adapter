@@ -6,6 +6,7 @@ import * as utils from '../../../utils/utils';
 
 export * from './register';
 export * from './transfer';
+export * from './transferFrom';
 export * from './metadata';
 export * from './allowance';
 
