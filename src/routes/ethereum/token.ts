@@ -18,9 +18,9 @@ const transferFromTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/re
 tokenRouter
   .get('/:query/balance/:address', smartContractController.getTokenBalance)
   .get('/:query/metadata', smartContractController.getTokenMetadataByQuery)
-  .post('/:query/transfer', validate({body: allowanceTokenByQuerySchema}), smartContractController.tokenTransferByQuery)
+  .post('/:query/transfer', validate({body: transferTokenByQuerySchema}), smartContractController.tokenTransferByQuery)
   .post('/:query/transferFrom', validate({body: transferFromTokenByQuerySchema}), smartContractController.tokenTransferFromByQuery)
-  .post('/:query/allowance', validate({body: transferTokenByQuerySchema}), smartContractController.tokenAllowanceByQuery)
+  .post('/:query/allowance', validate({body: allowanceTokenByQuerySchema}), smartContractController.tokenAllowanceByQuery)
   .get('/metadata', smartContractController.getTokenMetadata)
   .post('/transfer', validate({body: transferTokenSchema}), smartContractController.tokenTransfer)
   .post('/register', validate({body: registerTokenSchema}), smartContractController.tokenRegister)
