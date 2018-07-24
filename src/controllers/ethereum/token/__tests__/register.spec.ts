@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../../../domain/ethereum';
-import { EthereumTokenRegisterSuccessResponse } from '../../../../models/ethereum';
+import { ethereumTokenRegisterSuccessResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumTokenRegisterController from '../register';
 
@@ -45,7 +45,7 @@ describe('tokenRegisterController', async () => {
     await ethereumTokenRegisterController.tokenRegister(req, res, next);
 
     expect(domainTokenRegisterMock).toHaveBeenCalledWith('mockedAlias', 'mockedAddress');
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, EthereumTokenRegisterSuccessResponse, 'mockedResult');
+    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumTokenRegisterSuccessResponse, 'mockedResult');
 
   });
 

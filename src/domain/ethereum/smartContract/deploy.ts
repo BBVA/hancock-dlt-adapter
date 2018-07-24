@@ -1,6 +1,6 @@
 import { IEthereumSmartContractDeployModel } from '../../../models/ethereum';
 import {
-  EthereumSmartContractSmartcontractErrorResponse,
+  ethereumSmartContractSmartcontractErrorResponse,
   IEthereumSmartContractDeployRequest,
 } from '../../../models/ethereum/smartContract';
 import { retrieveContractAbi, retrieveContractBinary } from '../smartContract/common';
@@ -63,7 +63,7 @@ export const _adaptContractDeploy = async (contractDeployModel: IEthereumSmartCo
       .on('error', (e: any) => {
 
         LOG.error(e);
-        reject(EthereumSmartContractSmartcontractErrorResponse);
+        reject(ethereumSmartContractSmartcontractErrorResponse);
 
       });
   });

@@ -6,19 +6,19 @@ export interface IEthereumResponse {
   statusCode: number;
 }
 
-export const EthereumBadRequestResponse: IEthereumResponse = {
+export const ethereumBadRequestResponse: IEthereumResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Ethereum - Bad request',
   statusCode: 400,
 };
 
-export const EthereumErrorResponse: IEthereumResponse = {
+export const ethereumErrorResponse: IEthereumResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Ethereum - Blockchain request error',
   statusCode: 500,
 };
 
-export const EthereumOkResponse: IEthereumResponse = {
+export const ethereumOkResponse: IEthereumResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'Ethereum - Operation successfully requested',
   statusCode: 202,

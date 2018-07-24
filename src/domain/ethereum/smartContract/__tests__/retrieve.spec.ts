@@ -1,7 +1,7 @@
 import 'jest';
 import * as db from '../../../../db/ethereum';
 import {
-  EthereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../../models/ethereum';
 import * as ethereumScCommonDomain from '../common';
@@ -47,7 +47,7 @@ describe('ethereumScRetrieveDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 

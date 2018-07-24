@@ -3,7 +3,7 @@ import 'jest';
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../../db/ethereum';
 import {
-  EthereumSmartContractInternalServerErrorResponse,
+  ethereumSmartContractInternalServerErrorResponse,
 } from '../../../../models/ethereum';
 import * as ethereumScDeleteDomain from '../delete';
 
@@ -62,7 +62,7 @@ describe('ethereumScDeleteDomain', () => {
       } catch (e) {
 
         expect(dbContractMock).toHaveBeenCalledWith(addressOrAlias);
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 
@@ -84,7 +84,7 @@ describe('ethereumScDeleteDomain', () => {
       } catch (e) {
 
         expect(dbDeleteInstanceMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 
@@ -102,7 +102,7 @@ describe('ethereumScDeleteDomain', () => {
       } catch (e) {
 
         expect(dbDeleteInstanceMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(EthereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
 
       }
 

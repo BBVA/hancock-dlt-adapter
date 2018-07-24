@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import * as domain from '../../../domain/ethereum';
-import { EthereumSmartContractSuccessResponse, IEthereumSmartContractRegisterRequest } from '../../../models/ethereum';
+import { ethereumSmartContractSuccessResponse, IEthereumSmartContractRegisterRequest } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 
 export async function register(req: Request, res: Response, next: NextFunction) {
@@ -13,7 +13,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
   return domain
     .register(alias, address, abi)
-    .then((result: any) => utils.createReply(res, EthereumSmartContractSuccessResponse, result))
+    .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
     .catch((err: any) => utils.createReply(res, err));
 
 }

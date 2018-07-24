@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as domain from '../../domain/protocol';
-import { IProtocolDecodeRequest, IProtocolEncodeRequest, ProtocolRequestOkResponse } from '../../models/protocol';
+import { IProtocolDecodeRequest, IProtocolEncodeRequest, protocolRequestOkResponse } from '../../models/protocol';
 import * as utils from '../../utils/utils';
 import * as protocolController from '../protocol';
 
@@ -41,7 +41,7 @@ describe('protocolController', async () => {
     expect(domainEncodeMock.mock.calls).toEqual([[req.body]]);
 
     expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ProtocolRequestOkResponse, { qrEncode: 'mockResult' }]]);
+    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, protocolRequestOkResponse, { qrEncode: 'mockResult' }]]);
 
   });
 
@@ -61,7 +61,7 @@ describe('protocolController', async () => {
     expect(domainDecodeMock.mock.calls).toEqual([[req.body.code]]);
 
     expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ProtocolRequestOkResponse, 'mockResult']]);
+    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, protocolRequestOkResponse, 'mockResult']]);
 
   });
 });

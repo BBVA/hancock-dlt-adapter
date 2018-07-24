@@ -66,103 +66,103 @@ export interface IEthereumSmartContractRawTxResponse {
   data: string;
 }
 
-export const EthereumSmartContractSuccessResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractSuccessResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Smart Contract - Success',
   statusCode: 200,
 };
 
-export const EthereumSmartContractRegisterSmartcontractSuccessResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractRegisterSmartcontractSuccessResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract409.code,
   message: 'Smart Contract - Alias in use',
   statusCode: 200,
 };
 
-export const EthereumSmartContractCreatedResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractCreatedResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral201.code,
   message: 'Smart Contract - Created',
   statusCode: 201,
 };
 
-export const EthereumSmartContractTransactionOkResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractTransactionOkResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'Smart Contract - Transaction OK',
   statusCode: 202,
 };
 
-export const EthereumSmartContractSmartcontractAcceptedResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractSmartcontractAcceptedResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'Smart Contracts - Operation successfully requested. Consensus pending',
   statusCode: 202,
 };
 
-export const EthereumSmartContractNoContentResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractNoContentResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral204.code,
   message: responses.ndbgeneral204.description,
   statusCode: 204,
 };
 
-export const EthereumSmartContractBadRequestResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractBadRequestResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Smart Contract - Bad request',
   statusCode: 400,
 };
 
-export const EthereumSmartContractNotFoundResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractNotFoundResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral404.code,
   message: 'Smart Contract - Not Found',
   statusCode: 404,
 };
 
-export const EthereumSmartContractSourcecodeNotFoundErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractSourcecodeNotFoundErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral404.code,
   message: 'Smart Contracts - Source code not found',
   statusCode: 404,
 };
 
-export const EthereumSmartContractAbiNameNotFoundResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractAbiNameNotFoundResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral404.code,
   message: 'Smart Contract - Abi name not found',
   statusCode: 404,
 };
 
-export const EthereumSmartContractConflictResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractConflictResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract409.code,
   message: 'Smart Contract - Alias or address in use',
   statusCode: 409,
 };
 
-export const EthereumSmartContractInternalServerErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractInternalServerErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbgeneral500.code,
   message: 'Smart Contract - Internal Server Error',
   statusCode: 500,
 };
 
-export const EthereumSmartContractSmartcontractErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractSmartcontractErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Smart Contract - Blockchain request error',
   statusCode: 500,
 };
 
-export const EthereumSmartContractCompilationErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractCompilationErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Smart Contract - Compilation error',
   statusCode: 500,
 };
 
-export const EthereumSmartContractDeployErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractDeployErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Smart Contract - Deployment error',
   statusCode: 500,
 };
 
-export const EthereumSmartContractTransactionErrorResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractTransactionErrorResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Smart Contract - Transaction Error',
   statusCode: 500,
 };
 
-export const EthereumSmartContractInvalidTransactionInvokationResponse: IEthereumSmartContractResponse = {
+export const ethereumSmartContractInvalidTransactionInvokationResponse: IEthereumSmartContractResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'Smart Contract - Invalid transaction invokation',
   statusCode: 500,

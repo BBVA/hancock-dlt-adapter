@@ -2,8 +2,8 @@
 import 'jest';
 import * as domain from '../../../domain/ethereum';
 import {
-  EthereumTransferErrorResponse,
-  EthereumTransferSyncOkResponse,
+  ethereumTransferErrorResponse,
+  ethereumTransferSyncOkResponse,
   IEthereumTransferSendRequest,
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
@@ -47,7 +47,7 @@ describe('transferController', async () => {
     expect(domainSendTransferMock.mock.calls).toEqual([[req.body]]);
 
     expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, EthereumTransferSyncOkResponse, 'mockResult']]);
+    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ethereumTransferSyncOkResponse, 'mockResult']]);
 
   });
 
@@ -65,7 +65,7 @@ describe('transferController', async () => {
     expect(domainSendTransferMock.mock.calls).toEqual([[req.body]]);
 
     expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, EthereumTransferErrorResponse]]);
+    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ethereumTransferErrorResponse]]);
 
   });
 

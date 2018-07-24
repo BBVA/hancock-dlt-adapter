@@ -13,31 +13,31 @@ export interface IEthereumTransferResponse {
   statusCode: number;
 }
 
-export const EthereumTransferBadRequestResponse: IEthereumTransferResponse = {
+export const ethereumTransferBadRequestResponse: IEthereumTransferResponse = {
   code: responses.ndbgeneral400.code,
   message: 'EthereumTransfer - Bad request',
   statusCode: 400,
 };
 
-export const EthereumTransferDDBBErrorResponse: IEthereumTransferResponse = {
+export const ethereumTransferDDBBErrorResponse: IEthereumTransferResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'EthereumTransfer - Internal ddbb error',
   statusCode: 500,
 };
 
-export const EthereumTransferErrorResponse: IEthereumTransferResponse = {
+export const ethereumTransferErrorResponse: IEthereumTransferResponse = {
   code: responses.ndbsmartcontract500.code,
   message: 'EthereumTransfer - Blockchain request error',
   statusCode: 500,
 };
 
-export const EthereumTransferOkResponse: IEthereumTransferResponse = {
+export const ethereumTransferOkResponse: IEthereumTransferResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'EthereumTransfer - Blockchain transaction successfully sent. Consensus pending',
   statusCode: 202,
 };
 
-export const EthereumTransferSyncOkResponse: IEthereumTransferResponse = {
+export const ethereumTransferSyncOkResponse: IEthereumTransferResponse = {
   code: responses.ndbsmartcontract202.code,
   message: 'EthereumTransfer - Blockchain transaction successful',
   statusCode: 200,

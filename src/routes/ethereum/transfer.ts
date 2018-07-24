@@ -4,10 +4,10 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as transactionController from '../../controllers/ethereum';
 
-export const TransferRouter = ExpressRouter();
+export const transferRouter = ExpressRouter();
 
 const schemaPath: string = path.normalize(__dirname + '/../../../../raml/schemas');
-const TransferSendSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/transfers/transfer.json`, 'utf-8'));
+const transferSendSchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/transfers/transfer.json`, 'utf-8'));
 
-TransferRouter
-  .post('/', validate({ body: TransferSendSchema }), transactionController.sendTransfer);
+transferRouter
+  .post('/', validate({ body: transferSendSchema }), transactionController.sendTransfer);

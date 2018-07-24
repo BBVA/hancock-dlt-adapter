@@ -7,7 +7,7 @@ import { TxAdapter } from './txAdapter';
 
 // Important: Test this... wrong official typings
 // tslint:disable-next-line:no-var-requires
-const Web3 = require('web3');
+const web3 = require('web3');
 
 export class Ethereum {
 
@@ -17,7 +17,7 @@ export class Ethereum {
   constructor() {
 
     this.engine = new ProviderEngine();
-    this.web3 = new Web3(this.engine);
+    this.web3 = new web3(this.engine);
 
     this.engine.addProvider(new TxAdapter());
 

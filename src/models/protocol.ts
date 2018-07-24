@@ -20,19 +20,19 @@ export interface IProtocolEncodeRequest {
   dlt: 'ethereum';
 }
 
-export const ProtocolBadRequestResponse: IProtocolResponse = {
+export const protocolBadRequestResponse: IProtocolResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Bad request',
   statusCode: 400,
 };
 
-export const ProtocolRequestErrorResponse: IProtocolResponse = {
+export const protocolRequestErrorResponse: IProtocolResponse = {
   code: responses.ndbgeneral500.code,
   message: 'Request error',
   statusCode: 500,
 };
 
-export const ProtocolRequestOkResponse: IProtocolResponse = {
+export const protocolRequestOkResponse: IProtocolResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Operation successfully requested',
   statusCode: 200,
