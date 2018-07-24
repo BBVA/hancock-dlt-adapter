@@ -19,5 +19,5 @@
       "type": "string"
     }
   },
-  "required": [ "from", "spender", "value", "smartContractAddress" ]
+  "required": [ "from", "tokenOwner", "spender", "smartContractAddress" ]
 }

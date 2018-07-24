@@ -16,5 +16,5 @@
       "description": "address which is allowed to spent the tokens"
     }
   },
-  "required": [ "from", "spender", "value", "smartContractAddress" ]
+  "required": [ "from", "tokenOwner", "spender"]
 }
