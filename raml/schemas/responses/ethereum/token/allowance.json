@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "description": "Approve Transfer Token Response Schema",
+  "description": "Allowance Token Response Schema",
   "type": "object",
   "properties": {
     "result": {
