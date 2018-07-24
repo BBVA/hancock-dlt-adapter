@@ -40,6 +40,19 @@ export interface IEthereumTokenMetadataResponse {
   totalSupply: string;
 }
 
+export interface IEthereumTokenAllowanceRequest {
+  from: string;
+  tokenOwner: string;
+  spender: string;
+  smartContractAddress: string;
+}
+
+export interface IEthereumTokenAllowanceByQueryRequest {
+  from: string;
+  tokenOwner: string;
+  spender: string;
+}
+
 export const ethereumBadRequestTokenResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral400.code,
   message: 'Token ERC20 - Bad request',
@@ -73,6 +86,12 @@ export const ethereumTokenMetadataSuccessResponse: IEthereumTokenResponse = {
 export const ethereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Transfer - Success',
+  statusCode: 200,
+};
+
+export const ethereumTokenAllowanceSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Allowance - Success',
   statusCode: 200,
 };
 
