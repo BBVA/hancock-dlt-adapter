@@ -17,7 +17,6 @@ export interface IEthereumTokenTransferByQueryRequest {
   value: string;
 }
 
-<<<<<<< HEAD
 export interface IEthereumTokenApproveTransferRequest {
   from: string;
   spender: string;
@@ -29,14 +28,14 @@ export interface IEthereumTokenApproveTransferByQueryRequest {
   from: string;
   spender: string;
   value: string;
-=======
+}
+
 export interface IEthereumTokenTransferFromRequest extends IEthereumTokenTransferRequest {
   sender: string;
 }
 
 export interface IEthereumTokenTransferFromByQueryRequest extends IEthereumTokenTransferByQueryRequest {
   sender: string;
->>>>>>> origin/develop
 }
 
 export interface IEthereumTokenRegisterRequest {
