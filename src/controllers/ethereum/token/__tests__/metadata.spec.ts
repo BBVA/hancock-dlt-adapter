@@ -22,8 +22,10 @@ describe('metadataController', async () => {
 
     req = {
       params: {
-        address: 'mockedAddress',
         query: 'mockedAddressAlias',
+      },
+      query: {
+        address: 'mockedAddress',
       },
     };
 
