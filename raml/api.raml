@@ -18,6 +18,8 @@ types:
   ProtocolDecodeModelRequest: !include schemas/requests/protocol/decode.json
   TransferTokenRequest: !include schemas/requests/ethereum/token/transfer.json
   TransferTokenByQueryRequest: !include schemas/requests/ethereum/token/transferByQuery.json
+  TransferFromTokenRequest: !include schemas/requests/ethereum/token/transferFrom.json
+  TransferFromTokenByQueryRequest: !include schemas/requests/ethereum/token/transferFromByQuery.json
   ApproveTransferTokenRequest: !include schemas/requests/ethereum/token/approveTransfer.json
   ApproveTransferTokenByQueryRequest: !include schemas/requests/ethereum/token/approveTransferByQuery.json
   RegisterTokenRequest: !include schemas/requests/ethereum/token/register.json
@@ -32,6 +34,8 @@ types:
   ProtocolDecodeModelResponse: !include schemas/responses/protocol/decode.json
   TransferTokenResponse: !include schemas/responses/ethereum/token/transfer.json
   TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
+  TransferFromTokenResponse: !include schemas/responses/ethereum/token/transferFrom.json
+  TransferFromTokenByQueryResponse: !include schemas/responses/ethereum/token/transferFromByQuery.json
   ApproveTransferTokenResponse: !include schemas/responses/ethereum/token/approveTransfer.json
   ApproveTransferTokenByQueryResponse: !include schemas/responses/ethereum/token/approveTransferByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
@@ -256,6 +260,22 @@ securitySchemes:
               body:
                 application/json:
                   type: GenericResponse 
+      /transferFrom:
+        post:
+          description: Transfer ERC20 tokens between two addresses by Query 
+          body: 
+            application/json:
+              type: TransferFromTokenByQueryRequest
+          responses:
+            200:
+            body:
+              application/json:
+                type: TransferFromTokenByQueryResponse
+            400:
+            500:
+              body:
+                application/json:
+                  type: GenericResponse 
       /approve:
         post:
           description: Token ERC20 owner can approve for spender to transfer tokens from the token owner's account by query
@@ -299,6 +319,22 @@ securitySchemes:
           body:
             application/json:
               type: TransferTokenResponse
+          400:
+          500:
+            body:
+              application/json:
+                type: GenericResponse
+    /transferFrom:
+      post:
+        description: Transfer ERC20 tokens between two addresses 
+        body: 
+          application/json:
+            type: TransferFromTokenRequest
+        responses:
+          200:
+          body:
+            application/json:
+              type: TransferFromTokenResponse
           400:
           500:
             body:
