@@ -1,0 +1,23 @@
+
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Allowance Token schema",
+  "type": "object",
+  "properties": {
+    "from": {
+      "type": "string"
+    },
+    "tokenOwner": {
+      "type": "string",
+      "description": "address of the owner of the tokens"
+    },
+    "spender": {
+      "type": "string",
+      "description": "address which is allowed to spent the tokens"
+    },
+    "smartContractAddress": {
+      "type": "string"
+    }
+  },
+  "required": [ "from", "spender", "value", "smartContractAddress" ]
+}

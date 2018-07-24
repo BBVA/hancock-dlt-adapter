@@ -20,6 +20,8 @@ types:
   TransferTokenByQueryRequest: !include schemas/requests/ethereum/token/transferByQuery.json
   ApproveTransferTokenRequest: !include schemas/requests/ethereum/token/approveTransfer.json
   ApproveTransferTokenByQueryRequest: !include schemas/requests/ethereum/token/approveTransferByQuery.json
+  AllowanceTokenRequest: !include schemas/requests/ethereum/token/allowanceTransfer.json
+  AllowanceTokenByQueryRequest: !include schemas/requests/ethereum/token/allowanceTransferByQuery.json
   RegisterTokenRequest: !include schemas/requests/ethereum/token/register.json
 
   GenericResponse: !include schemas/responses/generic.json
@@ -34,6 +36,8 @@ types:
   TransferTokenByQueryResponse: !include schemas/responses/ethereum/token/transferByQuery.json
   ApproveTransferTokenResponse: !include schemas/responses/ethereum/token/approveTransfer.json
   ApproveTransferTokenByQueryResponse: !include schemas/responses/ethereum/token/approveTransferByQuery.json
+  AllowanceTokenResponse: !include schemas/responses/ethereum/token/allowance.json
+  AllowanceTokenByQueryResponse: !include schemas/responses/ethereum/token/allowanceByQuery.json
   GetBalanceTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
   RegisterTokenResponse: !include schemas/responses/ethereum/token/register.json
   GetMetadataTokenResponse: !include schemas/responses/ethereum/token/getTokenBalance.json
@@ -272,6 +276,22 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse 
+      /allowance:
+        post:
+          description: Provides the number of tokens allowed to be transferred from a given address by another given address by query
+          body: 
+            application/json:
+              type: AllowanceTokenByQueryRequest
+          responses:
+            200:
+            body:
+              application/json:
+                type: AllowanceTokenByQueryResponse
+            400:
+            500:
+            body:
+              application/json:
+                type: GenericResponse 
     /register:
       post:
         description: Register new ERC20 tokens in hancock to be invoked by alias or address
@@ -336,7 +356,23 @@ securitySchemes:
           500:
           body:
             application/json:
-              type: GenericResponse                 
+              type: GenericResponse       
+    /allowance:
+      post:
+        description: Provides the number of tokens allowed to be transferred from a given address by another given address
+        body: 
+          application/json:
+            type: AllowanceTokenRequest
+        responses:
+          200:
+          body:
+            application/json:
+              type: AllowanceTokenResponse
+          400:
+          500:
+          body:
+            application/json:
+              type: GenericResponse            
 
 /protocol:
   displayName: Protocol
