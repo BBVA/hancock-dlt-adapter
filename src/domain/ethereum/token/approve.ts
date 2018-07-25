@@ -16,7 +16,7 @@ export async function tokenApproveTransfer(transferRequest: IEthereumTokenApprov
 
   try {
 
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName(transferRequest.smartContractAddress);
+    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
 
     if (abi) {
 
