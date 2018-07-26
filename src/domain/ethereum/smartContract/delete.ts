@@ -1,6 +1,9 @@
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../db/ethereum';
 import { ethereumSmartContractInternalServerErrorResponse, IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
+
+const LOG = logger.getLogger();
 
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 

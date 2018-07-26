@@ -1,5 +1,8 @@
 import { IEthereumTransferSendRequest } from '../../models/ethereum';
+import * as logger from '../../utils/logger';
 import * as utils from '../../utils/utils';
+
+const LOG = logger.getLogger();
 
 export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
 

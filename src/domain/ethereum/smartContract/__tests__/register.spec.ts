@@ -9,11 +9,19 @@ import {
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
 } from '../../../../models/ethereum';
+import * as logger from '../../../../utils/logger';
 import * as ethereumScRegisterDomain from '../register';
 
 jest.mock('../../../../db/ethereum');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScRegisterDomain', () => {
+
+  let LOG;
+
+  beforeAll(() => {
+    LOG = logger.getLogger();
+  });
 
   describe('::_updateSmartContractVersion', () => {
 

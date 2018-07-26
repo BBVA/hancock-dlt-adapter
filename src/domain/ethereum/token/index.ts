@@ -1,6 +1,7 @@
 import * as db from '../../../db/ethereum';
 import { ethereumSmartContractNotFoundResponse, IEthereumContractDbModel, IEthereumSmartContractInvokeByQueryRequest } from '../../../models/ethereum';
 import { IEthereumTokenBalanceResponse } from '../../../models/ethereum/token';
+import * as logger from '../../../utils/logger';
 import { invokeByQuery } from '../smartContract/invoke';
 
 export * from './register';
@@ -9,6 +10,8 @@ export * from './approve';
 export * from './transferFrom';
 export * from './metadata';
 export * from './allowance';
+
+const LOG = logger.getLogger();
 
 export async function getTokenBalance(addressOrAlias: string, address: string): Promise<IEthereumTokenBalanceResponse> {
 

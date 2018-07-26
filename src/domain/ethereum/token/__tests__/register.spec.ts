@@ -4,6 +4,7 @@ import * as scRegisterDomain from '../../smartContract/register';
 import * as tokenRegisterDomain from '../register';
 
 jest.mock('../../smartContract/register');
+jest.mock('../../../../utils/logger');
 
 describe('tokenRegisterDomain', () => {
 

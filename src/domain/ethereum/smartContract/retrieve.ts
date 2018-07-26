@@ -3,7 +3,10 @@ import {
   ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
 import { retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
+
+const LOG = logger.getLogger();
 
 export async function find(): Promise<IEthereumContractDbModel[]> {
 

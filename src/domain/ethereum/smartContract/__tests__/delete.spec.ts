@@ -5,9 +5,11 @@ import * as db from '../../../../db/ethereum';
 import {
   ethereumSmartContractInternalServerErrorResponse,
 } from '../../../../models/ethereum';
+import * as logger from '../../../../utils/logger';
 import * as ethereumScDeleteDomain from '../delete';
 
 jest.mock('../../../../db/ethereum');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScDeleteDomain', () => {
 
@@ -16,7 +18,7 @@ describe('ethereumScDeleteDomain', () => {
     const dbContractMock: jest.Mock = (db.getSmartContractByAddressOrAlias as jest.Mock);
     const dbDeleteInstanceMock: jest.Mock = (db.deleteSmartContractByAddressOrAlias as jest.Mock);
     const dbDeleteAbiMock: jest.Mock = (db.deleteSmartContracAbiByName as jest.Mock);
-
+    const LOG = logger.getLogger();
     const addressOrAlias: string = 'whatever';
     const contractModelMock = {
       abiName: 'mockedAbiName',

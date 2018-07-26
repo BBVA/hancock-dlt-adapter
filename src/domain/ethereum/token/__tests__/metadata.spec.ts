@@ -14,6 +14,7 @@ jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
 jest.mock('../common.ts');
+jest.mock('../../../../utils/logger');
 
 describe('metadataDomain', () => {
 

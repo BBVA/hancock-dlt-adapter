@@ -1,6 +1,9 @@
 import * as mongodb from 'mongodb';
 import { Db } from 'mongodb';
+import * as logger from '../utils/logger';
 import config from './config';
+
+const LOG = logger.getLogger();
 
 // tslint:disable-next-line:variable-name
 export let _client: Db;

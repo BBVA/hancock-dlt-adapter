@@ -9,6 +9,7 @@ import * as ethereumScCommonDomain from '../common';
 import * as ethereumScInvokeDomain from '../invoke';
 
 jest.mock('../common');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScInvokeDomain', () => {
 

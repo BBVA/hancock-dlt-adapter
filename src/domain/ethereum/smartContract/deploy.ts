@@ -3,8 +3,11 @@ import {
   ethereumSmartContractSmartcontractErrorResponse,
   IEthereumSmartContractDeployRequest,
 } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
 import { retrieveContractAbi, retrieveContractBinary } from '../smartContract/common';
 import { ContractAbi, ContractBin } from './../../../models/ethereum/common';
+
+const LOG = logger.getLogger();
 
 export async function deploy(deployRequest: IEthereumSmartContractDeployRequest): Promise<any> {
 

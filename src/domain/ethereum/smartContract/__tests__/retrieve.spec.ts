@@ -9,6 +9,7 @@ import * as ethereumScRetrieveDomain from '../retrieve';
 
 jest.mock('../common');
 jest.mock('../../../../db/ethereum');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScRetrieveDomain', () => {
 

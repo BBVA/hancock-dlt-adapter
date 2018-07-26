@@ -8,6 +8,7 @@ import { invokeByQuery } from '../../smartContract/invoke';
 jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/invoke');
+jest.mock('../../../../utils/logger');
 
 describe('tokenDomain', () => {
 

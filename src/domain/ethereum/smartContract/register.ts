@@ -8,6 +8,9 @@ import {
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
 } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
+
+const LOG = logger.getLogger();
 
 export async function register(alias: string, address: string, abi: any[], abiName?: string): Promise<void> {
 

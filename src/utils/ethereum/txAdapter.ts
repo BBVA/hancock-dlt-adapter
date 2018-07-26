@@ -5,9 +5,11 @@
  * - getAccounts() -- array of addresses supported
  * - signTransaction(tx) -- sign a raw transaction object
  */
-
 import Subprovider = require('web3-provider-engine/subproviders/subprovider');
 import estimateGas = require('web3-provider-engine/util/estimate-gas');
+import * as logger from '../logger';
+
+const LOG = logger.getLogger();
 
 export class TxAdapter extends Subprovider {
 

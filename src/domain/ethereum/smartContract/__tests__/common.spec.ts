@@ -15,6 +15,7 @@ import * as ethereumScCommonDomain from '../common';
 
 jest.mock('request-promise-native');
 jest.mock('../../../../db/ethereum');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScCommonDomain', () => {
 

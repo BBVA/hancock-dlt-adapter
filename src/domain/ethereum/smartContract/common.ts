@@ -10,6 +10,9 @@ import {
   IEthereumSmartContractRequestAction,
   SC_REQUEST_ACTIONS,
 } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
+
+const LOG = logger.getLogger();
 
 export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string): Promise<IEthereumContractDbModel> {
 

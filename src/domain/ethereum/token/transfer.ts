@@ -7,8 +7,11 @@ import {
   IEthereumTokenTransferByQueryRequest,
   IEthereumTokenTransferRequest,
 } from '../../../models/ethereum';
+import * as logger from '../../../utils/logger';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
+
+const LOG = logger.getLogger();
 
 export async function tokenTransfer(transferRequest: IEthereumTokenTransferRequest): Promise<any> {
 

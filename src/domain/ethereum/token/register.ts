@@ -1,5 +1,8 @@
 import { TokenNames } from '../../../models/ethereum';
+import * as logger from '../../../utils/logger';
 import { registerInstance } from '../smartContract/register';
+
+const LOG = logger.getLogger();
 
 export async function tokenRegister(alias: string, address: string): Promise<any> {
 

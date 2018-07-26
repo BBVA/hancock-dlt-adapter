@@ -4,6 +4,7 @@ import * as utils from '../../../utils/utils';
 import * as transferDomain from '../transfer';
 
 jest.mock('../../../utils/utils');
+jest.mock('../../../utils/logger');
 
 describe('transferDomain', () => {
 

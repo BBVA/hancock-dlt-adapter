@@ -5,10 +5,12 @@ import {
   IEthereumSmartContractDeployModel,
   IEthereumSmartContractDeployRequest,
 } from '../../../../models/ethereum';
+import * as logger from '../../../../utils/logger';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScDeployDomain from '../deploy';
 
 jest.mock('../common');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScDeployDomain', () => {
 
@@ -203,6 +205,7 @@ describe('ethereumScDeployDomain', () => {
     it('should listen an exception with onError handler if there are problems adapting the deploy transaction', async () => {
 
       const throwedError: Error = new Error('Boom!');
+      const LOG = logger.getLogger();
 
       contractInstanceDeployWeb3WrapperMock.send.mockReturnThis();
       contractInstanceDeployWeb3WrapperMock.on.mockImplementationOnce((event, callback) => {

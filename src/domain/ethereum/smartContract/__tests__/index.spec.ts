@@ -6,6 +6,7 @@ jest.mock('../deploy');
 jest.mock('../invoke');
 jest.mock('../register');
 jest.mock('../retrieve');
+jest.mock('../../../../utils/logger');
 
 describe('ethereumScIndex', () => {
 

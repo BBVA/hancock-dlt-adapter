@@ -10,6 +10,7 @@ jest.mock('../smartContract');
 jest.mock('../../../domain/ethereum');
 jest.mock('../../../utils/utils');
 jest.mock('../../../db/ethereum');
+jest.mock('../../../utils/logger');
 
 describe('ethereumController', async () => {
   let req: any;

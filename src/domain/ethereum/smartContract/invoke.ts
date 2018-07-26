@@ -4,8 +4,11 @@ import {
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
 } from '../../../models/ethereum/smartContract';
+import * as logger from '../../../utils/logger';
 import { adaptContractInvoke, retrieveContractAbi, retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
 import { ContractAbi } from './../../../models/ethereum/common';
+
+const LOG = logger.getLogger();
 
 export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest): Promise<any> {
 

@@ -15,6 +15,7 @@ jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
 jest.mock('../../smartContract/invoke');
 jest.mock('../common.ts');
+jest.mock('../../../../utils/logger');
 
 describe('approveDomain', () => {
 

@@ -5,9 +5,10 @@ import { Ethereum } from './utils/ethereum/index';
 import { getApp } from './utils/express';
 import * as logger from './utils/logger';
 
+const LOG = logger.getLogger();
+
 export async function run() {
 
-  global.LOG = logger.init(config.server.host, config.application, config.logger.logLevel);
   global.ETH = new Ethereum();
 
   return db
@@ -21,12 +22,12 @@ export async function run() {
       app.listen(config.server.port, (error: any) => {
 
         if (error) {
-          return console.error('Service is not available', error);
+          return LOG.error('Service is not available', error);
         }
 
-        console.log('-----------------------------------------------------------------------');
-        console.log('Service available in port', config.server.port);
-        console.log('-----------------------------------------------------------------------');
+        LOG.info('-----------------------------------------------------------------------');
+        LOG.info('Service available in port', config.server.port);
+        LOG.info('-----------------------------------------------------------------------');
 
       });
 
@@ -43,7 +44,7 @@ function exitHook(err?: any) {
   LOG.info('Exiting gracefully...');
 
   if (err) {
-    console.error(err);
+    LOG.error(err);
   }
 
   db

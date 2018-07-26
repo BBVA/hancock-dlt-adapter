@@ -5,8 +5,11 @@ import { ethereumSmartContractNotFoundResponse,
   IEthereumSmartContractInvokeModel,
 } from '../../../models/ethereum';
 import { IEthereumTokenMetadataResponse } from '../../../models/ethereum/token';
+import * as logger from '../../../utils/logger';
 import { adaptContractInvoke } from '../smartContract/common';
 import { getAdaptRequestModel } from './common';
+
+const LOG = logger.getLogger();
 
 export const getTokenMetadata = async (address: string): Promise<any> => {
 

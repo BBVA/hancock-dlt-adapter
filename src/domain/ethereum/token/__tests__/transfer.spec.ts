@@ -11,6 +11,7 @@ import * as tokenTransferDomain from '../transfer';
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
 jest.mock('../../smartContract/invoke');
+jest.mock('../../../../utils/logger');
 
 describe('tokenTransferDomain', () => {
 
