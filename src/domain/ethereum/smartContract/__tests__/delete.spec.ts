@@ -71,6 +71,25 @@ describe('ethereumScDeleteDomain', () => {
 
     });
 
+    it('should throw an exception if there are an error in Mongo', async () => {
+
+      dbContractMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScDeleteDomain.deleteByQuery(addressOrAlias);
+        fail('It should fail');
+
+      } catch (err) {
+
+        expect(dbContractMock).toHaveBeenCalledWith(addressOrAlias);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+        expect(err).toEqual(hancockDbError);
+
+      }
+
+    });
+
     it('should throw an exception if the db.deleteSmartContractByAddressOrAlias returns an invalid response', async () => {
 
       const expectedInstanceResponse: FindAndModifyWriteOpResultObject = {

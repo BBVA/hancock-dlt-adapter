@@ -15,7 +15,7 @@ export interface IHancockErrorResponse {
 
 export class HancockError extends Error implements IHancockError {
 
-  private static prefix: string = 'HKWH';
+  private static prefix: string = 'HKAD';
 
   public name: string = 'HancockError';
   public errorStack: HancockError[] = [];

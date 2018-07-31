@@ -7,7 +7,7 @@ jest.mock('../transfer');
 jest.mock('../smartContract');
 jest.mock('../token');
 jest.mock('../../../utils/utils');
-jest.mock('../../../controllers/error');
+jest.mock('../../../utils/error');
 
 describe('ethereumDomain', () => {
 

@@ -2,7 +2,7 @@
 import 'jest';
 import * as request from 'request-promise-native';
 import * as db from '../../../../db/ethereum';
-import { hancockDbError } from '../../../../models/error';
+import { hancockDbError, hancockDefaultError, hancockDltError } from '../../../../models/error';
 import {
   ContractAbi,
   ethereumSmartContractInternalServerErrorResponse,
@@ -15,7 +15,13 @@ import {
 import { error } from '../../../../utils/error';
 import { hancockContractNotFoundError } from '../../models/error';
 import * as ethereumScCommonDomain from '../common';
-import { hancockContractAbiError, hancockContractBinaryError, hancockContractCallError, hancockContractSendError } from '../models/error';
+import {
+  hancockContractAbiError,
+  hancockContractBinaryError,
+  hancockContractCallError,
+  hancockContractMethodNotFoundError,
+  hancockContractSendError,
+} from '../models/error';
 
 jest.mock('request-promise-native');
 jest.mock('../../../../db/ethereum');
@@ -178,7 +184,7 @@ describe('ethereumScCommonDomain', () => {
       } catch (e) {
 
         expect(requestMock).toHaveBeenLastCalledWith(`${urlBase}.bin`);
-        expect(error).toHaveBeenCalledWith(hancockContractBinaryError);
+        expect(error).toHaveBeenCalledWith(hancockContractBinaryError, hancockContractBinaryError);
         expect(e).toEqual(hancockContractBinaryError);
 
       }
@@ -260,10 +266,9 @@ describe('ethereumScCommonDomain', () => {
     it('should throw an exception if there are problems invoking the smartcontract method doing a "call" action', async () => {
 
       contractInvokeReqMock.action = 'call';
-      const throwedError: Error = new Error('Boom!');
 
       contractInstanceMethodWeb3WrapperMock.call.mockImplementationOnce((params, callback) => {
-        callback(throwedError, undefined);
+        callback(hancockDefaultError, undefined);
       });
 
       try {
@@ -285,7 +290,7 @@ describe('ethereumScCommonDomain', () => {
         // rejected error is ok
         expect(e).toEqual(hancockContractCallError);
 
-        expect(error).toHaveBeenCalledWith();
+        expect(error).toHaveBeenCalledWith(hancockContractCallError, hancockDefaultError);
       }
 
     });

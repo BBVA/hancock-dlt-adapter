@@ -1,6 +1,6 @@
-import { error } from '../controllers/error';
 import { IProtocolEncodeRequest } from '../models/protocol';
 import config from '../utils/config';
+import { error } from '../utils/error';
 import logger from '../utils/logger';
 import { hancockProtocolDecodeError, hancockProtocolEncodeError } from './models/error';
 

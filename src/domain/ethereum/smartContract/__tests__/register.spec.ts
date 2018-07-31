@@ -1,7 +1,7 @@
 import 'jest';
 import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../../db/ethereum';
-import { hancockDbError, hancockNotFoundError } from '../../../../models/error';
+import { hancockDbError, hancockDefaultError, hancockNotFoundError } from '../../../../models/error';
 import {
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
@@ -10,7 +10,7 @@ import {
 import { error } from '../../../../utils/error';
 import logger from '../../../../utils/logger';
 import { hancockContractNotFoundError } from '../../models/error';
-import { hancockContractAbiError, hancockContractConflictError } from '../models/error';
+import { hancockContractAbiError, hancockContractConflictError, hancockContractRegisterError } from '../models/error';
 import * as ethereumScRegisterDomain from '../register';
 
 jest.mock('../../../../db/ethereum');
@@ -230,7 +230,7 @@ describe('ethereumScRegisterDomain', () => {
 
     beforeEach(() => {
 
-      jest.resetAllMocks();
+      jest.clearAllMocks();
 
     });
 
@@ -240,7 +240,7 @@ describe('ethereumScRegisterDomain', () => {
 
       dbContractMock.mockResolvedValueOnce(instanceResult);
 
-      const result: IEthereumContractInstanceDbModel | null = await (ethereumScRegisterDomain as any)._retrieveSmartContractInstance(address);
+      const result: IEthereumContractInstanceDbModel | null = await ethereumScRegisterDomain._retrieveSmartContractInstance(address);
 
       expect(dbContractMock).toHaveBeenCalledWith(address);
       expect(result).toEqual(instanceResult);
@@ -249,19 +249,39 @@ describe('ethereumScRegisterDomain', () => {
 
     it('should throw an exception if there are error checking contractModel existance in ddbb', async () => {
 
-      dbContractMock.mockRejectedValue(new Error('Boom!'));
+      dbContractMock.mockResolvedValueOnce(null);
 
       try {
 
-        await (ethereumScRegisterDomain as any)._retrieveSmartContractInstance(address);
+        await ethereumScRegisterDomain._retrieveSmartContractInstance(address);
         fail('It should fail');
 
-      } catch (e) {
+      } catch (err) {
 
         expect(dbContractMock).toHaveBeenCalledWith(address);
         expect(logger.error).toHaveBeenCalled();
 
-        expect(e).toEqual(hancockContractNotFoundError);
+        expect(err).toEqual(hancockContractNotFoundError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are error fetching the ddbb', async () => {
+
+      dbContractMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScRegisterDomain._retrieveSmartContractInstance(address);
+        fail('It should fail');
+
+      } catch (err) {
+
+        expect(dbContractMock).toHaveBeenCalledWith(address);
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(err).toEqual(hancockDbError);
 
       }
 
@@ -287,7 +307,7 @@ describe('ethereumScRegisterDomain', () => {
 
     beforeEach(() => {
 
-      jest.resetAllMocks();
+      jest.clearAllMocks();
 
     });
 
@@ -307,6 +327,66 @@ describe('ethereumScRegisterDomain', () => {
 
     });
 
+    it('should throw exception if _updateAbiVersion fail', async () => {
+
+      const insertAbiResponse: InsertOneWriteOpResult = { result: { ok: true } } as any;
+
+      _updateAbiVersionMock.mockRejectedValueOnce(hancockDefaultError);
+
+      try {
+
+        const result: any = await ethereumScRegisterDomain.registerAbi(abiName, abi);
+        fail('it should fail');
+      } catch (err) {
+
+        expect(_updateAbiVersionMock).toHaveBeenCalledWith(abiName);
+        expect(err).toEqual(hancockContractRegisterError);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError, hancockDefaultError);
+
+      }
+
+    });
+
+    it('should throw exception if insertSmartContractAbi fail', async () => {
+
+      const insertAbiResponse: InsertOneWriteOpResult = { result: { ok: true } } as any;
+
+      _updateAbiVersionMock.mockResolvedValueOnce(insertAbiResponse);
+      dbInsertAbiMock.mockRejectedValueOnce(hancockDbError);
+      try {
+
+        const result: any = await ethereumScRegisterDomain.registerAbi(abiName, abi);
+        fail('it should fail');
+      } catch (err) {
+
+        expect(_updateAbiVersionMock).toHaveBeenCalledWith(abiName);
+        expect(err).toEqual(hancockDbError);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+
+      }
+
+    });
+
+    it('should throw exception if insertSmartContractAbi response is not ok', async () => {
+
+      const insertAbiResponse: InsertOneWriteOpResult = { result: { ok: false } } as any;
+
+      _updateAbiVersionMock.mockResolvedValueOnce(insertAbiResponse);
+      dbInsertAbiMock.mockResolvedValueOnce(insertAbiResponse);
+      try {
+
+        const result: any = await ethereumScRegisterDomain.registerAbi(abiName, abi);
+        fail('it should fail');
+      } catch (err) {
+
+        expect(_updateAbiVersionMock).toHaveBeenCalledWith(abiName);
+        expect(err).toEqual(hancockContractRegisterError);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError);
+
+      }
+
+    });
+
   });
 
   describe('::registerInstance', () => {
@@ -323,6 +403,21 @@ describe('ethereumScRegisterDomain', () => {
     const address: string = 'mockedAddress';
     const abiName: string = 'mockedAbiName';
 
+    const contractAbiModelResponseMock: IEthereumContractAbiDbModel | null = {
+      name: 'mockedName',
+      abi: [],
+    } as any;
+    const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = {
+      alias: 'mockedAlias',
+      address: 'mockedAddress',
+      abiName: 'mockedAbi',
+    };
+    const insertResponseMock: InsertOneWriteOpResult = {
+      result: {
+        ok: 1,
+      },
+    } as any;
+
     beforeAll(() => {
 
       _updateSmartContractVersionMock = jest.spyOn(ethereumScRegisterDomain, '_updateSmartContractVersion');
@@ -332,22 +427,15 @@ describe('ethereumScRegisterDomain', () => {
 
     beforeEach(() => {
 
-      jest.resetAllMocks();
+      jest.clearAllMocks();
 
     });
 
     it('should register a new contract instance versioning contract alias if it is necessary', async () => {
 
-      const contractAbiModelResponseMock: IEthereumContractAbiDbModel | null = {} as any;
-      const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = null;
-      const insertResponseMock: InsertOneWriteOpResult = {
-        result: {
-          ok: 1,
-        },
-      } as any;
-
-      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(contractInstanceModelResponseMock);
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
       dbGetAbiByNameMock.mockResolvedValueOnce(contractAbiModelResponseMock);
+      _updateSmartContractVersionMock.mockResolvedValueOnce(true);
       dbInsertMock.mockResolvedValueOnce(insertResponseMock);
 
       const result: any = await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
@@ -362,8 +450,6 @@ describe('ethereumScRegisterDomain', () => {
     });
 
     it('should throw an exception if the contractModel address is already registered', async () => {
-
-      const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = {} as any;
 
       _retrieveSmartContractInstanceMock.mockResolvedValueOnce(contractInstanceModelResponseMock);
 
@@ -388,11 +474,8 @@ describe('ethereumScRegisterDomain', () => {
 
     it('should throw an exception if there is no abi identified by the abiName', async () => {
 
-      const contractAbiModelResponseMock: IEthereumContractAbiDbModel | null = null as any;
-      const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = null as any;
-
-      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(contractInstanceModelResponseMock);
-      dbGetAbiByNameMock.mockResolvedValueOnce(contractAbiModelResponseMock);
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
+      dbGetAbiByNameMock.mockResolvedValueOnce(null);
 
       try {
 
@@ -408,6 +491,139 @@ describe('ethereumScRegisterDomain', () => {
         expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractAbiError);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError);
+
+      }
+
+    });
+
+    it('should throw an exception if retrieve fail', async () => {
+
+      _retrieveSmartContractInstanceMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
+        expect(dbInsertMock).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(e).toEqual(hancockContractRegisterError);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError, hancockDbError);
+
+      }
+
+    });
+
+    it('should throw an exception if getAbiByName fail', async () => {
+
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
+      dbGetAbiByNameMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
+        expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
+        expect(dbInsertMock).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(e).toEqual(hancockDbError);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+
+      }
+
+    });
+
+    it('should throw an exception if _updateSmartContractVersionMock fail', async () => {
+
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
+      dbGetAbiByNameMock.mockResolvedValueOnce(contractAbiModelResponseMock);
+      _updateSmartContractVersionMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
+        expect(_updateSmartContractVersionMock).toHaveBeenCalled();
+        expect(dbInsertMock).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(e).toEqual(hancockContractRegisterError);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError, hancockDbError);
+
+      }
+
+    });
+
+    it('should throw an exception if dbInsert fail', async () => {
+
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
+      dbGetAbiByNameMock.mockResolvedValueOnce(contractAbiModelResponseMock);
+      _updateSmartContractVersionMock.mockResolvedValueOnce(true);
+      dbInsertMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
+        expect(_updateSmartContractVersionMock).toHaveBeenCalled();
+        expect(dbInsertMock).toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(e).toEqual(hancockDbError);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+
+      }
+
+    });
+
+    it('should throw an exception if dbInsert response fail', async () => {
+
+      _retrieveSmartContractInstanceMock.mockResolvedValueOnce(null);
+      dbGetAbiByNameMock.mockResolvedValueOnce(contractAbiModelResponseMock);
+      _updateSmartContractVersionMock.mockResolvedValueOnce(true);
+      dbInsertMock.mockResolvedValueOnce({
+        result: {
+          ok: false,
+        },
+      });
+
+      try {
+
+        await ethereumScRegisterDomain.registerInstance(alias, address, abiName);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
+        expect(_updateSmartContractVersionMock).toHaveBeenCalled();
+        expect(dbInsertMock).toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalled();
+
+        expect(e).toEqual(hancockContractRegisterError);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError);
 
       }
 
@@ -427,22 +643,22 @@ describe('ethereumScRegisterDomain', () => {
     const address: string = 'mockedAddress';
     const abi: any[] = ['mockedAbi'];
 
+    _retrieveSmartContractInstanceMock = jest.spyOn(ethereumScRegisterDomain, '_retrieveSmartContractInstance');
+    registerInstanceMock = jest.spyOn(ethereumScRegisterDomain, 'registerInstance');
+    registerAbiMock = jest.spyOn(ethereumScRegisterDomain, 'registerAbi');
+
     beforeEach(() => {
 
-      jest.restoreAllMocks();
-
-      _retrieveSmartContractInstanceMock = jest.spyOn(ethereumScRegisterDomain, '_retrieveSmartContractInstance');
-      registerInstanceMock = jest.spyOn(ethereumScRegisterDomain, 'registerInstance');
-      registerAbiMock = jest.spyOn(ethereumScRegisterDomain, 'registerAbi');
-
-      registerInstanceMock.mockResolvedValueOnce(undefined);
-      registerAbiMock.mockResolvedValueOnce(undefined);
+      jest.clearAllMocks();
 
     });
 
     it('should insert a new contractModel in ddbb if it does not exist yet and update the previous aliased one (only instance referencing abi)', async () => {
 
       const abiName: string = 'mockedAbiName';
+
+      registerInstanceMock.mockResolvedValueOnce(undefined);
+      registerAbiMock.mockResolvedValueOnce(undefined);
 
       const result: any = await ethereumScRegisterDomain.register(alias, address, abi, abiName);
 
@@ -455,6 +671,9 @@ describe('ethereumScRegisterDomain', () => {
     it('should insert a new contractModel in ddbb if it does not exist yet and update the previous aliased one (new instance and abi)', async () => {
 
       const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = null;
+
+      registerInstanceMock.mockResolvedValueOnce(undefined);
+      registerAbiMock.mockResolvedValueOnce(undefined);
 
       _retrieveSmartContractInstanceMock.mockResolvedValueOnce(contractInstanceModelResponseMock);
 
@@ -470,6 +689,8 @@ describe('ethereumScRegisterDomain', () => {
     it('should throw an exception if the contractModel address is already registered', async () => {
 
       const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = {} as any;
+
+      registerInstanceMock.mockResolvedValueOnce(undefined);
 
       _retrieveSmartContractInstanceMock.mockResolvedValueOnce(contractInstanceModelResponseMock);
 
@@ -490,6 +711,66 @@ describe('ethereumScRegisterDomain', () => {
       }
 
     });
+
+    // it('should throw an exception if the registerInstance fail', async () => {
+
+    //   const abiName: string = 'mockedAbi';
+    //   registerInstanceMock.mockRejectedValueOnce(hancockContractAbiError);
+
+    //   try {
+
+    //     await ethereumScRegisterDomain.register(alias, address, abi, abiName);
+    //     fail('It should fail');
+
+    //   } catch (e) {
+
+    //     expect(e).toEqual(hancockContractRegisterError);
+    //     expect(error).toHaveBeenCalledWith(hancockContractRegisterError, hancockContractRegisterError);
+
+    //   }
+
+    // });
+
+    it('should throw an exception if the _retrieveSmartContractInstanceMock fail', async () => {
+
+      const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = null;
+
+      _retrieveSmartContractInstanceMock.mockRejectedValueOnce(hancockContractRegisterError);
+
+      try {
+
+        await ethereumScRegisterDomain.register(alias, address, abi);
+        fail('It should fail');
+
+      } catch (err) {
+
+        expect(err).toEqual(hancockContractRegisterError);
+        expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+        expect(error).toHaveBeenCalledWith(hancockContractRegisterError, hancockContractRegisterError);
+
+      }
+
+    });
+
+    // it('should throw an exception if the registerInstance fail', async () => {
+
+    //   const contractInstanceModelResponseMock: IEthereumContractInstanceDbModel | null = null;
+    //   _retrieveSmartContractInstanceMock.mockResolvedValue(contractInstanceModelResponseMock);
+    //   registerAbiMock.mockRejectedValueOnce(hancockContractAbiError);
+
+    //   try {
+
+    //     await ethereumScRegisterDomain.register(alias, address, abi);
+    //     fail('It should fail');
+
+    //   } catch (err) {
+
+    //     expect(err).toEqual(hancockContractRegisterError);
+    //     expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
+
+    //   }
+
+    // });
 
   });
 

@@ -1,12 +1,13 @@
 
 import 'jest';
+import { error } from '../../../utils/error';
 import * as utils from '../../../utils/utils';
 import { hancockEthereumTrasnferError } from '../models/error';
 import * as transferDomain from '../transfer';
 
 jest.mock('../../../utils/utils');
 jest.mock('../../../utils/logger');
-jest.mock('../../../controllers/error');
+jest.mock('../../../utils/error');
 
 describe('transferDomain', () => {
 

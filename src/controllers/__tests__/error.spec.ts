@@ -1,7 +1,10 @@
 
 import 'jest';
-import { HancockError } from '../../models/error';
-import { errorController } from '../error';
+import { HancockError, IHancockErrorResponse } from '../../models/error';
+import logger from '../../utils/logger';
+import { _getErrorResponse, errorController } from '../error';
+
+jest.mock('../../utils/logger');
 
 describe('errorController', async () => {
 
@@ -17,7 +20,6 @@ describe('errorController', async () => {
 
   beforeEach(() => {
 
-    console.log(HancockError);
     testError = new HancockError('12345', 123, 'Test Error Suite');
 
     req = {};
@@ -31,13 +33,43 @@ describe('errorController', async () => {
 
   });
 
+  it('should return the HancockError correctly', async () => {
+
+    const expectedResponse = {
+      error: 123,
+      internalError: 'HKAD12345',
+      message: 'Test Error Suite',
+    };
+
+    const response: IHancockErrorResponse = _getErrorResponse(testError);
+
+    expect(response).toEqual(expectedResponse);
+
+  });
+
+  it('should return the HancockError correctly with extendedMessage', async () => {
+
+    const expectedResponse = {
+      error: 123,
+      internalError: 'HKAD12345',
+      message: 'Test Error Suite',
+      extendedMessage: 'testExtender',
+    };
+
+    const response: IHancockErrorResponse = _getErrorResponse({...testError, extendedMessage: 'testExtender'});
+
+    expect(response).toEqual(expectedResponse);
+
+  });
+
   it('should return the correct status code and error body given an specific error', async () => {
 
+    (_getErrorResponse as any) = jest.fn();
     await errorController(testError, req, res, next);
 
     expect(res.status.mock.calls).toEqual([[testError.httpCode]]);
-    expect(res.json.mock.calls).toEqual([[testError]]);
-    expect(console.error).toHaveBeenNthCalledWith(1, testError.message, testError.extendedMessage);
+    expect(_getErrorResponse).toHaveBeenCalledWith(testError);
+    expect(logger.error).toHaveBeenCalledWith(testError);
 
   });
 

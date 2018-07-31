@@ -9,7 +9,7 @@ import { error } from '../../../../utils/error';
 import logger from '../../../../utils/logger';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScDeployDomain from '../deploy';
-import { hancockContractDeployError } from '../models/error';
+import { hancockContractAbiError, hancockContractDeployError, hancockContractBinaryError } from '../models/error';
 
 jest.mock('../common');
 jest.mock('../../../../utils/logger');
@@ -74,6 +74,47 @@ describe('ethereumScDeployDomain', () => {
       });
 
       expect(result).toEqual(expectedResponse);
+
+    });
+
+    it('should throw an exception if there are problems retrieving the abi', async () => {
+
+      const deployRequestMock: IEthereumSmartContractDeployRequest = {} as any;
+
+      retrieveAbiMock.mockRejectedValueOnce(hancockContractAbiError);
+
+      try {
+
+        await ethereumScDeployDomain.deploy(deployRequestMock);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError, hancockContractAbiError);
+        expect(e).toEqual(hancockContractAbiError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems retrieving the binary', async () => {
+
+      const deployRequestMock: IEthereumSmartContractDeployRequest = {} as any;
+
+      retrieveAbiMock.mockResolvedValueOnce('mockedAbi');
+      retrieveBinMock.mockRejectedValueOnce(hancockContractBinaryError);
+
+      try {
+
+        await ethereumScDeployDomain.deploy(deployRequestMock);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(error).toHaveBeenCalledWith(hancockContractBinaryError, hancockContractBinaryError);
+        expect(e).toEqual(hancockContractBinaryError);
+
+      }
 
     });
 
