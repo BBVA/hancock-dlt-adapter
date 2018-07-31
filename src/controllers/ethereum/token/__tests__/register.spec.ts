@@ -57,7 +57,7 @@ describe('tokenRegisterController', async () => {
     await ethereumTokenRegisterController.tokenRegister(req, res, next);
 
     expect(domainTokenRegisterMock).toHaveBeenCalledWith('mockedAlias', 'mockedAddress');
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

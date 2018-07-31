@@ -1,41 +1,55 @@
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../db/ethereum';
-import { ethereumSmartContractInternalServerErrorResponse, IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
-import * as logger from '../../../utils/logger';
-
-const LOG = logger.getLogger();
+import { hancockDbError } from '../../../models/error';
+import { IEthereumContractDbModel } from '../../../models/ethereum/smartContract';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
+import { hancockContractDeleteError } from './models/error';
 
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
-  LOG.info(`De-registering contract by query: ${addressOrAlias}`);
-
+  logger.info(`De-registering contract by query: ${addressOrAlias}`);
+  let contractModel: IEthereumContractDbModel | null;
   try {
 
-    const contractModel: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
-
-    if (!contractModel) {
-      throw new Error('Contract doesnt exists');
-    }
-
-    const resultInstance: FindAndModifyWriteOpResultObject = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
-    const resultAbi: FindAndModifyWriteOpResultObject = await db.deleteSmartContracAbiByName(contractModel.abiName);
-
-    if (resultInstance.ok === 1 && resultAbi.ok === 1) {
-
-      LOG.info(`Smart contract de-registered`);
-      return Promise.resolve();
-
-    } else {
-
-      LOG.error(`Smart contract cannot be de-registered. Result code ${resultInstance.ok} and error ${JSON.stringify(resultInstance.lastErrorObject)}`);
-      return Promise.reject(ethereumSmartContractInternalServerErrorResponse);
-
-    }
+    contractModel = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
   } catch (e) {
 
-    LOG.error(`Smart contract cannot be de-registered: ${e}`);
-    return Promise.reject(ethereumSmartContractInternalServerErrorResponse);
+    logger.error(`Smart contract cannot be de-registered: ${e}`);
+    throw error(hancockDbError, e);
+
+  }
+
+  if (!contractModel) {
+    throw error(hancockContractNotFoundError);
+  }
+
+  let resultInstance: FindAndModifyWriteOpResultObject;
+  let resultAbi: FindAndModifyWriteOpResultObject;
+
+  try {
+
+    resultInstance = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
+    resultAbi = await db.deleteSmartContracAbiByName(contractModel.abiName);
+
+  } catch (err) {
+
+    logger.error(`Smart contract cannot be de-registered: ${err}`);
+    throw error(hancockDbError, err);
+
+  }
+
+  if (resultInstance.ok === 1 && resultAbi.ok === 1) {
+
+    logger.info(`Smart contract de-registered`);
+    return Promise.resolve();
+
+  } else {
+
+    logger.error(`Smart contract cannot be de-registered. Result code ${resultInstance.ok} and error ${JSON.stringify(resultInstance.lastErrorObject)}`);
+    throw error(hancockContractDeleteError);
 
   }
 }

@@ -19,7 +19,6 @@ export function getApp() {
   app.use(compression());
   app.use(middlewares.jsonSchemaValidation('JsonSchemaValidation'));
   app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
   app.use(methodOverride());
 
   if ('development' === env || 'test' === env) {

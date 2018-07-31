@@ -4,14 +4,19 @@ import {
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
 } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
+import { hancockContractNotFoundError } from '../../models/error';
 import * as commonDomain from '../../smartContract/common';
 import { invokeByQuery } from '../../smartContract/invoke';
+import { hancockContractAbiError } from '../../smartContract/models/error';
+import { hancockContractTokenTransferError } from '../models/error';
 import * as tokenTransferDomain from '../transfer';
 
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
 jest.mock('../../smartContract/invoke');
 jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('tokenTransferDomain', () => {
 
@@ -28,6 +33,7 @@ describe('tokenTransferDomain', () => {
 
       dbMock.mockReset();
       invokeMock.mockReset();
+      commonMock.mockReset();
 
       iEthereumERC20TransferRequest = {
         from: 'mockFrom',
@@ -76,10 +82,9 @@ describe('tokenTransferDomain', () => {
 
     });
 
-    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+    it('should throw an exception if there are problems retrieving the contractModels (null)', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      dbMock.mockRejectedValueOnce(throwedError);
+      dbMock.mockResolvedValueOnce(null);
 
       try {
 
@@ -89,7 +94,47 @@ describe('tokenTransferDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
+        expect(e).toEqual(hancockContractNotFoundError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+      dbMock.mockRejectedValueOnce(hancockContractNotFoundError);
+
+      try {
+
+        await tokenTransferDomain.tokenTransfer(iEthereumERC20TransferRequest);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(dbMock).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError, hancockContractNotFoundError);
+        expect(e).toEqual(hancockContractAbiError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems adapting the call', async () => {
+
+      commonMock.mockRejectedValueOnce(hancockContractTokenTransferError);
+      dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
+
+      try {
+
+        await tokenTransferDomain.tokenTransfer(iEthereumERC20TransferRequest);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(commonMock).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(hancockContractTokenTransferError, hancockContractTokenTransferError);
+        expect(e).toEqual(hancockContractTokenTransferError);
 
       }
 
@@ -115,8 +160,7 @@ describe('tokenTransferDomain', () => {
 
     it('should throw an exception if there are problems retrieving the contractModels', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      invokeMock.mockRejectedValueOnce(throwedError);
+      invokeMock.mockRejectedValueOnce(hancockContractTokenTransferError);
 
       try {
 
@@ -126,7 +170,8 @@ describe('tokenTransferDomain', () => {
       } catch (e) {
 
         expect(invokeMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractTokenTransferError, hancockContractTokenTransferError);
+        expect(e).toEqual(hancockContractTokenTransferError);
 
       }
 

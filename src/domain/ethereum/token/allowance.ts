@@ -1,57 +1,70 @@
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
-  ethereumSmartContractNotFoundResponse,
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
   IEthereumTokenAllowanceByQueryRequest,
   IEthereumTokenAllowanceRequest,
 } from '../../../models/ethereum';
-import * as logger from '../../../utils/logger';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-
-const LOG = logger.getLogger();
+import { hancockContractTokenAllowanceError } from './models/error';
 
 export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRequest): Promise<any> {
 
-  LOG.info(`Token allowance`);
+  logger.info(`Token allowance`);
+
+  let abi: IEthereumContractAbiDbModel | null;
 
   try {
 
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName('erc20');
 
-    if (abi) {
+  } catch (err) {
 
-      const invokeModel: IEthereumSmartContractInvokeModel = {
-        abi: abi.abi,
-        action: 'send',
-        from: allowanceRequest.from,
-        method: 'allowance',
-        params: [allowanceRequest.tokenOwner, allowanceRequest.spender],
-        to: allowanceRequest.smartContractAddress,
-      };
+    logger.error(err);
+    throw error(hancockDbError, err);
+
+  }
+
+  if (abi) {
+
+    const invokeModel: IEthereumSmartContractInvokeModel = {
+      abi: abi.abi,
+      action: 'send',
+      from: allowanceRequest.from,
+      method: 'allowance',
+      params: [allowanceRequest.tokenOwner, allowanceRequest.spender],
+      to: allowanceRequest.smartContractAddress,
+    };
+
+    try {
 
       return await adaptContractInvoke(invokeModel);
 
-    } else {
+    } catch (err) {
 
-      LOG.info('Contract not found');
-      throw ethereumSmartContractNotFoundResponse;
+      logger.error(err);
+      throw error(hancockContractTokenAllowanceError, err);
 
     }
 
-  } catch (e) {
+  } else {
 
-    LOG.error(e);
-    throw e;
+    logger.info('Contract not found');
+    throw error(hancockContractNotFoundError);
 
   }
+
 }
 
 export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEthereumTokenAllowanceByQueryRequest): Promise<any> {
 
-  LOG.info(`Token allowance by query`);
+  logger.info(`Token allowance by query`);
 
   try {
 
@@ -64,10 +77,10 @@ export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEt
 
     return await invokeByQuery(query, invokeModel);
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(e);
-    throw e;
+    logger.error(err);
+    throw error(hancockContractTokenAllowanceError, err);
 
   }
 }

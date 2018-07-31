@@ -3,6 +3,8 @@ import 'jest';
 import * as protocolDomain from '../protocol';
 
 jest.mock('../../utils/config');
+jest.mock('../../utils/logger');
+jest.mock('../../controllers/error');
 
 describe('protocolDomain', () => {
 

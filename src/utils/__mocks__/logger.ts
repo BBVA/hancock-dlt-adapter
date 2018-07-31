@@ -1,9 +1,12 @@
-// tslint:disable-next-line:variable-name
-const __logger__ = {
-  debug: jest.fn(),
+import 'jest';
+
+export const logger = {
+  fatal: jest.fn(),
   error: jest.fn(),
+  warn: jest.fn(),
   info: jest.fn(),
-  log: jest.fn(),
+  debug: jest.fn(),
+  trace: jest.fn(),
 };
 
-export const getLogger = jest.fn().mockReturnValue(__logger__);
+export default logger;

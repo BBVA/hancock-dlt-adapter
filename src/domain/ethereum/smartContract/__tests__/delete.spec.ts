@@ -2,14 +2,16 @@
 import 'jest';
 import { FindAndModifyWriteOpResultObject } from 'mongodb';
 import * as db from '../../../../db/ethereum';
-import {
-  ethereumSmartContractInternalServerErrorResponse,
-} from '../../../../models/ethereum';
-import * as logger from '../../../../utils/logger';
+import { hancockDbError } from '../../../../models/error';
+import { error } from '../../../../utils/error';
+import logger from '../../../../utils/logger';
+import { hancockContractNotFoundError } from '../../models/error';
 import * as ethereumScDeleteDomain from '../delete';
+import { hancockContractDeleteError } from '../models/error';
 
 jest.mock('../../../../db/ethereum');
 jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('ethereumScDeleteDomain', () => {
 
@@ -18,7 +20,6 @@ describe('ethereumScDeleteDomain', () => {
     const dbContractMock: jest.Mock = (db.getSmartContractByAddressOrAlias as jest.Mock);
     const dbDeleteInstanceMock: jest.Mock = (db.deleteSmartContractByAddressOrAlias as jest.Mock);
     const dbDeleteAbiMock: jest.Mock = (db.deleteSmartContracAbiByName as jest.Mock);
-    const LOG = logger.getLogger();
     const addressOrAlias: string = 'whatever';
     const contractModelMock = {
       abiName: 'mockedAbiName',
@@ -26,9 +27,7 @@ describe('ethereumScDeleteDomain', () => {
 
     beforeEach(() => {
 
-      jest.resetAllMocks();
-
-      dbContractMock.mockResolvedValue(contractModelMock);
+      jest.clearAllMocks();
 
     });
 
@@ -41,6 +40,7 @@ describe('ethereumScDeleteDomain', () => {
         ok: 1,
       };
 
+      dbContractMock.mockResolvedValueOnce(contractModelMock);
       dbDeleteInstanceMock.mockResolvedValueOnce(expectedInstanceResponse);
       dbDeleteAbiMock.mockResolvedValueOnce(expectedAbiResponse);
 
@@ -48,23 +48,24 @@ describe('ethereumScDeleteDomain', () => {
 
       expect(dbDeleteInstanceMock).toHaveBeenLastCalledWith(addressOrAlias);
       expect(dbDeleteAbiMock).toHaveBeenLastCalledWith(contractModelMock.abiName);
-      expect(LOG.info).toHaveBeenLastCalledWith('Smart contract de-registered');
+      expect(logger.info).toHaveBeenLastCalledWith('Smart contract de-registered');
 
     });
 
     it('should throw an exception if the contract is not found', async () => {
 
-      dbContractMock.mockResolvedValue(null);
+      dbContractMock.mockResolvedValueOnce(null);
 
       try {
 
         await ethereumScDeleteDomain.deleteByQuery(addressOrAlias);
         fail('It should fail');
 
-      } catch (e) {
+      } catch (err) {
 
         expect(dbContractMock).toHaveBeenCalledWith(addressOrAlias);
-        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
+        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
+        expect(err).toEqual(hancockContractNotFoundError);
 
       }
 
@@ -75,7 +76,7 @@ describe('ethereumScDeleteDomain', () => {
       const expectedInstanceResponse: FindAndModifyWriteOpResultObject = {
         ok: 0,
       };
-
+      dbContractMock.mockResolvedValueOnce(contractModelMock);
       dbDeleteInstanceMock.mockResolvedValueOnce(expectedInstanceResponse);
 
       try {
@@ -83,10 +84,11 @@ describe('ethereumScDeleteDomain', () => {
         await ethereumScDeleteDomain.deleteByQuery(addressOrAlias);
         fail('It should fail');
 
-      } catch (e) {
+      } catch (err) {
 
         expect(dbDeleteInstanceMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
+        expect(error).toHaveBeenCalledWith(hancockContractDeleteError);
+        expect(err).toEqual(hancockContractDeleteError);
 
       }
 
@@ -94,17 +96,19 @@ describe('ethereumScDeleteDomain', () => {
 
     it('should throw an exception if there are problems calling the ddbb', async () => {
 
-      dbDeleteInstanceMock.mockRejectedValueOnce(new Error('Boom!'));
+      dbDeleteInstanceMock.mockRejectedValueOnce(hancockDbError);
+      dbContractMock.mockResolvedValueOnce(contractModelMock);
 
       try {
 
         await ethereumScDeleteDomain.deleteByQuery(addressOrAlias);
         fail('It should fail');
 
-      } catch (e) {
+      } catch (err) {
 
         expect(dbDeleteInstanceMock).toHaveBeenLastCalledWith(addressOrAlias);
-        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+        expect(err).toEqual(hancockDbError);
 
       }
 

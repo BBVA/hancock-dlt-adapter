@@ -5,12 +5,15 @@ import {
   IEthereumSmartContractDeployModel,
   IEthereumSmartContractDeployRequest,
 } from '../../../../models/ethereum';
-import * as logger from '../../../../utils/logger';
+import { error } from '../../../../utils/error';
+import logger from '../../../../utils/logger';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScDeployDomain from '../deploy';
+import { hancockContractDeployError } from '../models/error';
 
 jest.mock('../common');
 jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('ethereumScDeployDomain', () => {
 
@@ -97,7 +100,7 @@ describe('ethereumScDeployDomain', () => {
           abi: 'mockedAbi',
           bin: 'mockedBinary',
         });
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractDeployError);
 
       }
 
@@ -196,7 +199,7 @@ describe('ethereumScDeployDomain', () => {
         expect(contractInstanceDeployWeb3WrapperMock.send.mock.calls[0][0]).toEqual({ from: contractDeployModelMock.from });
 
         // rejected error is ok
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractDeployError);
 
       }
 
@@ -205,7 +208,6 @@ describe('ethereumScDeployDomain', () => {
     it('should listen an exception with onError handler if there are problems adapting the deploy transaction', async () => {
 
       const throwedError: Error = new Error('Boom!');
-      const LOG = logger.getLogger();
 
       contractInstanceDeployWeb3WrapperMock.send.mockReturnThis();
       contractInstanceDeployWeb3WrapperMock.on.mockImplementationOnce((event, callback) => {
@@ -231,9 +233,9 @@ describe('ethereumScDeployDomain', () => {
         expect(contractInstanceDeployWeb3WrapperMock.send.mock.calls[0][0]).toEqual({ from: contractDeployModelMock.from });
 
         // rejected error is ok
-        expect(e).toEqual(ethereumSmartContractSmartcontractErrorResponse);
+        expect(e).toEqual(hancockContractDeployError);
 
-        expect(LOG.error).toHaveBeenCalledWith(throwedError);
+        expect(logger.error).toHaveBeenCalledWith(throwedError);
 
       }
 

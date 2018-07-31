@@ -14,7 +14,7 @@ export async function tokenAllowance(req: Request, res: Response, next: NextFunc
   return domain
     .tokenAllowance(params)
     .then((result: any) => utils.createReply(res, ethereumTokenAllowanceSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
@@ -26,6 +26,6 @@ export async function tokenAllowanceByQuery(req: Request, res: Response, next: N
   return domain
     .tokenAllowanceByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, ethereumTokenAllowanceSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

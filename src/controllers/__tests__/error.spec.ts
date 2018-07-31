@@ -1,6 +1,7 @@
 
 import 'jest';
-import { errorController, errorMap, Errors } from '../error';
+import { HancockError } from '../../models/error';
+import { errorController } from '../error';
 
 describe('errorController', async () => {
 
@@ -9,16 +10,15 @@ describe('errorController', async () => {
     log: jest.fn(),
   } as any;
 
-  let error: any;
   let req: any;
   let res: any;
   let next: any;
+  let testError: HancockError;
 
   beforeEach(() => {
 
-    error = {
-      message: Errors.NOT_FOUND,
-    };
+    console.log(HancockError);
+    testError = new HancockError('12345', 123, 'Test Error Suite');
 
     req = {};
 
@@ -33,25 +33,11 @@ describe('errorController', async () => {
 
   it('should return the correct status code and error body given an specific error', async () => {
 
-    const expectedBody = errorMap[Errors.NOT_FOUND];
-    await errorController(error, req, res, next);
+    await errorController(testError, req, res, next);
 
-    expect(res.status.mock.calls).toEqual([[expectedBody.code_http]]);
-    expect(res.json.mock.calls).toEqual([[expectedBody]]);
-    expect(console.error).toHaveBeenCalledWith(expectedBody.message);
-    expect(console.error).toHaveBeenCalledWith(error);
-
-  });
-
-  it('should return the default status code and error body when the given error is not matched', async () => {
-
-    const expectedBody = errorMap[Errors.DEFAULT_ERROR];
-    await errorController(new Error('WHATEVER'), req, res, next);
-
-    expect(res.status.mock.calls).toEqual([[expectedBody.code_http]]);
-    expect(res.json.mock.calls).toEqual([[expectedBody]]);
-    expect(console.error).toHaveBeenCalledWith(expectedBody.message);
-    expect(console.error).toHaveBeenCalledWith(error);
+    expect(res.status.mock.calls).toEqual([[testError.httpCode]]);
+    expect(res.json.mock.calls).toEqual([[testError]]);
+    expect(console.error).toHaveBeenNthCalledWith(1, testError.message, testError.extendedMessage);
 
   });
 

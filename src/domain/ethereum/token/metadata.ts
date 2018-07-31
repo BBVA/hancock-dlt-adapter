@@ -1,25 +1,39 @@
 import * as db from '../../../db/ethereum';
-import { ethereumSmartContractNotFoundResponse,
+import { hancockDbError } from '../../../models/error';
+import {
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeModel,
 } from '../../../models/ethereum';
 import { IEthereumTokenMetadataResponse } from '../../../models/ethereum/token';
-import * as logger from '../../../utils/logger';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke } from '../smartContract/common';
+import { hancockContractAbiError } from '../smartContract/models/error';
 import { getAdaptRequestModel } from './common';
-
-const LOG = logger.getLogger();
+import { hancockContractTokenMetadataError } from './models/error';
 
 export const getTokenMetadata = async (address: string): Promise<any> => {
 
-  LOG.info(`Token Metadata`);
+  logger.info(`Token Metadata`);
+  let abi: IEthereumContractAbiDbModel | null;
+  let promiseValues;
 
   try {
 
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName('erc20');
 
-    if (abi) {
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockContractAbiError, err);
+
+  }
+
+  if (abi) {
+
+    try {
 
       const invokeModelName: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'name', [], address);
       const name = adaptContractInvoke(invokeModelName);
@@ -33,55 +47,67 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
       const invokeModelTotalSupply: IEthereumSmartContractInvokeModel = getAdaptRequestModel(abi.abi, 'call', 'totalSupply', [], address);
       const totalSupply = adaptContractInvoke(invokeModelTotalSupply);
 
-      const promiseValues = await Promise.all([name, symbol, decimals, totalSupply]);
+      promiseValues = await Promise.all([name, symbol, decimals, totalSupply]);
 
-      const object = {
-        decimals: promiseValues[2],
-        name: promiseValues[0],
-        symbol: promiseValues[1],
-        totalSupply: promiseValues[3],
-      };
+    } catch (err) {
 
-      return object;
-
-    } else {
-
-      LOG.info('Contract not found');
-      throw ethereumSmartContractNotFoundResponse;
+      logger.error(err);
+      throw error(hancockContractTokenMetadataError, err);
 
     }
 
-  } catch (e) {
+    const object = {
+      decimals: promiseValues[2],
+      name: promiseValues[0],
+      symbol: promiseValues[1],
+      totalSupply: promiseValues[3],
+    };
 
-    LOG.error(e);
-    throw e;
+    return object;
+
+  } else {
+
+    logger.info('Contract not found');
+    throw error(hancockContractNotFoundError);
 
   }
+
 };
 
 export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<IEthereumTokenMetadataResponse> => {
 
-  LOG.info(`Token Metadata By Query`);
+  logger.info(`Token Metadata By Query`);
+  let abi: IEthereumContractDbModel | null;
 
   try {
 
-    const abi: IEthereumContractDbModel | null = await db.getSmartContractByAddressOrAlias(addressOrAlias);
+    abi = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
-    if (abi) {
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockDbError, err);
+
+  }
+
+  if (abi) {
+
+    try {
 
       return await getTokenMetadata(abi.address);
 
-    } else {
+    } catch (err) {
 
-      LOG.info('Contract not found');
-      throw ethereumSmartContractNotFoundResponse;
+      logger.error(err);
+      throw error(hancockContractTokenMetadataError, err);
 
     }
 
-  } catch (e) {
+  } else {
 
-    LOG.error(e);
-    throw e;
+    logger.info('Contract not found');
+    throw error(hancockContractNotFoundError);
 
   }
+
 };

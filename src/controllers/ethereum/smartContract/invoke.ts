@@ -14,7 +14,7 @@ export async function invoke(req: Request, res: Response, next: NextFunction) {
   return domain
     .invoke(params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
@@ -26,6 +26,6 @@ export async function invokeByQuery(req: Request, res: Response, next: NextFunct
   return domain
     .invokeByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

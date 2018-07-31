@@ -1,38 +1,50 @@
 import { InsertOneWriteOpResult, WriteOpResult } from 'mongodb';
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
-  ethereumSmartContractAbiNameNotFoundResponse,
-  ethereumSmartContractConflictResponse,
-  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractAbiDbModel,
   IEthereumContractDbModel,
   IEthereumContractInstanceDbModel,
 } from '../../../models/ethereum/smartContract';
-import * as logger from '../../../utils/logger';
-
-const LOG = logger.getLogger();
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
+import {
+  hancockContractAbiError,
+  hancockContractConflictError,
+  hancockContractRegisterError,
+} from './models/error';
 
 export async function register(alias: string, address: string, abi: any[], abiName?: string): Promise<void> {
 
-  if (abiName) {
+  try {
 
-    await registerInstance(alias, address, abiName);
+    if (abiName) {
 
-  } else {
-
-    const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
-
-    if (!instanceResult) {
-
-      await registerAbi(alias, abi);
-      await registerInstance(alias, address, alias);
+      await registerInstance(alias, address, abiName);
 
     } else {
 
-      LOG.error(`Smart contract ${alias} cannot be registered due to a conflict`);
-      throw ethereumSmartContractConflictResponse;
+      const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
+
+      if (!instanceResult) {
+
+        await registerAbi(alias, abi);
+        await registerInstance(alias, address, alias);
+
+      } else {
+
+        logger.error(`Smart contract ${alias} cannot be registered due to a conflict`);
+        throw error(hancockContractConflictError);
+
+      }
 
     }
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockContractRegisterError, err);
 
   }
 
@@ -40,16 +52,39 @@ export async function register(alias: string, address: string, abi: any[], abiNa
 
 export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
-  await _updateAbiVersion(name);
+  try {
 
-  const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
-    abi,
-    name,
-  });
+    await _updateAbiVersion(name);
 
-  if (insertAbi.result.ok) {
+  } catch (err) {
 
-    LOG.info(`Smart contract abi registered as ${name}`);
+    logger.error(err);
+    throw error(hancockContractRegisterError, err);
+
+  }
+
+  try {
+
+    const insertAbi: InsertOneWriteOpResult = await db.insertSmartContractAbi({
+      abi,
+      name,
+    });
+
+    if (insertAbi.result.ok) {
+
+      logger.info(`Smart contract abi registered as ${name}`);
+
+    } else {
+
+      logger.error(`Smart contract ${name} abi cannot be registered`);
+      throw error(hancockContractRegisterError);
+
+    }
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockDbError);
 
   }
 
@@ -57,40 +92,84 @@ export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
 export const registerInstance = async (alias: string, address: string, abiName: string): Promise<void> => {
 
-  const instanceResult: IEthereumContractInstanceDbModel | null = await _retrieveSmartContractInstance(address);
+  let instanceResult: IEthereumContractInstanceDbModel | null;
+
+  try {
+
+    instanceResult = await _retrieveSmartContractInstance(address);
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockContractRegisterError, err);
+
+  }
 
   if (!instanceResult) {
 
     let insertInstance: InsertOneWriteOpResult | null = null;
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName(abiName);
+    let abi: IEthereumContractAbiDbModel | null;
+
+    try {
+
+      abi = await db.getAbiByName(abiName);
+
+    } catch (err) {
+
+      logger.error(err);
+      throw error(hancockDbError);
+
+    }
 
     if (abi) {
 
-      await _updateSmartContractVersion(alias);
+      try {
 
-      insertInstance = await db.insertSmartContract({
-        abiName,
-        address,
-        alias,
-      });
+        await _updateSmartContractVersion(alias);
+
+      } catch (err) {
+
+        throw error(hancockContractRegisterError, err);
+
+      }
+
+      try {
+
+        insertInstance = await db.insertSmartContract({
+          abiName,
+          address,
+          alias,
+        });
+
+      } catch (err) {
+
+        logger.error(err);
+        throw error(hancockDbError);
+
+      }
 
     } else {
 
-      LOG.error(`Smart contract instance ${alias} cannot be registered, (abiName not found)`);
-      throw ethereumSmartContractAbiNameNotFoundResponse;
+      logger.error(`Smart contract instance ${alias} cannot be registered, (abiName not found)`);
+      throw error(hancockContractAbiError);
 
     }
 
     if (insertInstance && insertInstance.result.ok) {
 
-      LOG.info(`Smart contract instance registered as ${alias}`);
+      logger.info(`Smart contract instance registered as ${alias}`);
+
+    } else {
+
+      logger.error(`Smart contract ${alias} instance cannot be registered`);
+      throw error(hancockContractRegisterError);
 
     }
 
   } else {
 
-    LOG.error(`Smart contract instance ${alias} cannot be registered due to a conflict`);
-    throw ethereumSmartContractConflictResponse;
+    logger.error(`Smart contract instance ${alias} cannot be registered due to a conflict`);
+    throw error(hancockContractConflictError);
 
   }
 
@@ -105,10 +184,17 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
 
     instanceResult = await db.getSmartContractByAddress(address);
 
-  } catch (e) {
+    if (!instanceResult) {
 
-    LOG.error(`Smart contract ${address} cannot be registered: ${e}`);
-    throw ethereumSmartContractInternalServerErrorResponse;
+      logger.error(`Smart contract ${address} cannot be found`);
+      throw error(hancockContractNotFoundError);
+
+    }
+
+  } catch (err) {
+
+    logger.error(`Smart contract ${address} cannot be found`);
+    throw error(hancockDbError, err);
 
   }
 
@@ -119,30 +205,81 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
 // tslint:disable-next-line:variable-name
 export const _updateSmartContractVersion = async (alias: string): Promise<WriteOpResult | void> => {
 
-  const aliasResult: IEthereumContractDbModel | null = await db.getSmartContractByAlias(alias);
+  let aliasResult: IEthereumContractDbModel | null;
+
+  try {
+
+    aliasResult = await db.getSmartContractByAlias(alias);
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockDbError, err);
+
+  }
 
   if (aliasResult) {
 
-    const numVersions: number = await db.getCountVersionsByAlias(alias);
-    const newAlias: string = `${alias}@${numVersions + 1}`;
+    try {
 
-    await db.updateSmartContractAlias(alias, newAlias);
+      const numVersions: number = await db.getCountVersionsByAlias(alias);
+      const newAlias: string = `${alias}@${numVersions + 1}`;
+
+      await db.updateSmartContractAlias(alias, newAlias);
+
+    } catch (err) {
+
+      logger.error(err);
+      throw error(hancockDbError, err);
+
+    }
+
+  } else {
+
+    logger.error(`Smart contract ${alias} cannot be found`);
+    throw error(hancockContractNotFoundError);
 
   }
+
 };
 
 // tslint:disable-next-line:variable-name
 export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | void> => {
 
-  const aliasResult: IEthereumContractAbiDbModel | null = await db.getAbiByName(name);
+  let aliasResult: IEthereumContractAbiDbModel | null;
+
+  try {
+
+    aliasResult = await db.getAbiByName(name);
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockDbError, err);
+
+  }
 
   if (aliasResult) {
 
-    const numVersionsAbi: number = await db.getCountVersionsAbiByName(name);
-    const newName: string = `${name}@${numVersionsAbi + 1}`;
+    try {
 
-    await db.updateSmartContractAbiName(name, newName);
-    await db.updateAbiAlias(name, newName);
+      const numVersionsAbi: number = await db.getCountVersionsAbiByName(name);
+      const newName: string = `${name}@${numVersionsAbi + 1}`;
+
+      await db.updateSmartContractAbiName(name, newName);
+      await db.updateAbiAlias(name, newName);
+
+    } catch (err) {
+
+      logger.error(err);
+      throw error(hancockDbError, err);
+
+    }
+
+  } else {
+
+    logger.error(`Smart contract ${name} abi cannot be found`);
+    throw error(hancockContractAbiError);
 
   }
 };

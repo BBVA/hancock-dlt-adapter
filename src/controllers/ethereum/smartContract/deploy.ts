@@ -13,6 +13,6 @@ export async function deploy(req: Request, res: Response, next: NextFunction) {
   return domain
     .deploy(params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

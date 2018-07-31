@@ -1,10 +1,12 @@
 
 import 'jest';
 import * as utils from '../../../utils/utils';
+import { hancockEthereumTrasnferError } from '../models/error';
 import * as transferDomain from '../transfer';
 
 jest.mock('../../../utils/utils');
 jest.mock('../../../utils/logger');
+jest.mock('../../../controllers/error');
 
 describe('transferDomain', () => {
 
@@ -37,9 +39,7 @@ describe('transferDomain', () => {
     strToHexMock.mockReturnValue('0xHexString');
     const response: any = 'whatever';
 
-    sendTransactionMock.mockImplementationOnce((transfer, callbacks) => {
-      callbacks(null, response);
-    });
+    sendTransactionMock.mockResolvedValue(response);
 
     const result: any = await transferDomain.sendTransfer(transferPayload);
 
@@ -53,11 +53,8 @@ describe('transferDomain', () => {
   it('should call web3.eth.sendTransaction and fail if there are errors', async () => {
 
     delete transferPayload.data;
-    const throwedError = new Error('Boom!');
 
-    sendTransactionMock.mockImplementationOnce((transfer, callbacks) => {
-      callbacks(throwedError, undefined);
-    });
+    sendTransactionMock.mockRejectedValueOnce(hancockEthereumTrasnferError);
 
     try {
 
@@ -69,7 +66,7 @@ describe('transferDomain', () => {
       const firstCall = sendTransactionMock.mock.calls[0];
       expect(firstCall[0]).toEqual(transferPayload);
       expect(firstCall[0].data).toBeUndefined();
-      expect(e).toEqual(throwedError);
+      expect(e).toEqual(hancockEthereumTrasnferError);
 
     }
 

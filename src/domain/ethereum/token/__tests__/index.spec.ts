@@ -1,14 +1,19 @@
 
 import 'jest';
 import * as db from '../../../../db/ethereum';
+import { hancockDbError } from '../../../../models/error';
 import { IEthereumSmartContractInvokeByQueryRequest } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
 import * as tokenDomain from '../../../ethereum/token';
+import { hancockContractNotFoundError } from '../../models/error';
 import { invokeByQuery } from '../../smartContract/invoke';
+import { hancockContractTokenBalanceError } from '../models/error';
 
 jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/invoke');
 jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('tokenDomain', () => {
 
@@ -35,7 +40,6 @@ describe('tokenDomain', () => {
       address: 'mockAddress',
       alias: 'mockAlias',
     };
-
   });
 
   it('should call the db.getSmartContractByAddressOrAlias method and retrieve the balance of token', async () => {
@@ -75,11 +79,9 @@ describe('tokenDomain', () => {
 
   it('should fail if there are errors', async () => {
 
-    const throwedError = new Error('Boom!');
-
     dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
 
-    invokeMock.mockRejectedValueOnce(throwedError);
+    invokeMock.mockRejectedValueOnce(hancockContractTokenBalanceError);
 
     try {
 
@@ -89,16 +91,16 @@ describe('tokenDomain', () => {
     } catch (e) {
 
       expect(invokeMock).toHaveBeenCalledTimes(1);
-      expect(e).toEqual(throwedError);
+      expect(error).toHaveBeenCalledWith(hancockContractTokenBalanceError, hancockContractTokenBalanceError);
+      expect(e).toEqual(hancockContractTokenBalanceError);
 
     }
 
   });
 
-  it('should throw an exception if there are problems retrieving the contractModels', async () => {
+  it('should throw an exception if there are problems retrieving the contractModels (null)', async () => {
 
-    const throwedError: Error = new Error('Boom!');
-    dbMock.mockRejectedValueOnce(throwedError);
+    dbMock.mockResolvedValueOnce(null);
 
     try {
 
@@ -108,7 +110,27 @@ describe('tokenDomain', () => {
     } catch (e) {
 
       expect(dbMock).toHaveBeenCalledTimes(1);
-      expect(e).toEqual(throwedError);
+      expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
+      expect(e).toEqual(hancockContractNotFoundError);
+
+    }
+
+  });
+
+  it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+    dbMock.mockRejectedValueOnce(hancockContractNotFoundError);
+
+    try {
+
+      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      fail('It should fail');
+
+    } catch (e) {
+
+      expect(dbMock).toHaveBeenCalledTimes(1);
+      expect(error).toHaveBeenCalledWith(hancockDbError, hancockContractNotFoundError);
+      expect(e).toEqual(hancockDbError);
 
     }
 

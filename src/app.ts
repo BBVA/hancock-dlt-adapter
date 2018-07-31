@@ -3,9 +3,7 @@ import config from './utils/config';
 import * as db from './utils/db';
 import { Ethereum } from './utils/ethereum/index';
 import { getApp } from './utils/express';
-import * as logger from './utils/logger';
-
-const LOG = logger.getLogger();
+import logger from './utils/logger';
 
 export async function run() {
 
@@ -15,25 +13,25 @@ export async function run() {
     .connect()
     .then(() => {
 
-      LOG.info('MongoDB connection open');
+      logger.info('MongoDB connection open');
 
       const app = getApp();
       app.use(config.server.base, appRouter);
       app.listen(config.server.port, (error: any) => {
 
         if (error) {
-          return LOG.error('Service is not available', error);
+          return logger.error('Service is not available', error);
         }
 
-        LOG.info('-----------------------------------------------------------------------');
-        LOG.info('Service available in port', config.server.port);
-        LOG.info('-----------------------------------------------------------------------');
+        logger.info('-----------------------------------------------------------------------');
+        logger.info('Service available in port', config.server.port);
+        logger.info('-----------------------------------------------------------------------');
 
       });
 
     })
     .catch((err: any) => {
-      LOG.error(`MongoDB connection error: ${err}`);
+      logger.error(`MongoDB connection error: ${err}`);
       process.exit(1);
     });
 
@@ -41,20 +39,20 @@ export async function run() {
 
 function exitHook(err?: any) {
 
-  LOG.info('Exiting gracefully...');
+  logger.info('Exiting gracefully...');
 
   if (err) {
-    LOG.error(err);
+    logger.error(err);
   }
 
   db
     .close()
     .then(() => {
-      LOG.info('MongoDB disconnected through app termination');
+      logger.info('MongoDB disconnected through app termination');
       process.exit(0);
     })
     .catch((error: any) => {
-      LOG.error(`MongoDB disconnection error: ${error}`);
+      logger.error(`MongoDB disconnection error: ${error}`);
     });
 
   process.exit(0);

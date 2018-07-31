@@ -1,73 +1,103 @@
 import { IEthereumSmartContractDeployModel } from '../../../models/ethereum';
 import {
-  ethereumSmartContractSmartcontractErrorResponse,
   IEthereumSmartContractDeployRequest,
 } from '../../../models/ethereum/smartContract';
-import * as logger from '../../../utils/logger';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
 import { retrieveContractAbi, retrieveContractBinary } from '../smartContract/common';
 import { ContractAbi, ContractBin } from './../../../models/ethereum/common';
-
-const LOG = logger.getLogger();
+import { hancockContractAbiError, hancockContractBinaryError, hancockContractDeployError } from './models/error';
 
 export async function deploy(deployRequest: IEthereumSmartContractDeployRequest): Promise<any> {
 
-  LOG.debug('contract deploy');
+  logger.debug('contract deploy');
+  let abi: ContractAbi;
+  let bin: ContractBin;
 
   try {
 
-    const abi: ContractAbi = await retrieveContractAbi(deployRequest.urlBase);
-    const bin: ContractBin = await retrieveContractBinary(deployRequest.urlBase);
-
-    const deployModel: IEthereumSmartContractDeployModel = {
-      ...deployRequest,
-      abi,
-      bin,
-    } as IEthereumSmartContractDeployModel;
-
-    return await _adaptContractDeploy(deployModel);
+    abi = await retrieveContractAbi(deployRequest.urlBase);
 
   } catch (e) {
 
-    LOG.error(e);
-    throw e;
+    logger.error(e);
+    throw error(hancockContractAbiError, e);
 
   }
+
+  try {
+
+    bin = await retrieveContractBinary(deployRequest.urlBase);
+
+  } catch (e) {
+
+    logger.error(e);
+    throw error(hancockContractBinaryError, e);
+
+  }
+
+  const deployModel: IEthereumSmartContractDeployModel = {
+    ...deployRequest,
+    abi,
+    bin,
+  } as IEthereumSmartContractDeployModel;
+
+  try {
+
+    return await _adaptContractDeploy(deployModel);
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockContractDeployError, err);
+
+  }
+
 }
 
 // tslint:disable-next-line:variable-name
 export const _adaptContractDeploy = async (contractDeployModel: IEthereumSmartContractDeployModel): Promise<any> => {
 
-  LOG.debug('Adapting contract deploy');
+  logger.debug('Adapting contract deploy');
 
-  const contract: any = new ETH.web3.eth.Contract(contractDeployModel.abi);
+  try {
 
-  return new Promise((resolve, reject) => {
+    const contract: any = new ETH.web3.eth.Contract(contractDeployModel.abi);
 
-    LOG.debug('Deploying contract');
+    return new Promise((resolve, reject) => {
 
-    contract
-      .deploy({ data: '0x' + contractDeployModel.bin, arguments: contractDeployModel.params })
-      .send({ from: contractDeployModel.from }, (error: Error, result: any) => {
+      logger.debug('Deploying contract');
 
-        LOG.debug('Adapt deploy callback');
+      contract
+        .deploy({ data: '0x' + contractDeployModel.bin, arguments: contractDeployModel.params })
+        .send({ from: contractDeployModel.from }, (err: Error, result: any) => {
 
-        if (error) {
+          logger.debug('Adapt deploy callback');
 
-          LOG.debug('Error sending contract deployment');
-          reject(error);
+          if (err) {
 
-        } else {
+            logger.debug('Error sending contract deployment');
+            throw error(hancockContractDeployError, err);
 
-          LOG.debug('Contract deployment successfully adapted');
-          resolve(result);
+          } else {
 
-        }
-      })
-      .on('error', (e: any) => {
+            logger.debug('Contract deployment successfully adapted');
+            resolve(result);
 
-        LOG.error(e);
-        reject(ethereumSmartContractSmartcontractErrorResponse);
+          }
+        })
+        .on('error', (err: any) => {
 
-      });
-  });
+          logger.error(err);
+          throw error(hancockContractDeployError, err);
+
+        });
+    });
+
+  } catch (err) {
+
+    throw error(hancockContractDeployError, err);
+
+  }
+
 };

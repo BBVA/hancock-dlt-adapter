@@ -1,22 +1,34 @@
+import { error } from '../../controllers/error';
 import { IEthereumTransferSendRequest } from '../../models/ethereum';
-import * as logger from '../../utils/logger';
+import logger from '../../utils/logger';
 import * as utils from '../../utils/utils';
-
-const LOG = logger.getLogger();
+import { hancockEthereumTrasnferError } from './models/error';
 
 export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
 
-  if (transfer.data) {
-    transfer.data = utils.strToHex(transfer.data);
+  try {
+
+    if (transfer.data) {
+      transfer.data = utils.strToHex(transfer.data);
+    }
+    logger.info(`Sending Transfer`, transfer);
+
+    return await ETH.web3.eth.sendTransaction(transfer);
+
+  } catch (err) {
+
+    logger.error(err);
+    throw error(hancockEthereumTrasnferError, err);
+
   }
 
-  return new Promise<any>((resolve, reject) => {
+  // return new Promise<any>((resolve, reject) => {
 
-    LOG.info(`Sending Transfer`, transfer);
+  //   logger.info(`Sending Transfer`, transfer);
 
-    ETH.web3.eth.sendTransaction(transfer, (err: any, result: any) => err
-      ? reject(err)
-      : resolve(result));
+  //   ETH.web3.eth.sendTransaction(transfer, (err: any, result: any) => err
+  //     ? reject(err)
+  //     : resolve(result));
 
-  });
+  // });
 }

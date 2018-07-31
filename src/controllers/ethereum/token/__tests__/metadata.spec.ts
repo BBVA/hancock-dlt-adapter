@@ -73,8 +73,7 @@ describe('metadataController', async () => {
       expect(domainTokenByQueryMock).toHaveBeenCalledTimes(1);
       expect(domainTokenByQueryMock).toHaveBeenCalledWith('mockedAddressAlias');
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 
@@ -112,8 +111,7 @@ describe('metadataController', async () => {
       expect(domainTokenMock).toHaveBeenCalledTimes(1);
       expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress');
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 

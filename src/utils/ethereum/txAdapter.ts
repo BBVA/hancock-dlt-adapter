@@ -7,9 +7,7 @@
  */
 import Subprovider = require('web3-provider-engine/subproviders/subprovider');
 import estimateGas = require('web3-provider-engine/util/estimate-gas');
-import * as logger from '../logger';
-
-const LOG = logger.getLogger();
+import logger from '../logger';
 
 export class TxAdapter extends Subprovider {
 
@@ -20,15 +18,15 @@ export class TxAdapter extends Subprovider {
   public async handleRequest(payload: any, next: any, end: any) {
     switch (payload.method) {
       case 'eth_accounts':
-        LOG.debug('Intercepted Ethereum Accounts');
+        logger.debug('Intercepted Ethereum Accounts');
         this.getAccounts()
           .then(end)
           .catch((error) => {
-            LOG.error('Error getting accounts');
+            logger.error('Error getting accounts');
           });
         return;
       case 'eth_call':
-        LOG.debug('Intercepted Ethereum Call');
+        logger.debug('Intercepted Ethereum Call');
         const call = payload.params[0];
         this.fillInTxExtras(call)
           .then((rawTx) => {
@@ -36,25 +34,25 @@ export class TxAdapter extends Subprovider {
             next(null, payload);
           })
           .catch((error) => {
-            LOG.error('Error handling call transaction');
+            logger.error('Error handling call transaction');
             end(error);
           });
         // end(JSON.stringify(call));
         return;
       case 'eth_sendTransaction':
-        LOG.debug('Intercepted Ethereum Send Transaction');
+        logger.debug('Intercepted Ethereum Send Transaction');
         const tx = payload.params[0];
         this.fillInTxExtras(tx)
           .then((rawTx) => {
             end(null, rawTx);
           })
           .catch((error) => {
-            LOG.error('Error handling send transaction');
+            logger.error('Error handling send transaction');
             end(error);
           });
         return;
       case 'eth_subscribe':
-        LOG.debug('Intercepted Event Subscription');
+        logger.debug('Intercepted Event Subscription');
         return;
       default:
 
@@ -64,11 +62,11 @@ export class TxAdapter extends Subprovider {
   }
 
   public async getAccounts() {
-    LOG.debug('TODO: obtain accounts collection from wallet registry');
+    logger.debug('TODO: obtain accounts collection from wallet registry');
   }
 
   public fillInTxExtras(txParams: any) {
-    LOG.debug('Adding transaction extra params');
+    logger.debug('Adding transaction extra params');
 
     const address: string = txParams.from;
     const reqs: any[] = [];

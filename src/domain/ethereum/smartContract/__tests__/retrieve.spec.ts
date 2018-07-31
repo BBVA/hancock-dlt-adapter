@@ -4,12 +4,15 @@ import {
   ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
 import * as ethereumScCommonDomain from '../common';
+import { hancockContractRetrieveError } from '../models/error';
 import * as ethereumScRetrieveDomain from '../retrieve';
 
 jest.mock('../common');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('ethereumScRetrieveDomain', () => {
 
@@ -37,8 +40,7 @@ describe('ethereumScRetrieveDomain', () => {
 
     it('should throw an exception if there are problems retrieving the contractModels', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      dbMock.mockRejectedValueOnce(throwedError);
+      dbMock.mockRejectedValueOnce(hancockContractRetrieveError);
 
       try {
 
@@ -48,7 +50,7 @@ describe('ethereumScRetrieveDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(ethereumSmartContractInternalServerErrorResponse);
+        expect(e).toEqual(hancockContractRetrieveError);
 
       }
 
@@ -83,9 +85,8 @@ describe('ethereumScRetrieveDomain', () => {
     it('should throw an exception if there are problems retrieving the contractModel', async () => {
 
       const addressOrAlias: string = 'addressOrAlias';
-      const throwedError: Error = new Error('Boom!');
 
-      retrieveContractAbiByAddressOrAliasMock.mockRejectedValueOnce(throwedError);
+      retrieveContractAbiByAddressOrAliasMock.mockRejectedValueOnce(hancockContractRetrieveError);
 
       try {
 
@@ -95,7 +96,7 @@ describe('ethereumScRetrieveDomain', () => {
       } catch (e) {
 
         expect(retrieveContractAbiByAddressOrAliasMock).toHaveBeenCalledWith(addressOrAlias);
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractRetrieveError);
 
       }
 

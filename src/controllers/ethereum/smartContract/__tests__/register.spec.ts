@@ -61,8 +61,7 @@ describe('ethereumScRegisterController', async () => {
     expect(domainRegisterMock).toHaveBeenCalledTimes(1);
     expect(domainRegisterMock).toHaveBeenCalledWith(req.body.alias, req.body.address, req.body.abi);
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

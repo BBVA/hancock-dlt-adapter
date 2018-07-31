@@ -1,9 +1,7 @@
 import * as mongodb from 'mongodb';
 import { Db } from 'mongodb';
-import * as logger from '../utils/logger';
+import logger from '../utils/logger';
 import config from './config';
-
-const LOG = logger.getLogger();
 
 // tslint:disable-next-line:variable-name
 export let _client: Db;
@@ -24,14 +22,14 @@ export const connect = async (): Promise<Db> => {
   // Connection URL
   const url: string = `${config.db.protocol}://${credentials}${config.db.host}:${config.db.port}/${config.db.database}?${config.db.params}`;
 
-  LOG.info('connection string = ', url);
+  logger.info('connection string = ', url);
 
   // Use connect method to connect to the server
   return MongoClient
     .connect(url)
     .then((mongoClient: Db) => {
 
-      LOG.info('Connected successfully to server');
+      logger.info('Connected successfully to server');
 
       _client = mongoClient;
       return _client;

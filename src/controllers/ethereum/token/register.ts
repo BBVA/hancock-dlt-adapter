@@ -13,6 +13,6 @@ export async function tokenRegister(req: Request, res: Response, next: NextFunct
   return domain
     .tokenRegister(params.alias, params.address)
     .then((result: any) => utils.createReply(res, ethereumTokenRegisterSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

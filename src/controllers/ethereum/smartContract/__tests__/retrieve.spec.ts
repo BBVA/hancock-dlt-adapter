@@ -60,8 +60,7 @@ describe('ethereumScRetrieveController', async () => {
 
       expect(domainFindMock).toHaveBeenCalledTimes(1);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 
@@ -107,8 +106,7 @@ describe('ethereumScRetrieveController', async () => {
       expect(domainFindOneMock).toHaveBeenCalledTimes(1);
       expect(domainFindOneMock).toHaveBeenCalledWith(req.params.query);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 

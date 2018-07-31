@@ -9,6 +9,6 @@ export async function deleteByQuery(req: Request, res: Response, next: NextFunct
   return domain
     .deleteByQuery(query)
     .then(() => utils.createReply(res))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

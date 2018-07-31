@@ -62,8 +62,7 @@ describe('ethereumController', async () => {
     expect(domainGetBalanceMock).toHaveBeenCalledTimes(1);
     expect(domainGetBalanceMock).toHaveBeenCalledWith('mockedAddress');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorResponse);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

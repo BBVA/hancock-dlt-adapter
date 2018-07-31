@@ -65,8 +65,7 @@ describe('ethereumScInvokeController', async () => {
       expect(domainInvokeMock).toHaveBeenCalledTimes(1);
       expect(domainInvokeMock).toHaveBeenCalledWith(req.body);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 
@@ -113,8 +112,7 @@ describe('ethereumScInvokeController', async () => {
       expect(domainInvokeByQueryMock).toHaveBeenCalledTimes(1);
       expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.query, req.body);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 

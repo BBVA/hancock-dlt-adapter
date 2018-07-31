@@ -8,7 +8,7 @@ export async function find(req: Request, res: Response, next: NextFunction) {
   return domain
     .find()
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, { list: result }))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
@@ -19,6 +19,6 @@ export async function findOne(req: Request, res: Response, next: NextFunction) {
   return domain
     .findOne(addressOrAlias)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

@@ -19,5 +19,5 @@ export async function getTokenBalance(req: Request, res: Response, next: NextFun
     return domain
       .getTokenBalance(addressOrAlias, address)
       .then((result: IEthereumTokenBalanceResponse) => utils.createReply(res, ethereumOkTokenResponse, result ))
-      .catch(() => utils.createReply(res, ethereumErrorTokenResponse));
+      .catch(next);
   }
