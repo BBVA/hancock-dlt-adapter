@@ -9,7 +9,7 @@ import { error } from '../../../../utils/error';
 import { hancockContractNotFoundError } from '../../models/error';
 import * as commonDomain from '../../smartContract/common';
 import { invokeByQuery } from '../../smartContract/invoke';
-import { hancockContractAbiError } from '../../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { hancockContractTokenTransferFromError } from '../models/error';
 import * as tokenTransferFromDomain from '../transferFrom';
 
@@ -97,8 +97,8 @@ describe('tokenTransferFromDomain', () => {
       } catch (e) {
 
         expect(commonMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenTransferFromError, hancockContractTokenTransferFromError);
-        expect(e).toEqual(hancockContractTokenTransferFromError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenTransferFromError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 

@@ -1,5 +1,6 @@
 import 'jest';
 import * as db from '../../../../db/ethereum';
+import { hancockDbError } from '../../../../models/error';
 import {
   ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
@@ -50,7 +51,7 @@ describe('ethereumScRetrieveDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(hancockContractRetrieveError);
+        expect(e).toEqual(hancockDbError);
 
       }
 

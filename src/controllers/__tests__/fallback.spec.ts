@@ -1,6 +1,7 @@
 
 import 'jest';
-import { errorController, hancockDefaultError } from '../error';
+import { hancockDefaultError } from '../../models/error';
+import { errorController } from '../error';
 import { fallbackController } from '../fallback';
 
 jest.mock('../error');

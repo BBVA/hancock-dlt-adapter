@@ -12,7 +12,7 @@ import logger from '../../../utils/logger';
 import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-import { hancockContractTokenAllowanceError } from './models/error';
+import { hancockContractInvokeError } from '../smartContract/models/error';
 
 export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRequest): Promise<any> {
 
@@ -49,7 +49,7 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
     } catch (err) {
 
       logger.error(err);
-      throw error(hancockContractTokenAllowanceError, err);
+      throw error(hancockContractInvokeError, err);
 
     }
 
@@ -80,7 +80,7 @@ export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEt
   } catch (err) {
 
     logger.error(err);
-    throw error(hancockContractTokenAllowanceError, err);
+    throw error(hancockContractInvokeError, err);
 
   }
 }

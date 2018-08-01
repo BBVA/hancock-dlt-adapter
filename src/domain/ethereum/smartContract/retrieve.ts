@@ -1,4 +1,5 @@
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
@@ -18,7 +19,7 @@ export async function find(): Promise<IEthereumContractDbModel[]> {
   } catch (err) {
 
     logger.error(`Error retrieving smart contract: ${err}`);
-    throw error(hancockContractRetrieveError, err);
+    throw error(hancockDbError, err);
 
   }
 }

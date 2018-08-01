@@ -7,6 +7,7 @@ import { error } from '../../../../utils/error';
 import * as tokenDomain from '../../../ethereum/token';
 import { hancockContractNotFoundError } from '../../models/error';
 import { invokeByQuery } from '../../smartContract/invoke';
+import { hancockContractInvokeError } from '../../smartContract/models/error';
 import { hancockContractTokenBalanceError } from '../models/error';
 
 jest.mock('../../../../utils/utils');
@@ -91,8 +92,8 @@ describe('tokenDomain', () => {
     } catch (e) {
 
       expect(invokeMock).toHaveBeenCalledTimes(1);
-      expect(error).toHaveBeenCalledWith(hancockContractTokenBalanceError, hancockContractTokenBalanceError);
-      expect(e).toEqual(hancockContractTokenBalanceError);
+      expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenBalanceError);
+      expect(e).toEqual(hancockContractInvokeError);
 
     }
 

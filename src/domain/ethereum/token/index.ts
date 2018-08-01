@@ -6,7 +6,7 @@ import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
 import { hancockContractNotFoundError } from '../models/error';
 import { invokeByQuery } from '../smartContract/invoke';
-import { hancockContractTokenBalanceError } from './models/error';
+import { hancockContractInvokeError } from '../smartContract/models/error';
 
 export * from './register';
 export * from './transfer';
@@ -67,7 +67,7 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
   } catch (err) {
 
     logger.error(err);
-    throw error(hancockContractTokenBalanceError, err);
+    throw error(hancockContractInvokeError, err);
 
   }
 

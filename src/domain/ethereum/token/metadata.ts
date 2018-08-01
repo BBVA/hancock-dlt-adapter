@@ -10,7 +10,7 @@ import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
 import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke } from '../smartContract/common';
-import { hancockContractAbiError } from '../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
 import { getAdaptRequestModel } from './common';
 import { hancockContractTokenMetadataError } from './models/error';
 
@@ -52,7 +52,7 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
     } catch (err) {
 
       logger.error(err);
-      throw error(hancockContractTokenMetadataError, err);
+      throw error(hancockContractInvokeError, err);
 
     }
 

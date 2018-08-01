@@ -11,7 +11,7 @@ import logger from '../../../utils/logger';
 import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-import { hancockContractAbiError } from '../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
 import { hancockContractTokenTransferFromError } from './models/error';
 
 export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferFromRequest): Promise<any> {
@@ -48,7 +48,7 @@ export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferF
     }  catch (err) {
 
       logger.error(err);
-      throw error(hancockContractTokenTransferFromError, err);
+      throw error(hancockContractInvokeError, err);
 
     }
 

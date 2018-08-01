@@ -101,8 +101,9 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
         .methods[contractInvokeReq.method]
         .apply(null, contractInvokeReq.params);
 
-    } catch (error) {
+    } catch (err) {
 
+      logger.error(err);
       throw error(hancockContractMethodNotFoundError);
 
     }

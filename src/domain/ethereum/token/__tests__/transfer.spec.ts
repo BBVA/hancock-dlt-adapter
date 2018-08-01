@@ -8,7 +8,7 @@ import { error } from '../../../../utils/error';
 import { hancockContractNotFoundError } from '../../models/error';
 import * as commonDomain from '../../smartContract/common';
 import { invokeByQuery } from '../../smartContract/invoke';
-import { hancockContractAbiError } from '../../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { hancockContractTokenTransferError } from '../models/error';
 import * as tokenTransferDomain from '../transfer';
 
@@ -133,8 +133,8 @@ describe('tokenTransferDomain', () => {
       } catch (e) {
 
         expect(commonMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenTransferError, hancockContractTokenTransferError);
-        expect(e).toEqual(hancockContractTokenTransferError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenTransferError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 
@@ -170,8 +170,8 @@ describe('tokenTransferDomain', () => {
       } catch (e) {
 
         expect(invokeMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenTransferError, hancockContractTokenTransferError);
-        expect(e).toEqual(hancockContractTokenTransferError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenTransferError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 

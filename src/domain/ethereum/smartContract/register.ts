@@ -8,11 +8,12 @@ import {
 } from '../../../models/ethereum/smartContract';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
-import { hancockContractNotFoundError } from '../models/error';
 import {
   hancockContractAbiError,
   hancockContractConflictError,
   hancockContractRegisterError,
+  hancockContractRetrieveError,
+  hancockContractUpdateVersionError,
 } from './models/error';
 
 export async function register(alias: string, address: string, abi: any[], abiName?: string): Promise<void> {
@@ -123,7 +124,7 @@ export const registerInstance = async (alias: string, address: string, abiName: 
   } catch (err) {
 
     logger.error(err);
-    throw error(hancockContractRegisterError, err);
+    throw error(hancockContractRetrieveError, err);
 
   }
 
@@ -152,7 +153,7 @@ export const registerInstance = async (alias: string, address: string, abiName: 
       } catch (err) {
 
         logger.error(err);
-        throw error(hancockContractRegisterError, err);
+        throw error(hancockContractUpdateVersionError, err);
 
       }
 
@@ -214,13 +215,6 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
 
   }
 
-  if (!instanceResult) {
-
-    logger.error(`Smart contract ${address} cannot be found`);
-    throw error(hancockContractNotFoundError);
-
-  }
-
   return instanceResult;
 
 };
@@ -256,11 +250,6 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
       throw error(hancockDbError, err);
 
     }
-
-  } else {
-
-    logger.error(`Smart contract ${alias} cannot be found`);
-    throw error(hancockContractNotFoundError);
 
   }
 
@@ -299,10 +288,6 @@ export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | v
 
     }
 
-  } else {
-
-    logger.error(`Smart contract ${name} abi cannot be found`);
-    throw error(hancockContractAbiError);
-
   }
+
 };

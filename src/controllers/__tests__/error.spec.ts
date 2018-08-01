@@ -1,75 +1,99 @@
-
 import 'jest';
-import { HancockError, IHancockErrorResponse } from '../../models/error';
 import logger from '../../utils/logger';
-import { _getErrorResponse, errorController } from '../error';
+import * as errors from '../error';
+import { hancockDefaultError, HancockError, IHancockErrorResponse } from './../../models/error';
 
+jest.mock('../../utils/config');
 jest.mock('../../utils/logger');
 
 describe('errorController', async () => {
 
-  global.console = {
-    error: jest.fn(),
-    log: jest.fn(),
-  } as any;
-
-  let req: any;
-  let res: any;
-  let next: any;
-  let testError: HancockError;
-
   beforeEach(() => {
 
-    testError = new HancockError('12345', 123, 'Test Error Suite');
-
-    req = {};
-
-    res = {
-      json: jest.fn(),
-      status: jest.fn().mockImplementation(() => res),
-    };
-
-    next = jest.fn();
+    jest.clearAllMocks();
 
   });
 
-  it('should return the HancockError correctly', async () => {
+  describe('::_getErrorResponse', () => {
 
-    const expectedResponse = {
-      error: 123,
-      internalError: 'HKAD12345',
-      message: 'Test Error Suite',
-    };
+    it('should return the correct error response given a HancockError', async () => {
 
-    const response: IHancockErrorResponse = _getErrorResponse(testError);
+      const error: HancockError = new HancockError('1111', 500, 'Custom error');
 
-    expect(response).toEqual(expectedResponse);
+      const result: IHancockErrorResponse = await errors._getErrorResponse(error);
+
+      expect(result).toEqual({
+        error: 500,
+        internalError: 'HKAD1111',
+        message: 'Custom error',
+      });
+
+    });
+
+    it('should return the default status code and error body when the given error is not matched', async () => {
+
+      const extendedError: Error = new Error('Extended boom!');
+      const error: HancockError = new HancockError('1111', 500, 'Custom error', extendedError);
+
+      const result: IHancockErrorResponse = await errors._getErrorResponse(error);
+
+      expect(result).toEqual({
+        error: 500,
+        internalError: 'HKAD1111',
+        message: 'Custom error',
+        extendedMessage: 'Error: Extended boom!',
+      });
+
+    });
 
   });
 
-  it('should return the HancockError correctly with extendedMessage', async () => {
+  describe('::errorController', () => {
 
-    const expectedResponse = {
-      error: 123,
-      internalError: 'HKAD12345',
-      message: 'Test Error Suite',
-      extendedMessage: 'testExtender',
-    };
+    let req: any;
+    let res: any;
+    let next: any;
+    let _getResponseMock: jest.Mock;
+    const mockerErrorResponse: IHancockErrorResponse = {} as any;
 
-    const response: IHancockErrorResponse = _getErrorResponse({...testError, extendedMessage: 'testExtender'});
+    beforeEach(() => {
 
-    expect(response).toEqual(expectedResponse);
+      req = {};
 
-  });
+      res = {
+        json: jest.fn(),
+        status: jest.fn().mockImplementation(() => res),
+      };
 
-  it('should return the correct status code and error body given an specific error', async () => {
+      next = jest.fn();
 
-    (_getErrorResponse as any) = jest.fn();
-    await errorController(testError, req, res, next);
+      _getResponseMock = jest.spyOn(errors, '_getErrorResponse').mockReturnValue(mockerErrorResponse);
 
-    expect(res.status.mock.calls).toEqual([[testError.httpCode]]);
-    expect(_getErrorResponse).toHaveBeenCalledWith(testError);
-    expect(logger.error).toHaveBeenCalledWith(testError);
+    });
+
+    it('should return the correct status code and error body given an specific error', async () => {
+
+      const error: HancockError = new HancockError('1111', 500, 'Custom error');
+      await errors.errorController(error, req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(error.httpCode);
+      expect(_getResponseMock).toHaveBeenCalledWith(error);
+      expect(res.json).toHaveBeenCalledWith(mockerErrorResponse);
+      expect(logger.error).toHaveBeenCalledWith(error);
+
+    });
+
+    it('should return the default status code and error body when the given error is not matched', async () => {
+
+      const error: Error = new Error('WHATEVER');
+      await errors.errorController(error, req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(hancockDefaultError.httpCode);
+      expect(_getResponseMock).toHaveBeenCalledWith(hancockDefaultError);
+      expect(res.json).toHaveBeenCalledWith(mockerErrorResponse);
+      expect(logger.error).toHaveBeenCalledWith(hancockDefaultError);
+
+    });
 
   });
 

@@ -11,7 +11,7 @@ import * as approveDomain from '../../../ethereum/token/approve';
 import { hancockContractNotFoundError } from '../../models/error';
 import { adaptContractInvoke } from '../../smartContract/common';
 import { invokeByQuery } from '../../smartContract/invoke';
-import { hancockContractAbiError } from '../../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { getAdaptRequestModel } from '../common';
 import { hancockContractTokenApproveError } from '../models/error';
 
@@ -107,8 +107,8 @@ describe('approveDomain', () => {
       } catch (e) {
 
         expect(adaptMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenApproveError, hancockContractTokenApproveError);
-        expect(e).toEqual(hancockContractTokenApproveError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenApproveError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 
@@ -205,8 +205,8 @@ describe('approveDomain', () => {
       } catch (e) {
 
         expect(invokeMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenApproveError, hancockContractTokenApproveError);
-        expect(e).toEqual(hancockContractTokenApproveError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenApproveError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 

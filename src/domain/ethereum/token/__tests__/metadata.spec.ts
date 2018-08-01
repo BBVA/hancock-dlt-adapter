@@ -11,7 +11,7 @@ import { error } from '../../../../utils/error';
 import * as metadataDomain from '../../../ethereum/token/metadata';
 import { hancockContractNotFoundError } from '../../models/error';
 import { adaptContractInvoke } from '../../smartContract/common';
-import { hancockContractAbiError } from '../../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { getAdaptRequestModel } from '../common';
 import { hancockContractTokenMetadataError } from '../models/error';
 
@@ -129,8 +129,8 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(adaptMock).toHaveBeenCalledTimes(4);
-        expect(error).toHaveBeenCalledWith(hancockContractTokenMetadataError, hancockContractTokenMetadataError);
-        expect(e).toEqual(hancockContractTokenMetadataError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenMetadataError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 
