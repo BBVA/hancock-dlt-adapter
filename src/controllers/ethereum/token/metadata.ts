@@ -7,7 +7,7 @@ import * as utils from '../../../utils/utils';
 
 export async function getTokenMetadataByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
 
   return domain
     .getTokenMetadataByQuery(addressOrAlias)

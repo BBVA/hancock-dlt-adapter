@@ -19,7 +19,7 @@ describe('ethereumScDeleteController', async () => {
 
     req = {
       params: {
-        query: 'mockedQuery',
+        addressOrAlias: 'mockedQuery',
       },
     };
 

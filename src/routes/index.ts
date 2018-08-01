@@ -4,6 +4,7 @@ import config from '../utils/config';
 import { errorController } from '../controllers/error';
 import { fallbackController } from '../controllers/fallback';
 import { healthCheckController } from '../controllers/healthcheck';
+import { jsonSchemaError } from '../controllers/jsonSchemaError';
 import { protocolRouter } from './protocol';
 
 export const appRouter = Router();
@@ -24,4 +25,5 @@ appRouter
   .use('/health', healthCheckController)
   .use('/protocol', protocolRouter)
   .use(fallbackController)
+  .use(jsonSchemaError)
   .use(errorController);

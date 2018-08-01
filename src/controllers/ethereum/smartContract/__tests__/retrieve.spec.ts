@@ -74,7 +74,7 @@ describe('ethereumScRetrieveController', async () => {
 
       req = {
         params: {
-          query: 'queryMocked',
+          addressOrAlias: 'queryMocked',
         },
       };
 
@@ -89,7 +89,7 @@ describe('ethereumScRetrieveController', async () => {
       await ethereumScRetrieveController.findOne(req, res, next);
 
       expect(domainFindOneMock).toHaveBeenCalledTimes(1);
-      expect(domainFindOneMock).toHaveBeenCalledWith(req.params.query);
+      expect(domainFindOneMock).toHaveBeenCalledWith(req.params.addressOrAlias);
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
       expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
@@ -104,7 +104,7 @@ describe('ethereumScRetrieveController', async () => {
       await ethereumScRetrieveController.findOne(req, res, next);
 
       expect(domainFindOneMock).toHaveBeenCalledTimes(1);
-      expect(domainFindOneMock).toHaveBeenCalledWith(req.params.query);
+      expect(domainFindOneMock).toHaveBeenCalledWith(req.params.addressOrAlias);
 
       expect(next).toHaveBeenCalledTimes(1);
 

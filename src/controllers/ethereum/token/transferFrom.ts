@@ -20,7 +20,7 @@ export async function tokenTransferFrom(req: Request, res: Response, next: NextF
 
 export async function tokenTransferFromByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumTokenTransferFromByQueryRequest = req.body;
 
   return domain

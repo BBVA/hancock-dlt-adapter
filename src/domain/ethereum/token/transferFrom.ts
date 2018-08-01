@@ -61,7 +61,7 @@ export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferF
 
 }
 
-export async function tokenTransferFromByQuery(query: string, transferRequest: IEthereumTokenTransferFromByQueryRequest): Promise<any> {
+export async function tokenTransferFromByQuery(addressOrAlias: string, transferRequest: IEthereumTokenTransferFromByQueryRequest): Promise<any> {
 
   logger.info(`Token transfer from by query`);
 
@@ -74,7 +74,7 @@ export async function tokenTransferFromByQuery(query: string, transferRequest: I
       params: [transferRequest.sender, transferRequest.to, transferRequest.value],
     };
 
-    return await invokeByQuery(query, invokeModel);
+    return await invokeByQuery(addressOrAlias, invokeModel);
 
   } catch (err) {
 

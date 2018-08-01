@@ -216,9 +216,9 @@ securitySchemes:
                 type: GetBalanceResponse
 
   /token:
-    /{query}: 
+    /{address|alias}: 
       uriParameters: 
-        query: 
+        address|alias: 
           type: string 
       /balance: 
         /{address}: 
