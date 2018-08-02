@@ -4,10 +4,10 @@ import * as utils from '../../../utils/utils';
 
 export async function deleteByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const query: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
 
   return domain
-    .deleteByQuery(query)
+    .deleteByQuery(addressOrAlias)
     .then(() => utils.createReply(res))
     .catch(next);
 

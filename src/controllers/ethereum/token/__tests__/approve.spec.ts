@@ -23,7 +23,7 @@ describe('approveController', async () => {
     req = {
       body: 'mockedAddress',
       params: {
-        query: 'mockedQuery',
+        addressOrAlias: 'mockedQuery',
       },
     };
 

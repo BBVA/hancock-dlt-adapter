@@ -14,7 +14,7 @@ export async function find(req: Request, res: Response, next: NextFunction) {
 
 export async function findOne(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
 
   return domain
     .findOne(addressOrAlias)

@@ -20,7 +20,7 @@ export async function invoke(req: Request, res: Response, next: NextFunction) {
 
 export async function invokeByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumSmartContractInvokeByQueryRequest = req.body;
 
   return domain

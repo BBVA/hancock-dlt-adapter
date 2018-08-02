@@ -20,7 +20,7 @@ export async function tokenAllowance(req: Request, res: Response, next: NextFunc
 
 export async function tokenAllowanceByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumTokenAllowanceByQueryRequest = req.body;
 
   return domain

@@ -60,7 +60,7 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
 }
 
-export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEthereumTokenAllowanceByQueryRequest): Promise<any> {
+export async function tokenAllowanceByQuery(addressOrAlias: string, allowanceRequest: IEthereumTokenAllowanceByQueryRequest): Promise<any> {
 
   logger.info(`Token allowance by query`);
 
@@ -73,7 +73,7 @@ export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEt
       params: [allowanceRequest.tokenOwner, allowanceRequest.spender],
     };
 
-    return await invokeByQuery(query, invokeModel);
+    return await invokeByQuery(addressOrAlias, invokeModel);
 
   } catch (err) {
 

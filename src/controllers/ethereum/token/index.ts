@@ -14,7 +14,7 @@ export * from './allowance';
 export async function getTokenBalance(req: Request, res: Response, next: NextFunction) {
 
     const address: string = req.params.address;
-    const addressOrAlias: string = req.params.query;
+    const addressOrAlias: string = req.params.addressOrAlias;
 
     return domain
       .getTokenBalance(addressOrAlias, address)

@@ -22,7 +22,7 @@ describe('tokenController', async () => {
     req = {
       params: {
         address: 'mockedAddress',
-        query: 'mockedAddressAlias',
+        addressOrAlias: 'mockedAddressAlias',
       },
     };
 

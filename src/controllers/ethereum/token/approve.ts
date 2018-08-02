@@ -20,7 +20,7 @@ export async function tokenApproveTransfer(req: Request, res: Response, next: Ne
 
 export async function tokenApproveTransferByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumTokenApproveTransferByQueryRequest = req.body;
 
   return domain

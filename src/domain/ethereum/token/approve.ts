@@ -59,7 +59,7 @@ export async function tokenApproveTransfer(transferRequest: IEthereumTokenApprov
   }
 }
 
-export async function tokenApproveTransferByQuery(query: string, transferRequest: IEthereumTokenApproveTransferByQueryRequest): Promise<any> {
+export async function tokenApproveTransferByQuery(addressOrAlias: string, transferRequest: IEthereumTokenApproveTransferByQueryRequest): Promise<any> {
 
   logger.info(`Token approve transfer by query`);
 
@@ -72,7 +72,7 @@ export async function tokenApproveTransferByQuery(query: string, transferRequest
       params: [transferRequest.spender, transferRequest.value],
     };
 
-    return await invokeByQuery(query, invokeModel);
+    return await invokeByQuery(addressOrAlias, invokeModel);
 
   } catch (err) {
 

@@ -11,10 +11,6 @@ declare module 'web3-provider-engine/subproviders/subprovider' {
   export = Subprovider;
 }
 
-declare module 'express-jsonschema' {
-  export function validate(...args: any[]): (...args: any[]) => any;
-}
-
 declare module 'uuid';
 declare module 'method-override';
 declare module 'errorhandler';
@@ -28,3 +24,17 @@ declare module NodeJS {
 
 declare var LOG: any;
 declare var ETH: any;
+
+declare module 'express-jsonschema' {
+  export function validate(...args: any[]): (...args: any[]) => any;
+  interface JsonSchemaValidation {
+    value: any;
+    property: string;
+    messages: string[];
+  }
+  export interface JsonSchemaError extends Error {
+    validations: {
+      body: JsonSchemaValidation[];
+    }
+  }
+}
