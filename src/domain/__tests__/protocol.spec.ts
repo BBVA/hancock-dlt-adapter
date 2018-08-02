@@ -1,8 +1,11 @@
 
 import 'jest';
+import { hancockProtocolDecodeError, hancockProtocolEncodeError } from '../models/error';
 import * as protocolDomain from '../protocol';
 
 jest.mock('../../utils/config');
+jest.mock('../../utils/logger');
+jest.mock('../../utils/error');
 
 describe('protocolDomain', () => {
 
@@ -25,6 +28,20 @@ describe('protocolDomain', () => {
     const result: any = protocolDomain.decode(encodedPayload);
 
     expect(result).toEqual(decodedPayload);
+
+  });
+
+  it('should throw an exception in decode with undefined as parameter', () => {
+
+    try {
+
+      protocolDomain.decode(null);
+
+    } catch (err) {
+
+      expect(err).toBe(hancockProtocolDecodeError);
+
+    }
 
   });
 

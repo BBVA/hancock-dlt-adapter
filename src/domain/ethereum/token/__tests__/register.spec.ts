@@ -1,9 +1,13 @@
 import 'jest';
 import { TokenNames } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
 import * as scRegisterDomain from '../../smartContract/register';
+import { hancockContractTokenRegisterError } from '../models/error';
 import * as tokenRegisterDomain from '../register';
 
 jest.mock('../../smartContract/register');
+jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('tokenRegisterDomain', () => {
 
@@ -31,8 +35,7 @@ describe('tokenRegisterDomain', () => {
 
     it('should throw an exception if there are problems registering the token', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      registerInstanceMock.mockRejectedValueOnce(throwedError);
+      registerInstanceMock.mockRejectedValueOnce(hancockContractTokenRegisterError);
 
       try {
 
@@ -42,7 +45,8 @@ describe('tokenRegisterDomain', () => {
       } catch (e) {
 
         expect(registerInstanceMock).toHaveBeenCalled();
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractTokenRegisterError, hancockContractTokenRegisterError);
+        expect(e).toEqual(hancockContractTokenRegisterError);
 
       }
 

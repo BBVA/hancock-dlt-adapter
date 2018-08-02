@@ -1,19 +1,26 @@
 
 import 'jest';
 import * as db from '../../../../db/ethereum';
+import { hancockDbError, hancockNotFoundError } from '../../../../models/error';
 import {
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
 } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
 import * as metadataDomain from '../../../ethereum/token/metadata';
+import { hancockContractNotFoundError } from '../../models/error';
 import { adaptContractInvoke } from '../../smartContract/common';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { getAdaptRequestModel } from '../common';
+import { hancockContractTokenMetadataError } from '../models/error';
 
 jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
 jest.mock('../../smartContract/common');
 jest.mock('../common.ts');
+jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('metadataDomain', () => {
 
@@ -110,11 +117,9 @@ describe('metadataDomain', () => {
 
     it('should fail if there are errors', async () => {
 
-      const throwedError = new Error('Boom!');
-
       dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
 
-      adaptMock.mockRejectedValueOnce(throwedError);
+      adaptMock.mockRejectedValueOnce(hancockContractTokenMetadataError);
 
       try {
 
@@ -124,16 +129,16 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(adaptMock).toHaveBeenCalledTimes(4);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenMetadataError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 
     });
 
-    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+    it('should throw an exception if there are problems retrieving the contractModels (null)', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      dbMock.mockRejectedValueOnce(throwedError);
+      dbMock.mockResolvedValueOnce(null);
 
       try {
 
@@ -143,7 +148,27 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
+        expect(e).toEqual(hancockContractNotFoundError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+      dbMock.mockRejectedValueOnce(hancockContractNotFoundError);
+
+      try {
+
+        await metadataDomain.getTokenMetadata(address);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(dbMock).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError, hancockContractNotFoundError);
+        expect(e).toEqual(hancockContractAbiError);
 
       }
 
@@ -193,11 +218,9 @@ describe('metadataDomain', () => {
 
     it('should fail if there are errors', async () => {
 
-      const throwedError = new Error('Boom!');
-
       dbSCMock.mockResolvedValueOnce(iEthereumContractDbModelSC);
 
-      (metadataDomain.getTokenMetadata as any).mockRejectedValueOnce(throwedError);
+      (metadataDomain.getTokenMetadata as any).mockRejectedValueOnce(hancockContractTokenMetadataError);
 
       try {
 
@@ -207,16 +230,16 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect((metadataDomain.getTokenMetadata as any)).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractTokenMetadataError, hancockContractTokenMetadataError);
+        expect(e).toEqual(hancockContractTokenMetadataError);
 
       }
 
     });
 
-    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+    it('should throw an exception if there are problems retrieving the contractModels (null)', async () => {
 
-      const throwedError: Error = new Error('Boom!');
-      dbSCMock.mockRejectedValueOnce(throwedError);
+      dbSCMock.mockResolvedValueOnce(null);
 
       try {
 
@@ -226,7 +249,27 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(dbSCMock).toHaveBeenCalledTimes(1);
-        expect(e).toEqual(throwedError);
+        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
+        expect(e).toEqual(hancockContractNotFoundError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems retrieving the contractModels', async () => {
+
+      dbSCMock.mockRejectedValueOnce(hancockDbError);
+
+      try {
+
+        await metadataDomain.getTokenMetadataByQuery(addressOrAlias);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(dbSCMock).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
+        expect(e).toEqual(hancockDbError);
 
       }
 

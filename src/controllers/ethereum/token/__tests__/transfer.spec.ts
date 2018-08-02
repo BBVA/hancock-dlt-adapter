@@ -23,7 +23,7 @@ describe('tokenTransferController', async () => {
     req = {
       body: 'mockedQuery',
       params: {
-        query: 'mockedAddress',
+        addressOrAlias: 'mockedAddress',
       },
     };
 
@@ -63,8 +63,7 @@ describe('tokenTransferController', async () => {
     expect(domainTokenTransferMock).toHaveBeenCalledTimes(1);
     expect(domainTokenTransferMock).toHaveBeenCalledWith('mockedQuery');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 
@@ -92,8 +91,7 @@ describe('tokenTransferController', async () => {
     expect(domainTokenTransferByQueryMock).toHaveBeenCalledTimes(1);
     expect(domainTokenTransferByQueryMock).toHaveBeenCalledWith('mockedAddress', 'mockedQuery');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

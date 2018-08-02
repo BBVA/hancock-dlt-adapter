@@ -5,10 +5,15 @@ import {
   IEthereumSmartContractDeployModel,
   IEthereumSmartContractDeployRequest,
 } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
+import logger from '../../../../utils/logger';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScDeployDomain from '../deploy';
+import { hancockContractAbiError, hancockContractBinaryError, hancockContractDeployError } from '../models/error';
 
 jest.mock('../common');
+jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('ethereumScDeployDomain', () => {
 
@@ -72,6 +77,47 @@ describe('ethereumScDeployDomain', () => {
 
     });
 
+    it('should throw an exception if there are problems retrieving the abi', async () => {
+
+      const deployRequestMock: IEthereumSmartContractDeployRequest = {} as any;
+
+      retrieveAbiMock.mockRejectedValueOnce(hancockContractAbiError);
+
+      try {
+
+        await ethereumScDeployDomain.deploy(deployRequestMock);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError, hancockContractAbiError);
+        expect(e).toEqual(hancockContractAbiError);
+
+      }
+
+    });
+
+    it('should throw an exception if there are problems retrieving the binary', async () => {
+
+      const deployRequestMock: IEthereumSmartContractDeployRequest = {} as any;
+
+      retrieveAbiMock.mockResolvedValueOnce('mockedAbi');
+      retrieveBinMock.mockRejectedValueOnce(hancockContractBinaryError);
+
+      try {
+
+        await ethereumScDeployDomain.deploy(deployRequestMock);
+        fail('It should fail');
+
+      } catch (e) {
+
+        expect(error).toHaveBeenCalledWith(hancockContractBinaryError, hancockContractBinaryError);
+        expect(e).toEqual(hancockContractBinaryError);
+
+      }
+
+    });
+
     it('should throw an exception if there are problems retrieving the abi, bin or adapting the transaction', async () => {
 
       const deployRequestMock: IEthereumSmartContractDeployRequest = {} as any;
@@ -95,7 +141,7 @@ describe('ethereumScDeployDomain', () => {
           abi: 'mockedAbi',
           bin: 'mockedBinary',
         });
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractDeployError);
 
       }
 
@@ -194,7 +240,7 @@ describe('ethereumScDeployDomain', () => {
         expect(contractInstanceDeployWeb3WrapperMock.send.mock.calls[0][0]).toEqual({ from: contractDeployModelMock.from });
 
         // rejected error is ok
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractDeployError);
 
       }
 
@@ -228,9 +274,7 @@ describe('ethereumScDeployDomain', () => {
         expect(contractInstanceDeployWeb3WrapperMock.send.mock.calls[0][0]).toEqual({ from: contractDeployModelMock.from });
 
         // rejected error is ok
-        expect(e).toEqual(ethereumSmartContractSmartcontractErrorResponse);
-
-        expect(LOG.error).toHaveBeenCalledWith(throwedError);
+        expect(e).toEqual(hancockContractDeployError);
 
       }
 

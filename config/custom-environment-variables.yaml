@@ -1,4 +1,5 @@
 app:
+  hostname: HOSTNAME
   server:
     protocol: HANCOCK_SERVER_PROTOCOL
     host: HANCOCK_SERVER_HOST

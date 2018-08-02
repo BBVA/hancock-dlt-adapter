@@ -7,12 +7,12 @@ import * as utils from '../../../utils/utils';
 
 export async function getTokenMetadataByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
 
   return domain
     .getTokenMetadataByQuery(addressOrAlias)
     .then((result: any) => utils.createReply(res, ethereumTokenMetadataSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
@@ -23,6 +23,6 @@ export async function getTokenMetadata(req: Request, res: Response, next: NextFu
   return domain
     .getTokenMetadata(address)
     .then((result: any) => utils.createReply(res, ethereumTokenMetadataSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

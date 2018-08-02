@@ -5,10 +5,14 @@ import {
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
 } from '../../../../models/ethereum';
+import { error } from '../../../../utils/error';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScInvokeDomain from '../invoke';
+import { hancockContractInvokeError } from '../models/error';
 
 jest.mock('../common');
+jest.mock('../../../../utils/logger');
+jest.mock('../../../../utils/error');
 
 describe('ethereumScInvokeDomain', () => {
 
@@ -64,7 +68,7 @@ describe('ethereumScInvokeDomain', () => {
           ...invokeRequestMock,
           abi: 'mockedAbi',
         });
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 
@@ -131,7 +135,7 @@ describe('ethereumScInvokeDomain', () => {
           abi: 'mockedAbi',
           to: 'mockedAddress',
         });
-        expect(e).toEqual(throwedError);
+        expect(e).toEqual(hancockContractInvokeError);
 
       }
 

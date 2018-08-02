@@ -1,8 +1,11 @@
 import { Router as ExpressRouter } from 'express';
 import { validate } from 'express-jsonschema';
+import { param } from 'express-validator/check';
 import { readFileSync } from 'fs';
 import * as path from 'path';
-import * as smartContractController from '../../controllers/ethereum';
+import * as scController from '../../controllers/ethereum';
+import { paramValidationError } from '../../controllers/paramValidationError';
+import { addressPattern } from '../../utils/utils';
 
 export const tokenRouter = ExpressRouter();
 
@@ -18,15 +21,17 @@ const transferFromTokenSchema = JSON.parse(readFileSync(`${schemaPath}/requests/
 const transferFromTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/requests/ethereum/token/transferFromByQuery.json`, 'utf-8'));
 
 tokenRouter
-  .get('/:query/balance/:address', smartContractController.getTokenBalance)
-  .post('/approve', validate({body: transferApproveTokenSchema}), smartContractController.tokenApproveTransfer)
-  .post('/:query/approve', validate({body: transferApproveTokenByQuerySchema}), smartContractController.tokenApproveTransferByQuery)
-  .get('/:query/metadata', smartContractController.getTokenMetadataByQuery)
-  .post('/:query/transfer', validate({body: transferTokenByQuerySchema}), smartContractController.tokenTransferByQuery)
-  .post('/:query/transferFrom', validate({body: transferFromTokenByQuerySchema}), smartContractController.tokenTransferFromByQuery)
-  .post('/:query/allowance', validate({body: allowanceTokenByQuerySchema}), smartContractController.tokenAllowanceByQuery)
-  .get('/metadata', smartContractController.getTokenMetadata)
-  .post('/transfer', validate({body: transferTokenSchema}), smartContractController.tokenTransfer)
-  .post('/register', validate({body: registerTokenSchema}), smartContractController.tokenRegister)
-  .post('/transferFrom', validate({body: transferFromTokenSchema}), smartContractController.tokenTransferFrom)
-  .post('/allowance', validate({body: allowanceTokenSchema}), smartContractController.tokenAllowance);
+  .param('addressOrAlias', param('addressOrAlias').exists().isString())
+  .param('address', param('address').exists().matches(addressPattern))
+  .get('/:addressOrAlias/balance/:address', paramValidationError, scController.getTokenBalance)
+  .post('/approve', validate({body: transferApproveTokenSchema}), scController.tokenApproveTransfer)
+  .post('/:addressOrAlias/approve', paramValidationError, validate({body: transferApproveTokenByQuerySchema}), scController.tokenApproveTransferByQuery)
+  .get('/:addressOrAlias/metadata', paramValidationError, scController.getTokenMetadataByQuery)
+  .post('/:addressOrAlias/transfer', paramValidationError, validate({body: transferTokenByQuerySchema}), scController.tokenTransferByQuery)
+  .post('/:addressOrAlias/transferFrom', paramValidationError, validate({body: transferFromTokenByQuerySchema}), scController.tokenTransferFromByQuery)
+  .post('/:addressOrAlias/allowance', paramValidationError, validate({body: allowanceTokenByQuerySchema}), scController.tokenAllowanceByQuery)
+  .get('/metadata', scController.getTokenMetadata)
+  .post('/transfer', validate({body: transferTokenSchema}), scController.tokenTransfer)
+  .post('/register', validate({body: registerTokenSchema}), scController.tokenRegister)
+  .post('/transferFrom', validate({body: transferFromTokenSchema}), scController.tokenTransferFrom)
+  .post('/allowance', validate({body: allowanceTokenSchema}), scController.tokenAllowance);

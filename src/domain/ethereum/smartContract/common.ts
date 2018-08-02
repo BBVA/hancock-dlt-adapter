@@ -1,19 +1,27 @@
 import * as request from 'request-promise-native';
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import { ContractAbi, IEthereumSmartContractInvokeModel, SC_DEFAULT_ACTION } from '../../../models/ethereum';
-import { ethereumSmartContractNotFoundResponse } from '../../../models/ethereum/smartContract';
 import {
-  ethereumSmartContractInternalServerErrorResponse,
-  ethereumSmartContractSourcecodeNotFoundErrorResponse,
   IEthereumContractDbModel,
   IEthereumSmartContractRawTxResponse,
   IEthereumSmartContractRequestAction,
   SC_REQUEST_ACTIONS,
 } from '../../../models/ethereum/smartContract';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
+import {
+  hancockContractAbiError,
+  hancockContractBinaryError,
+  hancockContractCallError,
+  hancockContractMethodNotFoundError,
+  hancockContractSendError,
+} from './models/error';
 
 export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string): Promise<IEthereumContractDbModel> {
 
-  LOG.info(`Find contract by query: ${addressOrAlias}`);
+  logger.info(`Find contract by query: ${addressOrAlias}`);
 
   let contractDbModel: IEthereumContractDbModel | null;
 
@@ -23,15 +31,14 @@ export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string
 
   } catch (e) {
 
-    LOG.error(`Error retrieving contract from ddbb: ${e}`);
-    throw ethereumSmartContractInternalServerErrorResponse;
+    throw error(hancockDbError, e);
 
   }
 
   if (!contractDbModel) {
 
-    LOG.info('Contract not found');
-    throw ethereumSmartContractNotFoundResponse;
+    logger.info('Contract not found');
+    throw error(hancockContractNotFoundError);
 
   } else {
 
@@ -43,7 +50,7 @@ export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string
 
 export async function retrieveContractAbi(urlBase: string): Promise<ContractAbi> {
 
-  LOG.info('Retrieving contract ABI');
+  logger.info('Retrieving contract ABI');
 
   try {
 
@@ -52,7 +59,7 @@ export async function retrieveContractAbi(urlBase: string): Promise<ContractAbi>
 
   } catch (e) {
 
-    throw ethereumSmartContractSourcecodeNotFoundErrorResponse;
+    throw error(hancockContractAbiError, e);
 
   }
 
@@ -60,7 +67,7 @@ export async function retrieveContractAbi(urlBase: string): Promise<ContractAbi>
 
 export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
-  LOG.info('Retrieving contract binary');
+  logger.info('Retrieving contract binary');
 
   try {
 
@@ -68,7 +75,7 @@ export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
   } catch (e) {
 
-    throw ethereumSmartContractSourcecodeNotFoundErrorResponse;
+    throw error(hancockContractBinaryError, e);
 
   }
 
@@ -76,34 +83,43 @@ export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
 export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContractInvokeModel): Promise<IEthereumSmartContractRawTxResponse> {
 
-  LOG.info('Adapting contract invoke');
+  logger.info('Adapting contract invoke');
 
   const contract: any = new ETH.web3.eth.Contract(contractInvokeReq.abi, contractInvokeReq.to);
   const action: IEthereumSmartContractRequestAction = contractInvokeReq.action || SC_DEFAULT_ACTION;
 
   return new Promise<IEthereumSmartContractRawTxResponse>((resolve, reject) => {
 
-    LOG.info('Invoking contract');
+    logger.info('Invoking contract');
 
-    const contractMethod: any = contract
-      .methods[contractInvokeReq.method]
-      .apply(null, contractInvokeReq.params);
+    let contractMethod: any;
+
+    try {
+
+      contractMethod = contract
+        .methods[contractInvokeReq.method]
+        .apply(null, contractInvokeReq.params);
+
+    } catch (err) {
+
+      throw error(hancockContractMethodNotFoundError);
+
+    }
 
     switch (action) {
       case SC_REQUEST_ACTIONS.SEND:
 
-        contractMethod[action].call(null, { from: contractInvokeReq.from }, (error: Error, result: IEthereumSmartContractRawTxResponse) => {
+        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: IEthereumSmartContractRawTxResponse) => {
 
-          LOG.info(`Adapt invoke (${action}) callback`);
+          logger.info(`Adapt invoke (${action}) callback`);
 
-          if (error) {
+          if (err) {
 
-            LOG.error(`Error sending contract (${action}) invocation`);
-            reject(error);
+            throw error(hancockContractSendError, err);
 
           } else {
 
-            LOG.info(`Contract (${action}) invocation successfully adapted`);
+            logger.info(`Contract (${action}) invocation successfully adapted`);
             resolve(result);
 
           }
@@ -115,18 +131,17 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
       case SC_REQUEST_ACTIONS.CALL:
       default:
 
-        contractMethod[action].call(null, { from: contractInvokeReq.from }, (error: Error, result: any) => {
+        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: any) => {
 
-          LOG.info(`Adapt invoke (${action}) callback`);
+          logger.info(`Adapt invoke (${action}) callback`);
 
-          if (error) {
+          if (err) {
 
-            LOG.error(`Error contract (${action}) invocation`);
-            reject(error);
+            throw error(hancockContractCallError, err);
 
           } else {
 
-            LOG.info(`Contract (${action}) invocation success`);
+            logger.info(`Contract (${action}) invocation success`);
             resolve(result);
 
           }

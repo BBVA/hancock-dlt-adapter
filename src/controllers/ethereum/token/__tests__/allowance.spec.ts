@@ -23,7 +23,7 @@ describe('tokenAllowanceController', async () => {
     req = {
       body: 'mockedQuery',
       params: {
-        query: 'mockedAddress',
+        addressOrAlias: 'mockedAddress',
       },
     };
 
@@ -63,8 +63,7 @@ describe('tokenAllowanceController', async () => {
     expect(domainTokenAllowanceMock).toHaveBeenCalledTimes(1);
     expect(domainTokenAllowanceMock).toHaveBeenCalledWith('mockedQuery');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 
@@ -92,8 +91,7 @@ describe('tokenAllowanceController', async () => {
     expect(domainTokenAllowanceByQueryMock).toHaveBeenCalledTimes(1);
     expect(domainTokenAllowanceByQueryMock).toHaveBeenCalledWith('mockedAddress', 'mockedQuery');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

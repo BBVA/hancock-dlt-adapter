@@ -57,8 +57,7 @@ describe('ethereumScDeployController', async () => {
     expect(domainDeployMock).toHaveBeenCalledTimes(1);
     expect(domainDeployMock).toHaveBeenCalledWith(req.body);
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

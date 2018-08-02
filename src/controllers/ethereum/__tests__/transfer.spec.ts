@@ -64,8 +64,7 @@ describe('transferController', async () => {
     expect(domainSendTransferMock.mock.calls.length).toBe(1);
     expect(domainSendTransferMock.mock.calls).toEqual([[req.body]]);
 
-    expect(utilsCreateReplyMock.mock.calls.length).toBe(1);
-    expect(utilsCreateReplyMock.mock.calls).toEqual([[res, ethereumTransferErrorResponse]]);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

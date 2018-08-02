@@ -14,18 +14,18 @@ export async function tokenApproveTransfer(req: Request, res: Response, next: Ne
   return domain
     .tokenApproveTransfer(params)
     .then((result: any) => utils.createReply(res, ethereumTokenApproveTransferSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
 export async function tokenApproveTransferByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumTokenApproveTransferByQueryRequest = req.body;
 
   return domain
     .tokenApproveTransferByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, ethereumTokenApproveTransferSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

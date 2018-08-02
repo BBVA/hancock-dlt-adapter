@@ -1,7 +1,14 @@
 import * as pinoLib from 'pino';
-const pino = pinoLib();
+import config from '../utils/config';
 
-export function init(host: string, app: string, logLevel: string) {
-  const child = pino.child({ host, app, logLevel });
-  return child;
-}
+const pino = pinoLib({
+  name: config.application,
+  safe: true,
+});
+
+export const logger: pinoLib.Logger = pino.child({
+  hostname: config.hostname,
+  level: config.logger.logLevel,
+});
+
+export default logger;

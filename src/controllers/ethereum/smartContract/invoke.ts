@@ -14,18 +14,18 @@ export async function invoke(req: Request, res: Response, next: NextFunction) {
   return domain
     .invoke(params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
 export async function invokeByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumSmartContractInvokeByQueryRequest = req.body;
 
   return domain
     .invokeByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

@@ -23,7 +23,7 @@ describe('approveController', async () => {
     req = {
       body: 'mockedAddress',
       params: {
-        query: 'mockedQuery',
+        addressOrAlias: 'mockedQuery',
       },
     };
 
@@ -73,8 +73,7 @@ describe('approveController', async () => {
       expect(domainTokenByQueryMock).toHaveBeenCalledTimes(1);
       expect(domainTokenByQueryMock).toHaveBeenCalledWith('mockedQuery', 'mockedAddress');
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 
@@ -113,8 +112,7 @@ describe('approveController', async () => {
       expect(domainTokenMock).toHaveBeenCalledTimes(1);
       expect(domainTokenMock).toHaveBeenCalledWith('mockedAddress');
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 

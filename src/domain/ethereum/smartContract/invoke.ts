@@ -4,12 +4,15 @@ import {
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
 } from '../../../models/ethereum/smartContract';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
 import { adaptContractInvoke, retrieveContractAbi, retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
 import { ContractAbi } from './../../../models/ethereum/common';
+import { hancockContractInvokeError } from './models/error';
 
 export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest): Promise<any> {
 
-  LOG.debug('contract invoke ');
+  logger.debug('contract invoke ');
 
   try {
 
@@ -22,17 +25,16 @@ export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest)
 
     return await adaptContractInvoke(invokeModel);
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(e);
-    throw e;
+    throw error(hancockContractInvokeError, err);
 
   }
 }
 
 export async function invokeByQuery(addressOrAlias: string, invokeRequest: IEthereumSmartContractInvokeByQueryRequest): Promise<any> {
 
-  LOG.info(`Contract invoke by query: ${addressOrAlias}`);
+  logger.info(`Contract invoke by query: ${addressOrAlias}`);
 
   try {
 
@@ -46,10 +48,9 @@ export async function invokeByQuery(addressOrAlias: string, invokeRequest: IEthe
 
     return await adaptContractInvoke(invokeModel);
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(e);
-    throw e;
+    throw error(hancockContractInvokeError, err);
 
   }
 }

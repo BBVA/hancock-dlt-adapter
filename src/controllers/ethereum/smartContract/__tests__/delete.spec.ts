@@ -19,7 +19,7 @@ describe('ethereumScDeleteController', async () => {
 
     req = {
       params: {
-        query: 'mockedQuery',
+        addressOrAlias: 'mockedQuery',
       },
     };
 
@@ -58,8 +58,7 @@ describe('ethereumScDeleteController', async () => {
     expect(domaindeleteByQueryMock).toHaveBeenCalledTimes(1);
     expect(domaindeleteByQueryMock).toHaveBeenCalledWith('mockedQuery');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

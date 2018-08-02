@@ -65,8 +65,7 @@ describe('ethereumScInvokeController', async () => {
       expect(domainInvokeMock).toHaveBeenCalledTimes(1);
       expect(domainInvokeMock).toHaveBeenCalledWith(req.body);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 
@@ -81,7 +80,7 @@ describe('ethereumScInvokeController', async () => {
       req = {
         body: {},
         params: {
-          query: 'queryMocked',
+          addressOrAlias: 'queryMocked',
         },
       };
 
@@ -96,7 +95,7 @@ describe('ethereumScInvokeController', async () => {
       await ethereumScInvokeController.invokeByQuery(req, res, next);
 
       expect(domainInvokeByQueryMock).toHaveBeenCalledTimes(1);
-      expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.query, req.body);
+      expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.addressOrAlias, req.body);
 
       expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
       expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
@@ -111,10 +110,9 @@ describe('ethereumScInvokeController', async () => {
       await ethereumScInvokeController.invokeByQuery(req, res, next);
 
       expect(domainInvokeByQueryMock).toHaveBeenCalledTimes(1);
-      expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.query, req.body);
+      expect(domainInvokeByQueryMock).toHaveBeenCalledWith(req.params.addressOrAlias, req.body);
 
-      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, errThrowed);
+      expect(next).toHaveBeenCalledTimes(1);
 
     });
 

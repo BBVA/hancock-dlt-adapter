@@ -1,22 +1,24 @@
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
-  ethereumSmartContractInternalServerErrorResponse,
   IEthereumContractDbModel,
 } from '../../../models/ethereum/smartContract';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
 import { retrieveContractAbiByAddressOrAlias } from '../smartContract/common';
+import { hancockContractRetrieveError } from './models/error';
 
 export async function find(): Promise<IEthereumContractDbModel[]> {
 
   try {
 
     const contractDbModel: IEthereumContractDbModel[] = await db.getAllSmartContracts();
-    LOG.info(`Listing all resources`);
+    logger.info(`Listing all resources`);
     return contractDbModel;
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(`Error retrieving smart contract: ${e}`);
-    throw ethereumSmartContractInternalServerErrorResponse;
+    throw error(hancockDbError, err);
 
   }
 }
@@ -26,13 +28,12 @@ export async function findOne(addressOrAlias: string): Promise<IEthereumContract
   try {
 
     const contractDbModel: IEthereumContractDbModel = await retrieveContractAbiByAddressOrAlias(addressOrAlias);
-    LOG.info('One contract found', contractDbModel);
+    logger.info('One contract found', contractDbModel);
     return contractDbModel;
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(`Error retrieving smart contract: ${e}`);
-    throw e;
+    throw error(hancockContractRetrieveError, err);
 
   }
 }

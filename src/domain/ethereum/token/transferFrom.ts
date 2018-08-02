@@ -1,54 +1,66 @@
 import * as db from '../../../db/ethereum';
 import {
-  ethereumSmartContractNotFoundResponse,
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
   IEthereumTokenTransferFromByQueryRequest,
   IEthereumTokenTransferFromRequest,
 } from '../../../models/ethereum';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
+import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
+import { hancockContractTokenTransferFromError } from './models/error';
 
 export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferFromRequest): Promise<any> {
 
-  LOG.info(`Token transfer from`);
+  logger.info(`Token transfer from`);
+  let abi: IEthereumContractAbiDbModel | null;
 
   try {
 
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName('erc20');
 
-    if (abi) {
+  } catch (err) {
 
-      const invokeModel: IEthereumSmartContractInvokeModel = {
-        abi: abi.abi,
-        action: 'send',
-        from: transferRequest.from,
-        method: 'transferFrom',
-        params: [transferRequest.sender, transferRequest.to, transferRequest.value],
-        to: transferRequest.smartContractAddress,
-      };
+    throw error(hancockContractAbiError, err);
+
+  }
+
+  if (abi) {
+
+    const invokeModel: IEthereumSmartContractInvokeModel = {
+      abi: abi.abi,
+      action: 'send',
+      from: transferRequest.from,
+      method: 'transferFrom',
+      params: [transferRequest.sender, transferRequest.to, transferRequest.value],
+      to: transferRequest.smartContractAddress,
+    };
+
+    try {
 
       return await adaptContractInvoke(invokeModel);
 
-    } else {
+    }  catch (err) {
 
-      LOG.info('Contract not found');
-      throw ethereumSmartContractNotFoundResponse;
+      throw error(hancockContractInvokeError, err);
 
     }
 
-  } catch (e) {
+  } else {
 
-    LOG.error(e);
-    throw e;
+    throw error(hancockContractNotFoundError);
 
   }
+
 }
 
-export async function tokenTransferFromByQuery(query: string, transferRequest: IEthereumTokenTransferFromByQueryRequest): Promise<any> {
+export async function tokenTransferFromByQuery(addressOrAlias: string, transferRequest: IEthereumTokenTransferFromByQueryRequest): Promise<any> {
 
-  LOG.info(`Token transfer from by query`);
+  logger.info(`Token transfer from by query`);
 
   try {
 
@@ -59,12 +71,11 @@ export async function tokenTransferFromByQuery(query: string, transferRequest: I
       params: [transferRequest.sender, transferRequest.to, transferRequest.value],
     };
 
-    return await invokeByQuery(query, invokeModel);
+    return await invokeByQuery(addressOrAlias, invokeModel);
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(e);
-    throw e;
+    throw error(hancockContractTokenTransferFromError, err);
 
   }
 }

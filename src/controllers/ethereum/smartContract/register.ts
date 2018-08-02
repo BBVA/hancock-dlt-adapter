@@ -14,6 +14,6 @@ export async function register(req: Request, res: Response, next: NextFunction) 
   return domain
     .register(alias, address, abi)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }

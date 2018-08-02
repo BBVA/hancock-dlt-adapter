@@ -1,54 +1,67 @@
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
-  ethereumSmartContractNotFoundResponse,
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
   IEthereumTokenApproveTransferByQueryRequest,
   IEthereumTokenApproveTransferRequest,
 } from '../../../models/ethereum';
+import { error } from '../../../utils/error';
+import logger from '../../../utils/logger';
+import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
+import { hancockContractInvokeError } from '../smartContract/models/error';
 
 export async function tokenApproveTransfer(transferRequest: IEthereumTokenApproveTransferRequest): Promise<any> {
 
-  LOG.info(`Token approve transfer`);
+  logger.info(`Token approve transfer`);
+
+  let abi: IEthereumContractAbiDbModel | null;
+  let invokeModel: IEthereumSmartContractInvokeModel;
 
   try {
 
-    const abi: IEthereumContractAbiDbModel | null = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName('erc20');
 
-    if (abi) {
+  } catch (err) {
 
-      const invokeModel: IEthereumSmartContractInvokeModel = {
-        abi: abi.abi,
-        action: 'send',
-        from: transferRequest.from,
-        method: 'approve',
-        params: [transferRequest.spender, transferRequest.value],
-        to: transferRequest.smartContractAddress,
-      };
+    throw error(hancockDbError, err);
 
-      return await adaptContractInvoke(invokeModel);
+  }
 
-    } else {
+  if (abi) {
 
-      LOG.info('Contract not found');
-      throw ethereumSmartContractNotFoundResponse;
+    invokeModel = {
+      abi: abi.abi,
+      action: 'send',
+      from: transferRequest.from,
+      method: 'approve',
+      params: [transferRequest.spender, transferRequest.value],
+      to: transferRequest.smartContractAddress,
+    };
 
-    }
+  } else {
 
-  } catch (e) {
+    throw error(hancockContractNotFoundError);
 
-    LOG.error(e);
-    throw e;
+  }
+
+  try {
+
+    return await adaptContractInvoke(invokeModel);
+
+  } catch (err) {
+
+    throw error(hancockContractInvokeError, err);
 
   }
 }
 
-export async function tokenApproveTransferByQuery(query: string, transferRequest: IEthereumTokenApproveTransferByQueryRequest): Promise<any> {
+export async function tokenApproveTransferByQuery(addressOrAlias: string, transferRequest: IEthereumTokenApproveTransferByQueryRequest): Promise<any> {
 
-  LOG.info(`Token approve transfer by query`);
+  logger.info(`Token approve transfer by query`);
 
   try {
 
@@ -59,12 +72,11 @@ export async function tokenApproveTransferByQuery(query: string, transferRequest
       params: [transferRequest.spender, transferRequest.value],
     };
 
-    return await invokeByQuery(query, invokeModel);
+    return await invokeByQuery(addressOrAlias, invokeModel);
 
-  } catch (e) {
+  } catch (err) {
 
-    LOG.error(e);
-    throw e;
+    throw error(hancockContractInvokeError, err);
 
   }
 }

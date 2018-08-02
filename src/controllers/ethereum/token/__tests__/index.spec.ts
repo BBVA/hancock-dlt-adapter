@@ -22,7 +22,7 @@ describe('tokenController', async () => {
     req = {
       params: {
         address: 'mockedAddress',
-        query: 'mockedAddressAlias',
+        addressOrAlias: 'mockedAddressAlias',
       },
     };
 
@@ -60,8 +60,7 @@ describe('tokenController', async () => {
     expect(domainTokenMock).toHaveBeenCalledTimes(1);
     expect(domainTokenMock).toHaveBeenCalledWith('mockedAddressAlias', 'mockedAddress');
 
-    expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
-    expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumErrorTokenResponse);
+    expect(next).toHaveBeenCalledTimes(1);
 
   });
 

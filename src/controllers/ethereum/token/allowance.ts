@@ -14,18 +14,18 @@ export async function tokenAllowance(req: Request, res: Response, next: NextFunc
   return domain
     .tokenAllowance(params)
     .then((result: any) => utils.createReply(res, ethereumTokenAllowanceSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
 
 export async function tokenAllowanceByQuery(req: Request, res: Response, next: NextFunction) {
 
-  const addressOrAlias: string = req.params.query;
+  const addressOrAlias: string = req.params.addressOrAlias;
   const params: IEthereumTokenAllowanceByQueryRequest = req.body;
 
   return domain
     .tokenAllowanceByQuery(addressOrAlias, params)
     .then((result: any) => utils.createReply(res, ethereumTokenAllowanceSuccessResponse, result))
-    .catch((err: any) => utils.createReply(res, err));
+    .catch(next);
 
 }
