@@ -14,7 +14,6 @@ export async function tokenRegister(alias: string, address: string): Promise<any
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractTokenRegisterError, err);
 
   }

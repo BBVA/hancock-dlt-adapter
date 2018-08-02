@@ -31,7 +31,6 @@ export async function retrieveContractAbiByAddressOrAlias(addressOrAlias: string
 
   } catch (e) {
 
-    logger.error(`Error retrieving contract from ddbb: ${e}`);
     throw error(hancockDbError, e);
 
   }
@@ -103,7 +102,6 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractMethodNotFoundError);
 
     }
@@ -117,7 +115,6 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
 
           if (err) {
 
-            logger.error(`Error sending contract (${action}) invocation`);
             throw error(hancockContractSendError, err);
 
           } else {
@@ -140,7 +137,6 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
 
           if (err) {
 
-            logger.error(`Error contract (${action}) invocation`);
             throw error(hancockContractCallError, err);
 
           } else {

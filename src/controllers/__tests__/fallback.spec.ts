@@ -1,6 +1,6 @@
 
 import 'jest';
-import { hancockDefaultError } from '../../models/error';
+import { hancockNotFoundError } from '../../models/error';
 import { errorController } from '../error';
 import { fallbackController } from '../fallback';
 
@@ -15,7 +15,7 @@ describe('fallbackController', async () => {
 
     await fallbackController(req, res, next);
 
-    expect(errorController).toHaveBeenCalledWith(hancockDefaultError, req, res, next);
+    expect(errorController).toHaveBeenCalledWith(hancockNotFoundError, req, res, next);
 
   });
 

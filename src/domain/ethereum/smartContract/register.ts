@@ -26,7 +26,6 @@ export async function register(alias: string, address: string, abi: any[], abiNa
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractRegisterError, err);
 
     }
@@ -41,7 +40,6 @@ export async function register(alias: string, address: string, abi: any[], abiNa
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractRegisterError, err);
 
     }
@@ -55,14 +53,12 @@ export async function register(alias: string, address: string, abi: any[], abiNa
 
       } catch (err) {
 
-        logger.error(err);
         throw error(hancockContractRegisterError, err);
 
       }
 
     } else {
 
-      logger.error(`Smart contract ${alias} cannot be registered due to a conflict`);
       throw error(hancockContractConflictError);
 
     }
@@ -79,7 +75,6 @@ export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractRegisterError, err);
 
   }
@@ -95,7 +90,6 @@ export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -106,7 +100,6 @@ export const registerAbi = async (name: string, abi: any[]): Promise<void> => {
 
   } else {
 
-    logger.error(`Smart contract ${name} abi cannot be registered`);
     throw error(hancockContractRegisterError);
 
   }
@@ -123,7 +116,6 @@ export const registerInstance = async (alias: string, address: string, abiName: 
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractRetrieveError, err);
 
   }
@@ -139,7 +131,6 @@ export const registerInstance = async (alias: string, address: string, abiName: 
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockDbError, err);
 
     }
@@ -152,7 +143,6 @@ export const registerInstance = async (alias: string, address: string, abiName: 
 
       } catch (err) {
 
-        logger.error(err);
         throw error(hancockContractUpdateVersionError, err);
 
       }
@@ -167,14 +157,12 @@ export const registerInstance = async (alias: string, address: string, abiName: 
 
       } catch (err) {
 
-        logger.error(err);
         throw error(hancockDbError, err);
 
       }
 
     } else {
 
-      logger.error(`Smart contract instance ${alias} cannot be registered, (abiName not found)`);
       throw error(hancockContractAbiError);
 
     }
@@ -185,14 +173,12 @@ export const registerInstance = async (alias: string, address: string, abiName: 
 
     } else {
 
-      logger.error(`Smart contract ${alias} instance cannot be registered`);
       throw error(hancockContractRegisterError);
 
     }
 
   } else {
 
-    logger.error(`Smart contract instance ${alias} cannot be registered due to a conflict`);
     throw error(hancockContractConflictError);
 
   }
@@ -210,7 +196,6 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
 
   } catch (err) {
 
-    logger.error(`Smart contract ${address} cannot be found`);
     throw error(hancockDbError, err);
 
   }
@@ -230,7 +215,6 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -246,7 +230,6 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockDbError, err);
 
     }
@@ -266,7 +249,6 @@ export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | v
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -283,7 +265,6 @@ export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | v
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockDbError, err);
 
     }

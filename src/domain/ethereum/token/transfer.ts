@@ -24,7 +24,6 @@ export async function tokenTransfer(transferRequest: IEthereumTokenTransferReque
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractAbiError, err);
 
   }
@@ -46,14 +45,12 @@ export async function tokenTransfer(transferRequest: IEthereumTokenTransferReque
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractInvokeError, err);
 
     }
 
   } else {
 
-    logger.info('Contract not found');
     throw error(hancockContractNotFoundError);
 
   }
@@ -76,7 +73,6 @@ export async function tokenTransferByQuery(query: string, transferRequest: IEthe
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractInvokeError, err);
 
   }

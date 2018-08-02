@@ -12,6 +12,7 @@ module.exports = {
     ],
     testPathIgnorePatterns: [
         "./node_modules/",
+        "./tests/jest-setup.ts"
     ],
     reporters: [ "default", [ "jest-junit", { output: "tests/reports/unit/junit.xml" } ] ],
     coverageDirectory: 'tests/reports/coverage',
@@ -28,4 +29,7 @@ module.exports = {
         statements: 60
       }
     },
+    setupFiles: [
+        './tests/jest-setup.ts'
+    ],
 };

@@ -15,7 +15,6 @@ export function getApp() {
 
   const env = app.get('env');
 
-  app.use(cors());
   app.use(compression());
   app.use(middlewares.jsonSchemaValidation('JsonSchemaValidation'));
   app.use(bodyParser.urlencoded({ extended: false }));

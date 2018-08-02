@@ -18,7 +18,6 @@ export async function find(): Promise<IEthereumContractDbModel[]> {
 
   } catch (err) {
 
-    logger.error(`Error retrieving smart contract: ${err}`);
     throw error(hancockDbError, err);
 
   }
@@ -34,7 +33,6 @@ export async function findOne(addressOrAlias: string): Promise<IEthereumContract
 
   } catch (err) {
 
-    logger.error(`Error retrieving smart contract: ${err}`);
     throw error(hancockContractRetrieveError, err);
 
   }

@@ -30,7 +30,6 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -46,7 +45,6 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
 
   } else {
 
-    logger.info('Contract not found');
     throw error(hancockContractNotFoundError);
 
   }
@@ -66,7 +64,6 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractInvokeError, err);
 
   }

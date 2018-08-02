@@ -26,7 +26,6 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractAbiError, err);
 
   }
@@ -51,7 +50,6 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractInvokeError, err);
 
     }
@@ -67,7 +65,6 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
   } else {
 
-    logger.info('Contract not found');
     throw error(hancockContractNotFoundError);
 
   }
@@ -85,7 +82,6 @@ export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<I
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -98,14 +94,12 @@ export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<I
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractTokenMetadataError, err);
 
     }
 
   } else {
 
-    logger.info('Contract not found');
     throw error(hancockContractNotFoundError);
 
   }

@@ -26,7 +26,6 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockDbError, err);
 
   }
@@ -48,7 +47,6 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
     } catch (err) {
 
-      logger.error(err);
       throw error(hancockContractInvokeError, err);
 
     }
@@ -79,7 +77,6 @@ export async function tokenAllowanceByQuery(query: string, allowanceRequest: IEt
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractInvokeError, err);
 
   }

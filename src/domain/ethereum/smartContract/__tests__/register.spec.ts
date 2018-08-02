@@ -245,7 +245,7 @@ describe('ethereumScRegisterDomain', () => {
       } catch (err) {
 
         expect(dbContractMock).toHaveBeenCalledWith(address);
-        expect(logger.error).toHaveBeenCalled();
+        
 
         expect(err).toEqual(hancockDbError);
 
@@ -430,7 +430,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).not.toHaveBeenCalled();
         expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractConflictError);
 
@@ -454,7 +453,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
         expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractAbiError);
         expect(error).toHaveBeenCalledWith(hancockContractAbiError);
@@ -477,7 +475,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
         expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractRetrieveError);
         expect(error).toHaveBeenCalledWith(hancockContractRetrieveError, hancockDbError);
@@ -502,7 +499,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
         expect(_updateSmartContractVersionMock).not.toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockDbError);
         expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
@@ -528,7 +524,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
         expect(_updateSmartContractVersionMock).toHaveBeenCalled();
         expect(dbInsertMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractUpdateVersionError);
         expect(error).toHaveBeenCalledWith(hancockContractUpdateVersionError, hancockDbError);
@@ -555,7 +550,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
         expect(_updateSmartContractVersionMock).toHaveBeenCalled();
         expect(dbInsertMock).toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockDbError);
         expect(error).toHaveBeenCalledWith(hancockDbError, hancockDbError);
@@ -586,7 +580,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(dbGetAbiByNameMock).toHaveBeenCalledWith(abiName);
         expect(_updateSmartContractVersionMock).toHaveBeenCalled();
         expect(dbInsertMock).toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractRegisterError);
         expect(error).toHaveBeenCalledWith(hancockContractRegisterError);
@@ -670,7 +663,6 @@ describe('ethereumScRegisterDomain', () => {
         expect(_retrieveSmartContractInstanceMock).toHaveBeenCalledWith(address);
         expect(registerAbiMock).not.toHaveBeenCalled();
         expect(registerInstanceMock).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalled();
 
         expect(e).toEqual(hancockContractConflictError);
 

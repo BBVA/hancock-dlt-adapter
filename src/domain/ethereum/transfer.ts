@@ -17,7 +17,6 @@ export async function sendTransfer(transfer: IEthereumTransferSendRequest): Prom
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockEthereumTrasnferError, err);
 
   }

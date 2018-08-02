@@ -17,7 +17,6 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   } catch (e) {
 
-    logger.error(`Smart contract cannot be de-registered: ${e}`);
     throw error(hancockDbError, e);
 
   }
@@ -36,7 +35,6 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   } catch (err) {
 
-    logger.error(`Smart contract cannot be de-registered: ${err}`);
     throw error(hancockDbError, err);
 
   }
@@ -48,7 +46,6 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   } else {
 
-    logger.error(`Smart contract cannot be de-registered. Result code ${resultInstance.ok} and error ${JSON.stringify(resultInstance.lastErrorObject)}`);
     throw error(hancockContractDeleteError);
 
   }

@@ -20,7 +20,6 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
 
   } catch (e) {
 
-    logger.error(e);
     throw error(hancockContractAbiError, e);
 
   }
@@ -31,7 +30,6 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
 
   } catch (e) {
 
-    logger.error(e);
     throw error(hancockContractBinaryError, e);
 
   }
@@ -48,7 +46,6 @@ export async function deploy(deployRequest: IEthereumSmartContractDeployRequest)
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractDeployError, err);
 
   }
@@ -88,7 +85,6 @@ export const _adaptContractDeploy = async (contractDeployModel: IEthereumSmartCo
         })
         .on('error', (err: any) => {
 
-          logger.error(err);
           throw error(hancockContractDeployError, err);
 
         });

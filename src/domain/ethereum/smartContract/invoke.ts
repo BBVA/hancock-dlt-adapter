@@ -27,7 +27,6 @@ export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest)
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractInvokeError, err);
 
   }
@@ -51,7 +50,6 @@ export async function invokeByQuery(addressOrAlias: string, invokeRequest: IEthe
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockContractInvokeError, err);
 
   }

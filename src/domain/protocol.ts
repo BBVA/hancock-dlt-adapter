@@ -1,7 +1,6 @@
 import { IProtocolEncodeRequest } from '../models/protocol';
 import config from '../utils/config';
 import { error } from '../utils/error';
-import logger from '../utils/logger';
 import { hancockProtocolDecodeError, hancockProtocolEncodeError } from './models/error';
 
 export function decode(data: string): IProtocolEncodeRequest {
@@ -13,7 +12,6 @@ export function decode(data: string): IProtocolEncodeRequest {
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockProtocolDecodeError, err);
 
   }
@@ -28,7 +26,6 @@ export function encode(data: IProtocolEncodeRequest): string {
 
   } catch (err) {
 
-    logger.error(err);
     throw error(hancockProtocolEncodeError, err);
 
   }

@@ -9,7 +9,7 @@ import { error } from '../../../../utils/error';
 import logger from '../../../../utils/logger';
 import * as ethereumScCommonDomain from '../common';
 import * as ethereumScDeployDomain from '../deploy';
-import { hancockContractAbiError, hancockContractDeployError, hancockContractBinaryError } from '../models/error';
+import { hancockContractAbiError, hancockContractBinaryError, hancockContractDeployError } from '../models/error';
 
 jest.mock('../common');
 jest.mock('../../../../utils/logger');
@@ -275,8 +275,6 @@ describe('ethereumScDeployDomain', () => {
 
         // rejected error is ok
         expect(e).toEqual(hancockContractDeployError);
-
-        expect(logger.error).toHaveBeenCalledWith(throwedError);
 
       }
 
