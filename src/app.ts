@@ -23,6 +23,8 @@ export async function run() {
           return logger.error('Service is not available', error);
         }
 
+        logger.info('Service available in port', config.server.port);
+
       });
 
     })
