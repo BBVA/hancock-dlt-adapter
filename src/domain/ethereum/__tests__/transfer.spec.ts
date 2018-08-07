@@ -40,7 +40,9 @@ describe('transferDomain', () => {
     strToHexMock.mockReturnValue('0xHexString');
     const response: any = 'whatever';
 
-    sendTransactionMock.mockResolvedValue(response);
+    sendTransactionMock.mockImplementationOnce((transfer, callback) => {
+      callback(null, response);
+    });
 
     const result: any = await transferDomain.sendTransfer(transferPayload);
 
@@ -55,7 +57,9 @@ describe('transferDomain', () => {
 
     delete transferPayload.data;
 
-    sendTransactionMock.mockRejectedValueOnce(hancockEthereumTrasnferError);
+    sendTransactionMock.mockImplementationOnce((transfer, callback) => {
+      callback(hancockEthereumTrasnferError);
+    });
 
     try {
 

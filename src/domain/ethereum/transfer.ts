@@ -11,9 +11,16 @@ export async function sendTransfer(transfer: IEthereumTransferSendRequest): Prom
     if (transfer.data) {
       transfer.data = utils.strToHex(transfer.data);
     }
-    logger.info(`Sending Transfer`, transfer);
 
-    return await ETH.web3.eth.sendTransaction(transfer);
+    return new Promise<any>((resolve, reject) => {
+
+      logger.info(`Sending Transfer`, transfer);
+
+      ETH.web3.eth.sendTransaction(transfer, (err: any, result: any) => err
+        ? reject(err)
+        : resolve(result));
+
+    });
 
   } catch (err) {
 
