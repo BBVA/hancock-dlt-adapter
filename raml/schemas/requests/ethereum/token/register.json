@@ -4,16 +4,22 @@
   "type": "object",
   "properties": {
     "address": {
-      "type": "string",
+      "$ref": "#/definitions/nonEmptyString",
       "description": "Address of the Smart Contrant in the DLT"
     },
     "alias": {
-      "type": "string",
+      "$ref": "#/definitions/nonEmptyString",
       "description": "Alias to use to register in Hancock"
     }
   },
   "required": [
     "address",
     "alias"
-  ]
+  ],
+  "definitions": {
+    "nonEmptyString": {
+        "type": "string",
+        "minLength": 1
+    }
+  }
 }
