@@ -35,4 +35,5 @@ tokenRouter
   .post('/transfer', validate({body: transferTokenSchema}), scController.tokenTransfer)
   .post('/transferFrom', validate({body: transferFromTokenSchema}), scController.tokenTransferFrom)
   .post('/approve', validate({body: transferApproveTokenSchema}), scController.tokenApproveTransfer)
-  .post('/allowance', validate({body: allowanceTokenSchema}), scController.tokenAllowance);
+  .post('/allowance', validate({body: allowanceTokenSchema}), scController.tokenAllowance)
+  .delete('/:addressOrAlias', paramValidationError, scController.tokenDeleteByQuery);

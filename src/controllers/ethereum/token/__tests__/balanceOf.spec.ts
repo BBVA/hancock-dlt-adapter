@@ -1,13 +1,13 @@
 
 import 'jest';
-import * as domain from '../../../../domain/ethereum/token';
+import * as domain from '../../../../domain/ethereum';
 import { ethereumErrorTokenResponse, ethereumOkTokenResponse } from '../../../../models/ethereum';
 import * as utils from '../../../../utils/utils';
 import * as ethereumTokenController from '../balanceOf';
 
 jest.mock('../../../../domain/ethereum');
-jest.mock('../../../../utils/utils');
 jest.mock('../../../../domain/ethereum/token');
+jest.mock('../../../../utils/utils');
 
 describe('tokenController', async () => {
   let req: any;

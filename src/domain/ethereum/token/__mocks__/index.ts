@@ -6,3 +6,4 @@ export * from './metadata';
 export * from './common';
 export * from './approve';
 export * from './balanceOf';
+export * from './delete';

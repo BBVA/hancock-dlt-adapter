@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import * as domain from '../../../domain/ethereum/token';
+import * as domain from '../../../domain/ethereum';
 import { ethereumOkTokenResponse } from '../../../models/ethereum';
 import { IEthereumTokenBalanceResponse } from '../../../models/ethereum/token';
 import * as utils from '../../../utils/utils';
