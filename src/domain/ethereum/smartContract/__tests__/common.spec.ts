@@ -2,12 +2,9 @@
 import 'jest';
 import * as request from 'request-promise-native';
 import * as db from '../../../../db/ethereum';
-import { hancockDbError, hancockDefaultError, hancockDltError } from '../../../../models/error';
+import { hancockDbError, hancockDefaultError } from '../../../../models/error';
 import {
   ContractAbi,
-  ethereumSmartContractInternalServerErrorResponse,
-  ethereumSmartContractNotFoundResponse,
-  ethereumSmartContractSourcecodeNotFoundErrorResponse,
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeModel,
   IEthereumSmartContractRawTxResponse,
@@ -19,7 +16,6 @@ import {
   hancockContractAbiError,
   hancockContractBinaryError,
   hancockContractCallError,
-  hancockContractMethodNotFoundError,
   hancockContractSendError,
 } from '../models/error';
 

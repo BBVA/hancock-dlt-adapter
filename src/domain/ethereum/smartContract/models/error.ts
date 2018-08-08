@@ -2,7 +2,7 @@ import { HancockError } from '../../../../models/error';
 
 export const hancockContractAbiError = new HancockError('50003', 500, 'Smart Contract - Error fetching Contract Abi');
 export const hancockContractBinaryError = new HancockError('50004', 500, 'Smart Contract - Error fetching Contract Binary');
-export const hancockContractMethodNotFoundError = new HancockError('50006', 500, 'Smart Contract - Method Not Found Error');
+export const hancockContractMethodNotFoundError = new HancockError('40402', 404, 'Smart Contract - Method Not Found Error');
 export const hancockContractSendError = new HancockError('50007', 500, 'Smart Contract - Send Error');
 export const hancockContractCallError = new HancockError('50008', 500, 'Smart Contract - Call Error');
 export const hancockContractDeleteError = new HancockError('50009', 500, 'Smart Contract - Delete Error');
