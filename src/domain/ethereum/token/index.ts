@@ -43,36 +43,35 @@ export async function getTokenBalance(addressOrAlias: string, address: string): 
       params: [address],
     };
 
+    try {
+
+      balanced = await invokeByQuery(addressOrAlias, invokeModel);
+
+      const invokeModelb: IEthereumSmartContractInvokeByQueryRequest = {
+        action: 'call',
+        from: abi.address,
+        method: 'decimals',
+        params: [],
+      };
+
+      decimal = await invokeByQuery(addressOrAlias, invokeModelb);
+
+    } catch (err) {
+
+      throw error(hancockContractInvokeError, err);
+
+    }
+
+    const object = {
+      accuracy: decimal,
+      balance: balanced,
+    };
+
+    return object;
+
   } else {
 
     throw error(hancockContractNotFoundError);
 
   }
-
-  try {
-
-    balanced = await invokeByQuery(addressOrAlias, invokeModel);
-
-    const invokeModelb: IEthereumSmartContractInvokeByQueryRequest = {
-      action: 'call',
-      from: abi.address,
-      method: 'decimals',
-      params: [],
-    };
-
-    decimal = await invokeByQuery(addressOrAlias, invokeModelb);
-
-  } catch (err) {
-
-    throw error(hancockContractInvokeError, err);
-
-  }
-
-  const object = {
-    accuracy: decimal,
-    balance: balanced,
-  };
-
-  return object;
-
 }

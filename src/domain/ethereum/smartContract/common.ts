@@ -81,14 +81,14 @@ export async function retrieveContractBinary(urlBase: string): Promise<string> {
 
 }
 
-export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContractInvokeModel): Promise<IEthereumSmartContractRawTxResponse> {
+export async function adaptContractInvoke<T = IEthereumSmartContractRawTxResponse>(contractInvokeReq: IEthereumSmartContractInvokeModel): Promise<T> {
 
   logger.info('Adapting contract invoke');
 
   const contract: any = new ETH.web3.eth.Contract(contractInvokeReq.abi, contractInvokeReq.to);
   const action: IEthereumSmartContractRequestAction = contractInvokeReq.action || SC_DEFAULT_ACTION;
 
-  return new Promise<IEthereumSmartContractRawTxResponse>((resolve, reject) => {
+  return new Promise<T>((resolve, reject) => {
 
     logger.info('Invoking contract');
 
@@ -109,7 +109,7 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
     switch (action) {
       case SC_REQUEST_ACTIONS.SEND:
 
-        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: IEthereumSmartContractRawTxResponse) => {
+        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: T) => {
 
           logger.info(`Adapt invoke (${action}) callback`);
 
@@ -131,7 +131,7 @@ export async function adaptContractInvoke(contractInvokeReq: IEthereumSmartContr
       case SC_REQUEST_ACTIONS.CALL:
       default:
 
-        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: any) => {
+        contractMethod[action].call(null, { from: contractInvokeReq.from }, (err: Error, result: T) => {
 
           logger.info(`Adapt invoke (${action}) callback`);
 

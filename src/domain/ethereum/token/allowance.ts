@@ -6,13 +6,13 @@ import {
   IEthereumSmartContractInvokeModel,
   IEthereumTokenAllowanceByQueryRequest,
   IEthereumTokenAllowanceRequest,
+  TokenNames,
 } from '../../../models/ethereum';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
-import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-import { hancockContractInvokeError } from '../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
 
 export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRequest): Promise<any> {
 
@@ -22,7 +22,7 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
   try {
 
-    abi = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName(TokenNames.ERC20);
 
   } catch (err) {
 
@@ -53,8 +53,7 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
   } else {
 
-    logger.info('Contract not found');
-    throw error(hancockContractNotFoundError);
+    throw error(hancockContractAbiError);
 
   }
 

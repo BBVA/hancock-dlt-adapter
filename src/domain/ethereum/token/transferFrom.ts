@@ -1,14 +1,15 @@
 import * as db from '../../../db/ethereum';
+import { hancockDbError } from '../../../models/error';
 import {
   IEthereumContractAbiDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeModel,
   IEthereumTokenTransferFromByQueryRequest,
   IEthereumTokenTransferFromRequest,
+  TokenNames,
 } from '../../../models/ethereum';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
-import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke  } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
 import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
@@ -21,11 +22,11 @@ export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferF
 
   try {
 
-    abi = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName(TokenNames.ERC20);
 
   } catch (err) {
 
-    throw error(hancockContractAbiError, err);
+    throw error(hancockDbError, err);
 
   }
 
@@ -52,7 +53,7 @@ export async function tokenTransferFrom(transferRequest: IEthereumTokenTransferF
 
   } else {
 
-    throw error(hancockContractNotFoundError);
+    throw error(hancockContractAbiError);
 
   }
 

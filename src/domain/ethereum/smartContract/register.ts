@@ -207,11 +207,11 @@ export const _retrieveSmartContractInstance = async (address: string): Promise<I
 // tslint:disable-next-line:variable-name
 export const _updateSmartContractVersion = async (alias: string): Promise<WriteOpResult | void> => {
 
-  let aliasResult: IEthereumContractDbModel | null;
+  let contract: IEthereumContractDbModel | null;
 
   try {
 
-    aliasResult = await db.getSmartContractByAlias(alias);
+    contract = await db.getSmartContractByAlias(alias);
 
   } catch (err) {
 
@@ -219,7 +219,7 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 
   }
 
-  if (aliasResult) {
+  if (contract) {
 
     try {
 
@@ -241,11 +241,11 @@ export const _updateSmartContractVersion = async (alias: string): Promise<WriteO
 // tslint:disable-next-line:variable-name
 export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | void> => {
 
-  let aliasResult: IEthereumContractAbiDbModel | null;
+  let abi: IEthereumContractAbiDbModel | null;
 
   try {
 
-    aliasResult = await db.getAbiByName(name);
+    abi = await db.getAbiByName(name);
 
   } catch (err) {
 
@@ -253,7 +253,7 @@ export const _updateAbiVersion = async (name: string): Promise<WriteOpResult | v
 
   }
 
-  if (aliasResult) {
+  if (abi) {
 
     try {
 

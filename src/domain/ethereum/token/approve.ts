@@ -6,24 +6,23 @@ import {
   IEthereumSmartContractInvokeModel,
   IEthereumTokenApproveTransferByQueryRequest,
   IEthereumTokenApproveTransferRequest,
+  TokenNames,
 } from '../../../models/ethereum';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
-import { hancockContractNotFoundError } from '../models/error';
 import { adaptContractInvoke } from '../smartContract/common';
 import { invokeByQuery } from '../smartContract/invoke';
-import { hancockContractInvokeError } from '../smartContract/models/error';
+import { hancockContractAbiError, hancockContractInvokeError } from '../smartContract/models/error';
 
 export async function tokenApproveTransfer(transferRequest: IEthereumTokenApproveTransferRequest): Promise<any> {
 
   logger.info(`Token approve transfer`);
 
   let abi: IEthereumContractAbiDbModel | null;
-  let invokeModel: IEthereumSmartContractInvokeModel;
 
   try {
 
-    abi = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName(TokenNames.ERC20);
 
   } catch (err) {
 
@@ -33,7 +32,7 @@ export async function tokenApproveTransfer(transferRequest: IEthereumTokenApprov
 
   if (abi) {
 
-    invokeModel = {
+    const invokeModel: IEthereumSmartContractInvokeModel = {
       abi: abi.abi,
       action: 'send',
       from: transferRequest.from,
@@ -42,19 +41,19 @@ export async function tokenApproveTransfer(transferRequest: IEthereumTokenApprov
       to: transferRequest.smartContractAddress,
     };
 
+    try {
+
+      return await adaptContractInvoke(invokeModel);
+
+    } catch (err) {
+
+      throw error(hancockContractInvokeError, err);
+
+    }
+
   } else {
 
-    throw error(hancockContractNotFoundError);
-
-  }
-
-  try {
-
-    return await adaptContractInvoke(invokeModel);
-
-  } catch (err) {
-
-    throw error(hancockContractInvokeError, err);
+    throw error(hancockContractAbiError);
 
   }
 }

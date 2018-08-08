@@ -10,10 +10,10 @@ import { hancockContractDeleteError } from './models/error';
 export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   logger.info(`De-registering contract by query: ${addressOrAlias}`);
-  let contractModel: IEthereumContractDbModel | null;
+  let contractDbModel: IEthereumContractDbModel | null;
   try {
 
-    contractModel = await db.getSmartContractByAddressOrAlias(addressOrAlias);
+    contractDbModel = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
   } catch (e) {
 
@@ -21,7 +21,7 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
 
   }
 
-  if (!contractModel) {
+  if (!contractDbModel) {
     throw error(hancockContractNotFoundError);
   }
 
@@ -31,7 +31,7 @@ export async function deleteByQuery(addressOrAlias: string): Promise<void> {
   try {
 
     resultInstance = await db.deleteSmartContractByAddressOrAlias(addressOrAlias);
-    resultAbi = await db.deleteSmartContracAbiByName(contractModel.abiName);
+    resultAbi = await db.deleteSmartContracAbiByName(contractDbModel.abiName);
 
   } catch (err) {
 

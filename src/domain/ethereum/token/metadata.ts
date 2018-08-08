@@ -5,7 +5,7 @@ import {
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeModel,
 } from '../../../models/ethereum';
-import { IEthereumTokenMetadataResponse } from '../../../models/ethereum/token';
+import { IEthereumTokenMetadataResponse, TokenNames } from '../../../models/ethereum/token';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
 import { hancockContractNotFoundError } from '../models/error';
@@ -22,11 +22,11 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
   try {
 
-    abi = await db.getAbiByName('erc20');
+    abi = await db.getAbiByName(TokenNames.ERC20);
 
   } catch (err) {
 
-    throw error(hancockContractAbiError, err);
+    throw error(hancockDbError, err);
 
   }
 
@@ -65,7 +65,7 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 
   } else {
 
-    throw error(hancockContractNotFoundError);
+    throw error(hancockContractAbiError);
 
   }
 
@@ -74,11 +74,11 @@ export const getTokenMetadata = async (address: string): Promise<any> => {
 export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<IEthereumTokenMetadataResponse> => {
 
   logger.info(`Token Metadata By Query`);
-  let abi: IEthereumContractDbModel | null;
+  let contractDbModel: IEthereumContractDbModel | null;
 
   try {
 
-    abi = await db.getSmartContractByAddressOrAlias(addressOrAlias);
+    contractDbModel = await db.getSmartContractByAddressOrAlias(addressOrAlias);
 
   } catch (err) {
 
@@ -86,11 +86,11 @@ export const getTokenMetadataByQuery = async (addressOrAlias: string): Promise<I
 
   }
 
-  if (abi) {
+  if (contractDbModel) {
 
     try {
 
-      return await getTokenMetadata(abi.address);
+      return await getTokenMetadata(contractDbModel.address);
 
     } catch (err) {
 
