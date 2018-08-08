@@ -220,6 +220,15 @@ securitySchemes:
       uriParameters: 
         address|alias: 
           type: string 
+      delete:
+        description: Unregister the Token in Hancock
+        headers:
+        responses:
+          204:
+          500:
+            body:
+              application/json:
+                type: GenericResponse
       /balance: 
         /{address}: 
           uriParameters: 
@@ -311,7 +320,8 @@ securitySchemes:
             500:
             body:
               application/json:
-                type: GenericResponse 
+                type: GenericResponse
+      
     /register:
       post:
         description: Register new ERC20 tokens in hancock to be invoked by alias or address
