@@ -50,8 +50,8 @@ export interface IEthereumTokenResponse {
 }
 
 export interface IEthereumTokenBalanceResponse {
-  balance: number;
-  accuracy: number;
+  balance: string;
+  accuracy: string;
 }
 
 export interface IEthereumTokenMetadataResponse {

@@ -1,6 +1,5 @@
 
 import 'jest';
-import { error } from '../../../utils/error';
 import * as utils from '../../../utils/utils';
 import { hancockEthereumTrasnferError } from '../models/error';
 import * as transferDomain from '../transfer';

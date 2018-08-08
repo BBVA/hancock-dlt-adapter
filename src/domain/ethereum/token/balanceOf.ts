@@ -13,7 +13,7 @@ export async function tokenBalanceOf(contractAddress: string, address: string): 
   logger.info(`Token balanceOf call`);
 
   let abi: IEthereumContractAbiDbModel | null;
-  let promiseValues: number[];
+  let promiseValues: string[];
 
   try {
 
@@ -47,8 +47,8 @@ export async function tokenBalanceOf(contractAddress: string, address: string): 
 
     try {
 
-      const balance: Promise<number> = adaptContractInvoke<number>(invokeModelBalance);
-      const decimals: Promise<number> = adaptContractInvoke<number>(invokeModelDecimals);
+      const balance: Promise<string> = adaptContractInvoke<string>(invokeModelBalance);
+      const decimals: Promise<string> = adaptContractInvoke<string>(invokeModelDecimals);
 
       promiseValues = await Promise.all([balance, decimals]);
 

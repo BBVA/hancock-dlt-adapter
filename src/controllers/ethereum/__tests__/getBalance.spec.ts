@@ -1,18 +1,18 @@
 
 import 'jest';
-import * as domain from '../../../domain/ethereum';
-import { ethereumErrorResponse, ethereumOkResponse } from '../../../models/ethereum';
+import * as domain from '../../../domain/ethereum/getBalance';
+import { ethereumOkResponse } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
-import * as ethereumController from '../index';
+import * as getBalanceController from '../index';
 
 jest.mock('../transfer');
 jest.mock('../smartContract');
-jest.mock('../../../domain/ethereum');
+jest.mock('../../../domain/ethereum/getBalance');
 jest.mock('../../../utils/utils');
 jest.mock('../../../db/ethereum');
 jest.mock('../../../utils/logger');
 
-describe('ethereumController', async () => {
+describe('getBalanceController', async () => {
   let req: any;
   let res: any;
   let next: any;
@@ -43,7 +43,7 @@ describe('ethereumController', async () => {
 
     domainGetBalanceMock.mockResolvedValue('mockResult');
 
-    await ethereumController.getBalance(req, res, next);
+    await getBalanceController.getBalance(req, res, next);
 
     expect(domainGetBalanceMock).toHaveBeenCalledTimes(1);
     expect(domainGetBalanceMock).toHaveBeenCalledWith('mockedAddress');
@@ -57,7 +57,7 @@ describe('ethereumController', async () => {
 
     domainGetBalanceMock.mockRejectedValue(new Error('Boom!'));
 
-    await ethereumController.getBalance(req, res, next);
+    await getBalanceController.getBalance(req, res, next);
 
     expect(domainGetBalanceMock).toHaveBeenCalledTimes(1);
     expect(domainGetBalanceMock).toHaveBeenCalledWith('mockedAddress');

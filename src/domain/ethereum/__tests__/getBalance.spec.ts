@@ -1,6 +1,6 @@
 
 import 'jest';
-import * as ethereumDomain from '../../ethereum';
+import * as getBalanceDomain from '../getBalance';
 import { hancockEthereumBalanceError } from '../models/error';
 
 jest.mock('../transfer');
@@ -9,7 +9,7 @@ jest.mock('../token');
 jest.mock('../../../utils/utils');
 jest.mock('../../../utils/error');
 
-describe('ethereumDomain', () => {
+describe('getBalanceDomain', () => {
 
   const address: string = '0xWhatever';
 
@@ -35,7 +35,7 @@ describe('ethereumDomain', () => {
 
     getBalanceMock.mockResolvedValue(response);
 
-    const result: any = await ethereumDomain.getBalance(address);
+    const result: any = await getBalanceDomain.getBalance(address);
 
     const firstCall = getBalanceMock.mock.calls[0];
     expect(firstCall[0]).toEqual(address);
@@ -49,7 +49,7 @@ describe('ethereumDomain', () => {
 
     try {
 
-      await ethereumDomain.getBalance(address);
+      await getBalanceDomain.getBalance(address);
       fail('it should fail');
 
     } catch (e) {
