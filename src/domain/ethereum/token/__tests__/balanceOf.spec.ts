@@ -2,27 +2,27 @@
 import 'jest';
 import * as db from '../../../../db/ethereum';
 import { hancockDbError } from '../../../../models/error';
-import { IEthereumSmartContractInvokeByQueryRequest } from '../../../../models/ethereum';
+import { IEthereumSmartContractInvokeModel } from '../../../../models/ethereum';
 import { error } from '../../../../utils/error';
-import * as tokenDomain from '../../../ethereum/token';
+import * as balanceOfDomain from '../../../ethereum/token/balanceOf';
 import { hancockContractNotFoundError } from '../../models/error';
-import { invokeByQuery } from '../../smartContract/invoke';
-import { hancockContractInvokeError } from '../../smartContract/models/error';
+import { adaptContractInvoke } from '../../smartContract/common';
+import { hancockContractAbiError, hancockContractInvokeError } from '../../smartContract/models/error';
 import { hancockContractTokenBalanceError } from '../models/error';
 
 jest.mock('../../../../utils/utils');
 jest.mock('../../../../db/ethereum');
-jest.mock('../../smartContract/invoke');
+jest.mock('../../smartContract/common');
 jest.mock('../../../../utils/logger');
 jest.mock('../../../../utils/error');
 
-describe('tokenDomain', () => {
+describe('balanceOfDomain', () => {
 
-  const dbMock: jest.Mock = (db.getSmartContractByAddressOrAlias as any);
+  const dbMock: jest.Mock = (db.getAbiByName as any);
   const address: string = '0xWhatever';
   const addressOrAlias: string = '0xTokenever';
   let iEthereumContractDbModel;
-  const invokeMock: jest.Mock = (invokeByQuery as any);
+  const invokeMock: jest.Mock = (adaptContractInvoke as any);
 
   const getTokenBalanceMock: jest.Mock = jest.fn();
   const contractMock: jest.Mock = jest.fn().mockReturnValue({
@@ -48,18 +48,22 @@ describe('tokenDomain', () => {
     const response = {accuracy: 'mockAccuracy', balance: 'mockBalance'};
     dbMock.mockResolvedValueOnce(iEthereumContractDbModel);
 
-    const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
+    const invokeModelBalance: IEthereumSmartContractInvokeModel = {
+      abi: [],
       action: 'call',
-      from: 'mockAddress',
+      from: address,
       method: 'balanceOf',
-      params: ['0xWhatever'],
+      params: [address],
+      to: addressOrAlias,
     };
 
-    const invokeModelb: IEthereumSmartContractInvokeByQueryRequest = {
+    const invokeModelDecimals: IEthereumSmartContractInvokeModel = {
+      abi: [],
       action: 'call',
-      from: 'mockAddress',
+      from: address,
       method: 'decimals',
       params: [],
+      to: addressOrAlias,
     };
 
     invokeMock.mockResolvedValueOnce('mockBalance');
@@ -69,11 +73,11 @@ describe('tokenDomain', () => {
       callbacks(null, response);
     });
 
-    const result: any = await tokenDomain.getTokenBalance(addressOrAlias, address);
+    const result: any = await balanceOfDomain.tokenBalanceOf(addressOrAlias, address);
 
     expect(dbMock).toHaveBeenCalledTimes(1);
-    expect(invokeMock).toHaveBeenCalledWith(addressOrAlias, invokeModel);
-    expect(invokeMock).toHaveBeenCalledWith(addressOrAlias, invokeModelb);
+    expect(invokeMock).toHaveBeenCalledWith(invokeModelBalance);
+    expect(invokeMock).toHaveBeenCalledWith(invokeModelDecimals);
     expect(result).toEqual(response);
 
   });
@@ -86,12 +90,12 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      await balanceOfDomain.tokenBalanceOf(addressOrAlias, address);
       fail('it should fail');
 
     } catch (e) {
 
-      expect(invokeMock).toHaveBeenCalledTimes(1);
+      expect(invokeMock).toHaveBeenCalledTimes(2);
       expect(error).toHaveBeenCalledWith(hancockContractInvokeError, hancockContractTokenBalanceError);
       expect(e).toEqual(hancockContractInvokeError);
 
@@ -105,14 +109,14 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      await balanceOfDomain.tokenBalanceOf(addressOrAlias, address);
       fail('It should fail');
 
     } catch (e) {
 
       expect(dbMock).toHaveBeenCalledTimes(1);
-      expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
-      expect(e).toEqual(hancockContractNotFoundError);
+      expect(error).toHaveBeenCalledWith(hancockContractAbiError);
+      expect(e).toEqual(hancockContractAbiError);
 
     }
 
@@ -124,7 +128,7 @@ describe('tokenDomain', () => {
 
     try {
 
-      await tokenDomain.getTokenBalance(addressOrAlias, address);
+      await balanceOfDomain.tokenBalanceOf(addressOrAlias, address);
       fail('It should fail');
 
     } catch (e) {

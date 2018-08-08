@@ -126,8 +126,8 @@ describe('approveDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
-        expect(e).toEqual(hancockContractNotFoundError);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError);
+        expect(e).toEqual(hancockContractAbiError);
 
       }
 

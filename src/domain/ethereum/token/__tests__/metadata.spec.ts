@@ -148,8 +148,8 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
-        expect(e).toEqual(hancockContractNotFoundError);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError);
+        expect(e).toEqual(hancockContractAbiError);
 
       }
 
@@ -167,8 +167,8 @@ describe('metadataDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractAbiError, hancockContractNotFoundError);
-        expect(e).toEqual(hancockContractAbiError);
+        expect(error).toHaveBeenCalledWith(hancockDbError, hancockContractNotFoundError);
+        expect(e).toEqual(hancockDbError);
 
       }
 

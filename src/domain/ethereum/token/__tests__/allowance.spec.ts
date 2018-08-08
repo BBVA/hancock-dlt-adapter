@@ -9,7 +9,7 @@ import { error } from '../../../../utils/error';
 import { hancockContractNotFoundError } from '../../models/error';
 import * as commonDomain from '../../smartContract/common';
 import { invokeByQuery } from '../../smartContract/invoke';
-import { hancockContractInvokeError } from '../../smartContract/models/error';
+import { hancockContractInvokeError, hancockContractAbiError } from '../../smartContract/models/error';
 import * as tokenAllowanceDomain from '../allowance';
 import { hancockContractTokenAllowanceError, hancockContractTokenTransferFromError } from '../models/error';
 
@@ -95,8 +95,8 @@ describe('tokenAllowanceDomain', () => {
       } catch (e) {
 
         expect(dbMock).toHaveBeenCalledTimes(1);
-        expect(error).toHaveBeenCalledWith(hancockContractNotFoundError);
-        expect(e).toEqual(hancockContractNotFoundError);
+        expect(error).toHaveBeenCalledWith(hancockContractAbiError);
+        expect(e).toEqual(hancockContractAbiError);
 
       }
 
