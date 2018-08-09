@@ -229,7 +229,7 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
-      /balance: 
+      /balanceOf: 
         /{address}: 
           uriParameters: 
             address: 
@@ -321,7 +321,27 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
-      
+    /balanceOf: 
+      get:
+        queryParameters:
+          address: 
+            type: string
+            description: address of the token wallet
+            required: true
+          contractAddress: 
+            type: string
+            description: address of the erc20 smartcontract
+            required: true
+        description: Obtain the native ERC20 token currency balance of an address 
+        responses: 
+          200: 
+            body: 
+              application/json: 
+                type: GetBalanceTokenResponse 
+          500: 
+            body: 
+              application/json: 
+                type: GenericResponse
     /register:
       post:
         description: Register new ERC20 tokens in hancock to be invoked by alias or address
