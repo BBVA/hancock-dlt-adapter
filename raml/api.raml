@@ -93,27 +93,6 @@ securitySchemes:
               application/json:
                 type: GenericResponse
 
-      post:
-        description: Adapt transaction that will invoke a method in the registered Smart Contract
-        headers:
-        body:
-          application/json:
-            type: TransactionInvokeByParamRequest
-        responses:
-          200:
-            body:
-              application/json:
-                type: TransactionInvokeResponse
-          400:
-          404:
-            body:
-              application/json:
-                type: GenericResponse
-          500:
-            body:
-              application/json:
-                type: GenericResponse
-
       delete:
         description: Unregister the Smart Contract in Hancock
         headers:
@@ -157,6 +136,32 @@ securitySchemes:
             body:
               application/json:
                 type: GenericResponse
+
+      /{address|alias}:
+        uriParameters:
+          address|alias:
+            type: string
+
+        post:
+          description: Adapt transaction that will invoke a method in the registered Smart Contract
+          headers:
+          body:
+            application/json:
+              type: TransactionInvokeByParamRequest
+          responses:
+            200:
+              body:
+                application/json:
+                  type: TransactionInvokeResponse
+            400:
+            404:
+              body:
+                application/json:
+                  type: GenericResponse
+            500:
+              body:
+                application/json:
+                  type: GenericResponse
 
     /register:
       post:

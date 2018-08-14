@@ -22,4 +22,4 @@ smartContractRouter
   .get('/:addressOrAlias', paramValidationError, smartContractController.findOne)
   .delete('/:addressOrAlias', paramValidationError, smartContractController.deleteByQuery)
   .post('/invoke', validate({body: transactionInvokeSchema}), smartContractController.invoke)
-  .post('/:addressOrAlias', paramValidationError, validate({body: transactionInvokeParamSchema}), smartContractController.invokeByQuery);
+  .post('/invoke/:addressOrAlias', paramValidationError, validate({body: transactionInvokeParamSchema}), smartContractController.invokeByQuery);
