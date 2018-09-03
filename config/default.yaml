@@ -16,8 +16,7 @@ app:
       port: 8545
   db:
     protocol: mongodb
-    host: mongo
-    port: 27017
+    hosts: mongo:27017
     database: 'hancock'
     params: ''
     user: ''

@@ -20,7 +20,7 @@ export const connect = async (): Promise<Db> => {
   }
 
   // Connection URL
-  const url: string = `${config.db.protocol}://${credentials}${config.db.host}:${config.db.port}/${config.db.database}?${config.db.params}`;
+  const url: string = `${config.db.protocol}://${credentials}${config.db.hosts}/${config.db.database}?${config.db.params}`;
 
   logger.info('connection string = ', url);
 
