@@ -66,6 +66,16 @@ nodePipeline{
         """
       }
     }
+    
+    stage('Docs'){
+      container('node'){
+        sh """
+          yarn run docs
+        """
+        upload_doc_shuttle_stage(docPath="documentation", docName="docs")
+      }
+    }
+
 
     check_unlocked_in_RC_shuttle_stage()
 

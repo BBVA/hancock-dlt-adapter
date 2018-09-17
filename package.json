@@ -45,6 +45,7 @@
     "concurrently": "3.5.1",
     "jest": "^23.2.0",
     "jest-junit": "^5.1.0",
+    "markdown-styles": "^3.1.10",
     "mkdirp": "0.5.1",
     "nodemon": "1.14.12",
     "raml2html": "6.4.2",
@@ -69,6 +70,10 @@
     "lint:fix": "npm run lint -- --fix",
     "test:watch": "jest --watchAll",
     "coverage": "jest --coverage",
-    "docs": "rimraf documentation && mkdirp documentation && raml2html --theme raml2html-markdown-theme raml/api.raml > documentation/api.md"
+    "clean:docs": "rimraf documentation && mkdirp documentation",
+    "raml2md": "raml2html --theme raml2html-markdown-theme raml/api.raml > documentation/api.md",
+    "raml2html": "raml2html raml/api.raml > documentation/api.html",
+    "md2html": "generate-md --layout github --input ./README.md --output ./documentation",
+    "docs": "npm run clean:docs && npm run md2html && npm run raml2html"
   }
 }
