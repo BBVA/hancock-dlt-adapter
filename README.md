@@ -43,16 +43,21 @@ With [docker](https://www.docker.com/):
 Once we have built the service, we need to configure a few things before launch it. You can find all environment vars 
 availables to configure the service in `config/custom-environment-variables.yaml`.
 
-An example of configuration of the most important vars: 
-- Ethereum rpc node:
-  - HANCOCK_BLOCKCHAIN_ETHEREUM_PROTOCOL="http"
-  - HANCOCK_BLOCKCHAIN_ETHEREUM_HOST="52.80.128.77"
-  - HANCOCK_BLOCKCHAIN_ETHEREUM_PORT="34774"
+An example of configuration of the most important vars:
 
-- Mongo ddbb host
-  - HANCOCK_DB_HOSTS="localhost:27017"
-  - HANCOCK_DB_DATABASE="hancock"
-  - HANCOCK_DB_ETHEREUM_DATABASE="hancock_eth"
+- Ethereum rpc node:
+```bash
+  export HANCOCK_BLOCKCHAIN_ETHEREUM_PROTOCOL="http"
+  export HANCOCK_BLOCKCHAIN_ETHEREUM_HOST="52.80.128.77"
+  export HANCOCK_BLOCKCHAIN_ETHEREUM_PORT="34774"
+```
+
+- Mongo ddbb host:
+```bash
+  export HANCOCK_DB_HOSTS="localhost:27017"
+  export HANCOCK_DB_DATABASE="hancock"
+  export HANCOCK_DB_ETHEREUM_DATABASE="hancock_eth"
+```
 
 ### API Docs
 
