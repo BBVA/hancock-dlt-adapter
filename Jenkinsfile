@@ -8,6 +8,27 @@ def lint() {
   }
 }
 
+def docs() {
+  stage('Docs'){
+    container('node'){
+      sh """
+        yarn run docs
+      """
+      upload_doc_shuttle_stage(docPath="documentation", docName="docs")
+    }
+  }
+}
+
+def unit_tests() {
+stage('Unit tests'){
+    container('node'){
+      sh """
+        yarn run coverage
+      """
+    }
+  }
+}
+
 nodePipeline{
 
   // ---- DEVELOP ----
@@ -26,13 +47,9 @@ nodePipeline{
 
     lint()
 
-    stage('Unit tests'){
-      container('node'){
-        sh """
-          yarn run coverage
-        """
-      }
-    }
+    unit_tests()
+
+    docs()
 
     docker_shuttle_stage()
 
@@ -59,23 +76,9 @@ nodePipeline{
 
     lint()
 
-    stage('Unit tests'){
-      container('node'){
-        sh """
-          yarn run coverage
-        """
-      }
-    }
+    unit_tests()
     
-    stage('Docs'){
-      container('node'){
-        sh """
-          yarn run docs
-        """
-        upload_doc_shuttle_stage(docPath="documentation", docName="docs")
-      }
-    }
-
+    docs()
 
     check_unlocked_in_RC_shuttle_stage()
 
