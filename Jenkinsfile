@@ -11,10 +11,8 @@ def lint() {
 def docs() {
   stage('Docs'){
     container('node'){
-      sh """
-        yarn run docs
-      """
-      upload_doc_shuttle_stage(docPath="documentation", docName="docs")
+      sh "yarn run docs"
+      upload_doc_shuttle_stage(docName: "docs", docPath: "./documentation")
     }
   }
 }
