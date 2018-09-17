@@ -20,12 +20,12 @@ With node and npm or yarn:
 ```bash
   # With npm
   npm install
-  npm build:ts
+  npm run build:ts
   npm run serve:prod
 
   # With yarn
   yarn install
-  yarn build:ts
+  yarn run build:ts
   yarn run serve:prod
 ```
 
