@@ -2,12 +2,12 @@ import 'jest';
 import { AggregationCursor, Collection } from '../../../../kst-hancock-ms-dlt-broker/node_modules/@types/mongodb';
 import { IEthereumContractAbiDbModel, IEthereumContractInstanceDbModel } from '../../models/ethereum';
 import * as db from '../../utils/db';
-import * as utils from '../../utils/utils';
+import * as utils from '../../utils/ethereum/utils';
 import * as ethereumDb from '../ethereum';
 
 jest.mock('../../utils/config');
 jest.mock('../../utils/db');
-jest.mock('../../utils/utils');
+jest.mock('../../utils/ethereum/utils');
 jest.mock('mongodb');
 
 describe('dbEthereum', async () => {

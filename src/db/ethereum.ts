@@ -2,7 +2,7 @@ import { AggregationCursor, Collection, Db, FindAndModifyWriteOpResultObject, In
 import { IEthereumContractAbiDbModel, IEthereumContractDbModel, IEthereumContractInstanceDbModel } from '../models/ethereum';
 import config from '../utils/config';
 import * as db from '../utils/db';
-import { getScQueryByAddressOrAlias } from '../utils/utils';
+import { getScQueryByAddressOrAlias } from '../utils/ethereum/utils';
 
 const database: string = config.db.ethereum.database;
 const contractsInstancesCollection: string = config.db.ethereum.collections.contractInstances;

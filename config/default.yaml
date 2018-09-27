@@ -10,6 +10,13 @@ app:
     base: ''
     externalBase: ''
   blockchain:
+    bitcoin:
+      nodeProtocol: http
+      nodeHost: bitcoind
+      nodePort: 18332
+      apiProtocol: http
+      apiHost: bitcore
+      apiPort: 3033
     ethereum:
       protocol: http
       host: ganache

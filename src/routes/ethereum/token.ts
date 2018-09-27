@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as scController from '../../controllers/ethereum';
 import { paramValidationError } from '../../controllers/paramValidationError';
-import { addressPattern } from '../../utils/utils';
+import { addressPattern } from '../../utils/ethereum/utils';
 
 export const tokenRouter = ExpressRouter();
 

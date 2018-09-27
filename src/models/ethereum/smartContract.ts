@@ -1,4 +1,5 @@
 import responses from '../../utils/responses';
+import { address } from '../common';
 import { ContractAbi, ContractBin } from './';
 
 // REQUESTS
@@ -14,31 +15,31 @@ export const SC_DEFAULT_ACTION: IEthereumSmartContractRequestAction = SC_REQUEST
 
 export interface IEthereumSmartContractInvokeByQueryRequest {
   method: string;
-  from: string;
+  from: address;
   action?: IEthereumSmartContractRequestAction;
   params?: string[];
 }
 
 export interface IEthereumSmartContractInvokeRequest extends IEthereumSmartContractInvokeByQueryRequest {
   urlBase: string;
-  to: string;
+  to: address;
 }
 
 export interface IEthereumSmartContractInvokeModel extends IEthereumSmartContractInvokeByQueryRequest {
-  to: string;
+  to: address;
   abi: ContractAbi;
 }
 
 export interface IEthereumSmartContractDeployRequest {
   method: string;
   params?: string[];
-  from: string;
+  from: address;
   urlBase: string;
 }
 
 export interface IEthereumSmartContractDeployModel {
   params?: string[];
-  from: string;
+  from: address;
   abi: ContractAbi;
   bin: ContractBin;
 }
@@ -58,8 +59,8 @@ export interface IEthereumSmartContractResponse {
 }
 
 export interface IEthereumSmartContractRawTxResponse {
-  from: string;
-  to: string;
+  from: address;
+  to: address;
   value: number;
   gas: string;
   gasPrice: string;

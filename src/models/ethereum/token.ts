@@ -1,31 +1,32 @@
 import responses from '../../utils/responses';
+import { address } from '../common';
 
 export enum TokenNames {
   ERC20 = 'erc20',
 }
 
 export interface IEthereumTokenTransferRequest {
-  from: string;
-  to: string;
+  from: address;
+  to: address;
   value: string;
   smartContractAddress: string;
 }
 
 export interface IEthereumTokenTransferByQueryRequest {
-  from: string;
-  to: string;
+  from: address;
+  to: address;
   value: string;
 }
 
 export interface IEthereumTokenApproveTransferRequest {
-  from: string;
+  from: address;
   spender: string;
   value: string;
   smartContractAddress: string;
 }
 
 export interface IEthereumTokenApproveTransferByQueryRequest {
-  from: string;
+  from: address;
   spender: string;
   value: string;
 }
@@ -62,14 +63,14 @@ export interface IEthereumTokenMetadataResponse {
 }
 
 export interface IEthereumTokenAllowanceRequest {
-  from: string;
+  from: address;
   tokenOwner: string;
   spender: string;
   smartContractAddress: string;
 }
 
 export interface IEthereumTokenAllowanceByQueryRequest {
-  from: string;
+  from: address;
   tokenOwner: string;
   spender: string;
 }

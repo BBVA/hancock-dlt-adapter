@@ -38,3 +38,8 @@ declare module 'express-jsonschema' {
     }
   }
 }
+
+declare module 'bitcoin-core' {
+  const Client: any;
+  export = Client;
+}

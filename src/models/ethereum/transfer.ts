@@ -1,8 +1,9 @@
 import responses from '../../utils/responses';
+import { address } from '../common';
 
 export interface IEthereumTransferSendRequest {
-  from: string;
-  to: string;
+  from: address;
+  to: address;
   value: string;
   data?: string;
 }
