@@ -1,4 +1,4 @@
-# Contributing to MirrorGate
+# Contributing to Hancock
 
 We would love for you to contribute to MirrorGate and help make it better. As a contributor, here are the guidelines we would like you to follow:
 
