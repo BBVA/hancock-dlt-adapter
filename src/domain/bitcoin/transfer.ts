@@ -1,10 +1,11 @@
-import { IEthereumTransferSendRequest } from '../../models/ethereum';
+import { IBitcoinTransferSendRequest } from '../../models/bitcoin';
+import { getBitcoinClient } from '../../utils/bitcoin';
 import { error } from '../../utils/error';
 import logger from '../../utils/logger';
 import * as utils from '../../utils/utils';
 import { hancockBitcoinTransferError } from './models/error';
 
-export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
+export async function sendTransfer(transfer: IBitcoinTransferSendRequest): Promise<any> {
 
   try {
 
@@ -12,15 +13,24 @@ export async function sendTransfer(transfer: IEthereumTransferSendRequest): Prom
       transfer.data = utils.strToHex(transfer.data);
     }
 
-    return new Promise<any>((resolve, reject) => {
+    logger.info(`Sending Transfer`, transfer);
 
-      logger.info(`Sending Transfer`, transfer);
+    const client: any = await getBitcoinClient();
 
-      ETH.web3.eth.sendTransaction(transfer, (err: any, result: any) => err
-        ? reject(err)
-        : resolve(result));
+    const Transaction = client.lib.Transaction;
+    const apiClient = client.api;
 
-    });
+    const utxos: any = await apiClient.getUtxo(transfer.from);
+
+    const transaction = new Transaction()
+      .from(utxos)
+      .to(transfer.to, parseInt(transfer.value, 10))
+      .change(transfer.from)
+      .serialize({
+        disableIsFullySigned: true,
+      });
+
+    return transaction;
 
   } catch (err) {
 

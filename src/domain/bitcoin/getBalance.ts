@@ -2,7 +2,7 @@ import { getBitcoinClient } from '../../utils/bitcoin';
 import { error } from '../../utils/error';
 import { hancockBitcoinBalanceError } from './models/error';
 
-export async function getBalance(address: string): Promise<number> {
+export async function getBalance(address: string): Promise<string> {
 
   try {
 

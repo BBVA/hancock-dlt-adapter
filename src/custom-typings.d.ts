@@ -43,3 +43,8 @@ declare module 'bitcoin-core' {
   const Client: any;
   export = Client;
 }
+
+declare module 'bitcore-lib' {
+  const Client: any;
+  export = Client;
+}
