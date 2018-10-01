@@ -58,7 +58,7 @@ function initBitcoinClient() {
 
 }
 
-export async function getBitcoinClient() {
+export async function getBitcoinClient(): Promise<any> {
 
   let connReady: boolean;
 

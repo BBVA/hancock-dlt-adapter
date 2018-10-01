@@ -1,24 +1,16 @@
 
 import 'jest';
+import * as bitcoin from '../../../utils/bitcoin';
 import * as getBalanceDomain from '../getBalance';
-import { hancockEthereumBalanceError } from '../models/error';
+import { hancockBitcoinBalanceError } from '../models/error';
 
-jest.mock('../../../utils/utils');
+jest.mock('../../../utils/bitcoin');
 jest.mock('../../../utils/error');
 
 describe('getBalanceDomain', () => {
 
-  const address: string = '0xWhatever';
-
-  const getBalanceMock: jest.Mock = jest.fn();
-
-  global.ETH = {
-    web3: {
-      eth: {
-        getBalance: getBalanceMock,
-      },
-    },
-  };
+  const address: string = 'mrTv3qiqTco1qHMBcwVjzJDuddDwKLNE4W';
+  const getBalanceMock: jest.Mock = (bitcoin as any).__client__.api.getBalance;
 
   beforeEach(() => {
 
@@ -34,15 +26,14 @@ describe('getBalanceDomain', () => {
 
     const result: any = await getBalanceDomain.getBalance(address);
 
-    const firstCall = getBalanceMock.mock.calls[0];
-    expect(firstCall[0]).toEqual(address);
+    expect(getBalanceMock).toHaveBeenCalledWith(address);
     expect(result).toEqual(response);
 
   });
 
   it('should fail if there are errors', async () => {
 
-    getBalanceMock.mockRejectedValueOnce(hancockEthereumBalanceError);
+    getBalanceMock.mockRejectedValueOnce(hancockBitcoinBalanceError);
 
     try {
 
@@ -51,9 +42,8 @@ describe('getBalanceDomain', () => {
 
     } catch (e) {
 
-      const firstCall = getBalanceMock.mock.calls[0];
-      expect(firstCall[0]).toEqual(address);
-      expect(e).toEqual(hancockEthereumBalanceError);
+      expect(getBalanceMock).toHaveBeenCalledWith(address);
+      expect(e).toEqual(hancockBitcoinBalanceError);
 
     }
 

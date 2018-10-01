@@ -1,5 +1,5 @@
 import { IBitcoinTransferSendRequest } from '../../models/bitcoin';
-import { getBitcoinClient } from '../../utils/bitcoin';
+import { getBitcoinClient } from '../../utils/bitcoin/bitcoin';
 import { error } from '../../utils/error';
 import logger from '../../utils/logger';
 import * as utils from '../../utils/utils';
@@ -8,10 +8,6 @@ import { hancockBitcoinTransferError } from './models/error';
 export async function sendTransfer(transfer: IBitcoinTransferSendRequest): Promise<any> {
 
   try {
-
-    if (transfer.data) {
-      transfer.data = utils.strToHex(transfer.data);
-    }
 
     logger.info(`Sending Transfer`, transfer);
 
@@ -25,12 +21,16 @@ export async function sendTransfer(transfer: IBitcoinTransferSendRequest): Promi
     const transaction = new Transaction()
       .from(utxos)
       .to(transfer.to, parseInt(transfer.value, 10))
-      .change(transfer.from)
-      .serialize({
-        disableIsFullySigned: true,
-      });
+      .change(transfer.from);
 
-    return transaction;
+    if (transfer.data) {
+      transfer.data = utils.strToHex(transfer.data).substr(80);
+      transaction.addData(transfer.data);
+    }
+
+    return transaction.serialize({
+      disableIsFullySigned: true,
+    });
 
   } catch (err) {
 
