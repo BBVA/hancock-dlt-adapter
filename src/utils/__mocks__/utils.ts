@@ -2,6 +2,4 @@ export const createReply = jest.fn().mockImplementation((reply: any, result?: an
   return true;
 });
 
-export const getScQueryByAddressOrAlias = jest.fn();
-
 export const strToHex = jest.fn();

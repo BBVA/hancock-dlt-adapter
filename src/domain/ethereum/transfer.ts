@@ -2,7 +2,7 @@ import { IEthereumTransferSendRequest } from '../../models/ethereum';
 import { error } from '../../utils/error';
 import logger from '../../utils/logger';
 import * as utils from '../../utils/utils';
-import { hancockEthereumTrasnferError } from './models/error';
+import { hancockEthereumTransferError } from './models/error';
 
 export async function sendTransfer(transfer: IEthereumTransferSendRequest): Promise<any> {
 
@@ -24,7 +24,7 @@ export async function sendTransfer(transfer: IEthereumTransferSendRequest): Prom
 
   } catch (err) {
 
-    throw error(hancockEthereumTrasnferError, err);
+    throw error(hancockEthereumTransferError, err);
 
   }
 }

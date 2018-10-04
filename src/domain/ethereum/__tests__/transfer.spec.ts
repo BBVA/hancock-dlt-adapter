@@ -1,7 +1,7 @@
 
 import 'jest';
 import * as utils from '../../../utils/utils';
-import { hancockEthereumTrasnferError } from '../models/error';
+import { hancockEthereumTransferError } from '../models/error';
 import * as transferDomain from '../transfer';
 
 jest.mock('../../../utils/utils');
@@ -57,7 +57,7 @@ describe('transferDomain', () => {
     delete transferPayload.data;
 
     sendTransactionMock.mockImplementationOnce((transfer, callback) => {
-      callback(hancockEthereumTrasnferError);
+      callback(hancockEthereumTransferError);
     });
 
     try {
@@ -70,7 +70,7 @@ describe('transferDomain', () => {
       const firstCall = sendTransactionMock.mock.calls[0];
       expect(firstCall[0]).toEqual(transferPayload);
       expect(firstCall[0].data).toBeUndefined();
-      expect(e).toEqual(hancockEthereumTrasnferError);
+      expect(e).toEqual(hancockEthereumTransferError);
 
     }
 

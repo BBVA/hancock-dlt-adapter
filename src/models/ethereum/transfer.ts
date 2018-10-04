@@ -1,11 +1,7 @@
 import responses from '../../utils/responses';
+import { IHancockTransferSendRequest } from '../common';
 
-export interface IEthereumTransferSendRequest {
-  from: string;
-  to: string;
-  value: string;
-  data?: string;
-}
+export type IEthereumTransferSendRequest = IHancockTransferSendRequest;
 
 export interface IEthereumTransferResponse {
   code: string;

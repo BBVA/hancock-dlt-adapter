@@ -2,7 +2,7 @@ import { Router as ExpressRouter } from 'express';
 import { param } from 'express-validator/check';
 import * as ethereumController from '../../controllers/ethereum';
 import { paramValidationError } from '../../controllers/paramValidationError';
-import { addressPattern } from '../../utils/utils';
+import { addressPattern } from '../../utils/ethereum/utils';
 import { smartContractRouter } from './smartContract';
 import { tokenRouter } from './token';
 import { transferRouter } from './transfer';
