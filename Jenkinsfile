@@ -32,7 +32,13 @@ nodePipeline{
   // ---- DEVELOP ----
   if (env.BRANCH_NAME == 'develop') {
 
-    try { sonar_shuttle_stage() }
+    try {
+      sonar_shuttle_stage()
+    } catch (exc) {
+      echo 'Sonar shuttle stage crashed!'
+      echo 'Continue with the execution'
+      throw
+    }
 
     stage('Install Dependencies'){
       container('node'){
