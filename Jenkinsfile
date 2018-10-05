@@ -37,7 +37,6 @@ nodePipeline{
     } catch (exc) {
       echo 'Sonar shuttle stage crashed!'
       echo 'Continue with the execution'
-      throw
     }
 
     stage('Install Dependencies'){
