@@ -106,6 +106,14 @@ export async function getInstanceByAlias(alias: string): Promise<IEthereumContra
 
 }
 
+export async function getInstancesByAbi(abiName: string): Promise<IEthereumContractInstanceDbModel[]> {
+
+  const coll: Collection = await _getCollection(contractsInstancesCollection);
+
+  return coll.find({ abiName }).toArray();
+
+}
+
 export async function deleteSmartContractByAddressOrAlias(addressOrAlias: string): Promise<FindAndModifyWriteOpResultObject> {
 
   const coll: Collection = await _getCollection(contractsInstancesCollection);
