@@ -221,6 +221,17 @@ securitySchemes:
                 type: GetBalanceResponse
 
   /token:
+    get:
+      description: Retrieve the list of all token registered in Hancock
+      responses:
+        200:
+          body:
+            application/json:
+              type: SmartContractListResponse
+        500:
+          body:
+            application/json:
+              type: GenericResponse
     /{address|alias}: 
       uriParameters: 
         address|alias: 

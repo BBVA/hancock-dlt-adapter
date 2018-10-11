@@ -189,6 +189,17 @@ describe('dbEthereum', async () => {
 
     });
 
+    it('::getInstancesByAbi should call getCollection and call dbClient.find with params', async () => {
+
+      const mockedAbi: string = 'mockedAbi';
+
+      await ethereumDb.getInstancesByAbi(mockedAbi);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(coll.find).toHaveBeenCalledWith({ abiName: mockedAbi });
+
+    });
+
     it('::deleteSmartContractByAddressOrAlias should call getCollection and call dbClient.findOneAndDelete with params', async () => {
 
       const mockedAddressOrAlias: string = 'mockAddressOrAlias';

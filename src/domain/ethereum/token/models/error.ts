@@ -8,3 +8,4 @@ export const hancockContractTokenTransferError = new HancockError('50020', 500, 
 export const hancockContractTokenTransferFromError = new HancockError('50021', 500, 'Smart Contract Token - TransferFrom Error');
 export const hancockContractTokenBalanceError = new HancockError('50022', 500, 'Smart Contract Token - Balance Error');
 export const hancockContractTokenDeleteError = new HancockError('50023', 500, 'Smart Contract Token - Delete Error');
+export const hancockContractTokenRetrieveError = new HancockError('50025', 500, 'Smart Contract Token - Retrieve Error');
