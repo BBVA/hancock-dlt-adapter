@@ -7,6 +7,7 @@ import { getScQueryByAddressOrAlias } from '../utils/ethereum/utils';
 const database: string = config.db.ethereum.database;
 const contractsInstancesCollection: string = config.db.ethereum.collections.contractInstances;
 const contractsAbisCollection: string = config.db.ethereum.collections.contractAbis;
+const tokenInstancesCollection: string = config.db.ethereum.collections.tokenInstances;
 
 // tslint:disable-next-line:variable-name
 export const _getCollection = async (collection: string): Promise<Collection> => {
@@ -29,6 +30,31 @@ export const _aggregateCollections = (coll: Collection, query?: any): Aggregatio
       $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ['$abiJoin', 0] }, '$$ROOT'] } },
     },
     { $project: { abiJoin: 0, _id: 0, name: 0 } },
+  ];
+
+  if (query) {
+    stages.unshift({ $match: query });
+  }
+
+  return coll.aggregate(stages);
+};
+
+// tslint:disable-next-line:variable-name
+export const _aggregateInstancesCollections = (coll: Collection, query?: any): AggregationCursor<any> => {
+
+  const stages: any[] = [
+    {
+      $lookup: {
+        as: 'addressJoin',
+        foreignField: 'address',
+        from: tokenInstancesCollection,
+        localField: 'address',
+      },
+    },
+    {
+      $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ['$addressJoin', 0] }, '$$ROOT'] } },
+    },
+    { $project: { addressJoin: 0, _id: 0 } },
   ];
 
   if (query) {
@@ -110,7 +136,7 @@ export async function getInstancesByAbi(abiName: string): Promise<IEthereumContr
 
   const coll: Collection = await _getCollection(contractsInstancesCollection);
 
-  return coll.find({ abiName }).toArray();
+  return _aggregateInstancesCollections(coll, { abiName }).toArray();
 
 }
 
