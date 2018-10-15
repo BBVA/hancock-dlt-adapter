@@ -42,7 +42,7 @@ try {
     let res = [
       collection.drop(),
       collection.createIndex({ 'address': 1 }, { unique: true }),
-      collection.insert({ "name": "tkn", "address": "0x9dee2e4f57ddb4bc86d53ead86a5db718ea64c00", "symbol": "TKN" , "decimals": 10}),
+      collection.insert({ "name": "tkn", "address": "0x9dee2e4f57ddb4bc86d53ead86a5db718ea64c00", "symbol": "TKN" , "decimals": 10, "totalSupply":100000 }),
     ];
 
     printjson(res);
