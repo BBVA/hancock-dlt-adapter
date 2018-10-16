@@ -23,7 +23,7 @@ const transferFromTokenByQuerySchema = JSON.parse(readFileSync(`${schemaPath}/re
 tokenRouter
   .param('addressOrAlias', param('addressOrAlias').exists().isString())
   .param('address', param('address').exists().matches(addressPattern))
-  .get('', scController.tokenFindAll)
+  .get('/', scController.tokenFindAll)
   .post('/register', validate({body: registerTokenSchema}), scController.tokenRegister)
   .get('/:addressOrAlias/metadata', paramValidationError, scController.getTokenMetadataByQuery)
   .get('/:addressOrAlias/balanceOf/:address', paramValidationError, scController.tokenBalanceOfByQuery)
