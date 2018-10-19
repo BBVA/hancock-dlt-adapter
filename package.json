@@ -4,8 +4,7 @@
   "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
   "authors": [
-    "Javier Moreno Molina <javier.moreno.molina@bbva.com",
-    "Angel Manzano Alcaraz <angel.manzano.contractor@bbva.com>"
+    "BBVA NDB - R&D Team"
   ],
   "license": "ISC",
   "dependencies": {
