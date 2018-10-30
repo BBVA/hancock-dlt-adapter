@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "description": "Transactions schema",
+  "type": "object",
+  "properties": {
+    "method": {
+      "type": "string",
+      "description": "Method to invoke in the smart contract"
+    },
+    "action": {
+      "type": "string",
+      "enum": ["send", "call"]
+    },
+    "params": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Params to pass to the method"
+    },
+    "abi": {
+      "type": "array",
+      "description": "Abi of the Smart Contract"
+    },
+    "from": {
+      "type": "string"
+    },
+    "to": {
+      "type": "string",
+      "description": "Address of the smart contract to invoke"
+    }
+  },
+  "required": [ "method", "abi", "from", "to" ]
+}
+

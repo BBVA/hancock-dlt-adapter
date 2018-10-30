@@ -4,6 +4,7 @@ import {
   ethereumSmartContractSuccessResponse,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
+  IEthereumSmartContractInvokeAbiRequest,
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 
@@ -13,6 +14,17 @@ export async function invoke(req: Request, res: Response, next: NextFunction) {
 
   return domain
     .invoke(params)
+    .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
+    .catch(next);
+
+}
+
+export async function invokeAbi(req: Request, res: Response, next: NextFunction) {
+
+  const params: IEthereumSmartContractInvokeAbiRequest = req.body;
+
+  return domain
+    .invokeAbi(params)
     .then((result: any) => utils.createReply(res, ethereumSmartContractSuccessResponse, result))
     .catch(next);
 

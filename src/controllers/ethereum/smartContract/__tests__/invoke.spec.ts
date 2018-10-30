@@ -71,6 +71,50 @@ describe('ethereumScInvokeController', async () => {
 
   });
 
+  describe('should call domain.invokeAbi', async () => {
+
+    const domainInvokeAbiMock = (domain.invokeAbi as jest.Mock);
+
+    beforeEach(() => {
+
+      req = {
+        body: {},
+      };
+
+      domainInvokeAbiMock.mockReset();
+
+    });
+
+    it('and return the response', async () => {
+
+      domainInvokeAbiMock.mockResolvedValue('mockResult');
+
+      await ethereumScInvokeController.invokeAbi(req, res, next);
+
+      expect(domainInvokeAbiMock).toHaveBeenCalledTimes(1);
+      expect(domainInvokeAbiMock).toHaveBeenCalledWith(req.body);
+
+      expect(utilsCreateReplyMock).toHaveBeenCalledTimes(1);
+      expect(utilsCreateReplyMock).toHaveBeenCalledWith(res, ethereumSmartContractSuccessResponse, 'mockResult');
+
+    });
+
+    it('and fail if there is a problem', async () => {
+
+      const errThrowed = new Error('Boom!');
+      domainInvokeAbiMock.mockRejectedValue(errThrowed);
+
+      await ethereumScInvokeController.invokeAbi(req, res, next);
+
+      expect(domainInvokeAbiMock).toHaveBeenCalledTimes(1);
+      expect(domainInvokeAbiMock).toHaveBeenCalledWith(req.body);
+
+      expect(next).toHaveBeenCalledTimes(1);
+
+    });
+
+  });
+
   describe('should call domain.invokeByQuery', async () => {
 
     const domainInvokeByQueryMock = (domain.invokeByQuery as jest.Mock);

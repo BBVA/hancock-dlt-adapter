@@ -25,6 +25,11 @@ export interface IEthereumSmartContractInvokeRequest extends IEthereumSmartContr
   to: address;
 }
 
+export interface IEthereumSmartContractInvokeAbiRequest extends IEthereumSmartContractInvokeByQueryRequest {
+  abi: string;
+  to: address;
+}
+
 export interface IEthereumSmartContractInvokeModel extends IEthereumSmartContractInvokeByQueryRequest {
   to: address;
   abi: ContractAbi;
