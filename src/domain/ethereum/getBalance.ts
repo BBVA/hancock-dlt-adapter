@@ -1,7 +1,7 @@
 import { error } from '../../utils/error';
 import { hancockEthereumBalanceError } from './models/error';
 
-export async function getBalance(address: string): Promise<number> {
+export async function getBalance(address: string): Promise<string> {
 
   try {
 

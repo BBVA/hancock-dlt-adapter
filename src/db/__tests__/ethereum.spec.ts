@@ -66,6 +66,7 @@ describe('dbEthereum', async () => {
 
     let getCollMock: jest.Mock;
     let aggregateCollMock: jest.Mock;
+    let aggregateTokenCollMock: jest.Mock;
 
     let coll: any;
     let cursor: any;
@@ -80,6 +81,7 @@ describe('dbEthereum', async () => {
 
       getCollMock = jest.spyOn(ethereumDb, '_getCollection').mockResolvedValue(coll);
       aggregateCollMock = jest.spyOn(ethereumDb, '_aggregateCollections').mockReturnValue(cursor);
+      aggregateTokenCollMock = jest.spyOn(ethereumDb, '_aggregateInstancesCollections').mockReturnValue(cursor);
       // getCollMock = (ethereumDb._getCollection as jest.Mock);
       // aggregateCollMock = (ethereumDb._aggregateCollections as jest.Mock);
 
@@ -186,6 +188,17 @@ describe('dbEthereum', async () => {
 
       expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
       expect(coll.findOne).toHaveBeenCalledWith({ alias: mockedAlias });
+
+    });
+
+    it('::getInstancesByAbi should call getCollection and call dbClient.find with params', async () => {
+
+      const mockedAbi: string = 'mockedAbi';
+
+      await ethereumDb.getInstancesByAbi(mockedAbi);
+
+      expect(getCollMock).toHaveBeenCalledWith(collNameInstances);
+      expect(aggregateTokenCollMock).toHaveBeenCalledWith(coll, { abiName: mockedAbi });
 
     });
 

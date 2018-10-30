@@ -32,7 +32,12 @@ nodePipeline{
   // ---- DEVELOP ----
   if (env.BRANCH_NAME == 'develop') {
 
-    // sonar_shuttle_stage()
+    try {
+      sonar_shuttle_stage()
+    } catch (exc) {
+      echo 'Sonar shuttle stage crashed!'
+      echo 'Continue with the execution'
+    }
 
     stage('Install Dependencies'){
       container('node'){
@@ -53,7 +58,7 @@ nodePipeline{
 
     qa_data_shuttle_stage()
 
-    deploy_shuttle_stage(project: "blockchainhub", environment: "develop", askForConfirmation: false)
+    deploy_shuttle_stage(project: "hancock", environment: "develop", askForConfirmation: false)
 
 
   }
@@ -86,7 +91,7 @@ nodePipeline{
 
     logic_label_shuttle_stage()
 
-    deploy_shuttle_stage(project: "blockchainhub", environment: "qa", askForConfirmation: false)
+    deploy_shuttle_stage(project: "hancock", environment: "qa", askForConfirmation: false)
 
     set2rc_shuttle_stage()
 

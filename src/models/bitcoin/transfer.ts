@@ -1,11 +1,7 @@
 import responses from '../../utils/responses';
+import { IHancockTransferSendRequest } from '../common';
 
-export interface IBitcoinTransferSendRequest {
-  from: string;
-  to: string;
-  value: string;
-  data?: string;
-}
+export type IBitcoinTransferSendRequest = IHancockTransferSendRequest;
 
 export interface IBitcoinTransferResponse {
   code: string;

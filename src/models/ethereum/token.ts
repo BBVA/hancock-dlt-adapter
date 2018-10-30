@@ -105,6 +105,12 @@ export const ethereumTokenMetadataSuccessResponse: IEthereumTokenResponse = {
   statusCode: 200,
 };
 
+export const ethereumTokenFindAllSuccessResponse: IEthereumTokenResponse = {
+  code: responses.ndbgeneral200.code,
+  message: 'Token Find All - Success',
+  statusCode: 200,
+};
+
 export const ethereumTokenTransferSuccessResponse: IEthereumTokenResponse = {
   code: responses.ndbgeneral200.code,
   message: 'Token Transfer - Success',

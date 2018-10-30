@@ -1,4 +1,5 @@
 import * as NodeClient from 'bitcoin-core';
+import * as bitcoreLib from 'bitcore-lib';
 import * as request from 'request-promise-native';
 import { address } from '../../models/common';
 import config from '../config';
@@ -18,17 +19,23 @@ class BitcoinApiClient {
   }
 
   public async getInfo(): Promise<any> {
-    return request(`${this.url}/status`);
+    return request(`${this.url}/status`, { json: true });
   }
 
-  public async getBalance(addr: address): Promise<any> {
+  public async getBalance(addr: address): Promise<string> {
     return request(`${this.url}/addr/${addr}/balance`);
   }
+
+  public async getUtxo(addr: address): Promise<any> {
+    return request(`${this.url}/addr/${addr}/utxo`, { json: true });
+  }
+
 }
 
 class BitcoinClient {
   constructor(
     public node: any,
+    public lib: any,
     public api: BitcoinApiClient) {
   }
 }
@@ -47,11 +54,11 @@ function initBitcoinClient() {
     port: `${cfg.apiPort}`,
   });
 
-  bitcoinInstance = new BitcoinClient(node, api);
+  bitcoinInstance = new BitcoinClient(node, bitcoreLib, api);
 
 }
 
-export async function getBitcoinClient() {
+export async function getBitcoinClient(): Promise<any> {
 
   let connReady: boolean;
 

@@ -34,8 +34,23 @@ try {
     printjson(res);
   }
 
+  function initTokenInstancesDB() {
+
+    hancockDb = db.getSiblingDB("hancock");
+    collection = hancockDb.sc_token;
+
+    let res = [
+      collection.drop(),
+      collection.createIndex({ 'address': 1 }, { unique: true }),
+      collection.insert({ "name": "tkn", "address": "0x9dee2e4f57ddb4bc86d53ead86a5db718ea64c00", "symbol": "TKN" , "decimals": 10, "totalSupply":100000 }),
+    ];
+
+    printjson(res);
+  }
+
   initSmartContractAbisDB();
   initSmartContractInstancesDB();
+  initTokenInstancesDB();
 
 } catch (error) {
 

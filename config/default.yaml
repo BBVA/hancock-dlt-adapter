@@ -33,6 +33,7 @@ app:
       collections:
         contractAbis: sc_abi
         contractInstances: sc_instance
+        tokenInstances: sc_token
   logger:
     logLevel: debug
   protocol: 'hancock://qr?code=__CODE__'  

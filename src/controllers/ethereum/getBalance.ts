@@ -9,7 +9,7 @@ export async function getBalance(req: Request, res: Response, next: NextFunction
 
   return domain
     .getBalance(address)
-    .then((balance: number) => utils.createReply(res, ethereumOkResponse, { balance }))
+    .then((balance: string) => utils.createReply(res, ethereumOkResponse, { balance }))
     .catch(next);
 
 }

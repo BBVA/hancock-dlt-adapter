@@ -7,3 +7,4 @@ export * from './common';
 export * from './approve';
 export * from './balanceOf';
 export * from './delete';
+export * from './retrieve';
