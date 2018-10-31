@@ -3,6 +3,7 @@ import {
   IEthereumContractDbModel,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
+  IEthereumSmartContractInvokeAbiRequest,
 } from '../../../models/ethereum/smartContract';
 import { error } from '../../../utils/error';
 import logger from '../../../utils/logger';
@@ -21,6 +22,31 @@ export async function invoke(invokeRequest: IEthereumSmartContractInvokeRequest)
     const invokeModel: IEthereumSmartContractInvokeModel = {
       ...invokeRequest,
       abi,
+    } as IEthereumSmartContractInvokeModel;
+
+    return await adaptContractInvoke(invokeModel);
+
+  } catch (err) {
+
+    throw error(hancockContractInvokeError, err);
+
+  }
+}
+
+export async function invokeAbi(invokeRequest: IEthereumSmartContractInvokeAbiRequest): Promise<any> {
+
+  logger.debug('contract invoke abi');
+
+  try {
+    const abi: any[] = invokeRequest.abi as any;
+
+    const invokeModel: IEthereumSmartContractInvokeModel = {
+      action: invokeRequest.action,
+      from: invokeRequest.from,
+      method: invokeRequest.method,
+      params: invokeRequest.params,
+      abi: abi,
+      to: invokeRequest.to,
     } as IEthereumSmartContractInvokeModel;
 
     return await adaptContractInvoke(invokeModel);
