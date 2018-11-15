@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import * as domain from '../../../domain/ethereum';
 import {
   ethereumSmartContractSuccessResponse,
+  IEthereumSmartContractInvokeAbiRequest,
   IEthereumSmartContractInvokeByQueryRequest,
   IEthereumSmartContractInvokeRequest,
-  IEthereumSmartContractInvokeAbiRequest,
 } from '../../../models/ethereum';
 import * as utils from '../../../utils/utils';
 
