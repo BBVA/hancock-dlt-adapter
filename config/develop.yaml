@@ -20,7 +20,7 @@ app:
     ethereum:
       protocol: http
       host: ganache
-      port: 
+      port: 8545
   db:
     protocol: mongodb
     hosts: mongo:27017
