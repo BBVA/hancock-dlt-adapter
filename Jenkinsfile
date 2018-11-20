@@ -34,6 +34,9 @@ stage('Unit tests'){
       sh """
         yarn run coverage
       """
+      sh('tar -cvzf reports.tar.gz tests/reports')
+      archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
+      stash name: "reports", includes: "reports.tar.gz"
     }
   }
 }
