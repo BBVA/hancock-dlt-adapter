@@ -115,7 +115,7 @@ export async function adaptContractInvoke<T = IEthereumSmartContractRawTxRespons
 
           if (err) {
 
-            throw error(hancockContractSendError, err);
+            reject(error(hancockContractSendError, err));
 
           } else {
 
@@ -137,7 +137,7 @@ export async function adaptContractInvoke<T = IEthereumSmartContractRawTxRespons
 
           if (err) {
 
-            throw error(hancockContractCallError, err);
+            reject(error(hancockContractCallError, err));
 
           } else {
 
