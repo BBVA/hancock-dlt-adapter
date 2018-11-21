@@ -1,6 +1,6 @@
 def install_dependencies() {
   stage('Install Dependencies'){
-    container('node-puppeter'){
+    container('node'){
       sh """
         yarn cache clean --force
         yarn install
@@ -11,7 +11,7 @@ def install_dependencies() {
 
 def lint() {
   stage('Linter'){
-    container('node-puppeter'){
+    container('node'){
       sh """
         yarn run lint
       """
@@ -21,7 +21,7 @@ def lint() {
 
 def docs() {
   stage('Docs'){
-    container('node-puppeter'){
+    container('node'){
       sh "yarn run docs"
       upload_doc_shuttle_stage(docName: "docs", docPath: "./documentation")
     }
@@ -30,11 +30,12 @@ def docs() {
 
 def unit_tests() {
 stage('Unit tests'){
-    container('node-puppeter'){
+    container('node'){
       sh """
         yarn run coverage
       """
       sh('tar -cvzf reports.tar.gz tests/reports')
+      sh('cp reports.tar.gz /home/jenkins')
       archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
       stash name: "reports", includes: "reports.tar.gz"
     }
