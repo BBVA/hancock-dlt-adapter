@@ -56,7 +56,7 @@ nodePipeline{
 
     install_dependencies()
 
-    lint()
+    //lint()
 
     unit_tests()
 
