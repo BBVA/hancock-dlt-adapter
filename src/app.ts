@@ -14,7 +14,7 @@ export async function run() {
     .then(() => {
 
       logger.info('MongoDB connection open');
-
+ 
       const app = getApp();
       app.use(config.server.base, appRouter);
       app.listen(config.server.port, (error: any) => {
