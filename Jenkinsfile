@@ -1,6 +1,6 @@
 def install_dependencies() {
   stage('Install Dependencies'){
-    container('node'){
+    container('node-puppeter'){
       sh """
         yarn cache clean --force
         yarn install
@@ -11,7 +11,7 @@ def install_dependencies() {
 
 def lint() {
   stage('Linter'){
-    container('node'){
+    container('node-puppeter'){
       sh """
         yarn run lint
       """
@@ -21,7 +21,7 @@ def lint() {
 
 def docs() {
   stage('Docs'){
-    container('node'){
+    container('node-puppeter'){
       sh "yarn run docs"
       upload_doc_shuttle_stage(docName: "docs", docPath: "./documentation")
     }
@@ -30,7 +30,7 @@ def docs() {
 
 def unit_tests() {
 stage('Unit tests'){
-    container('node'){
+    container('node-puppeter'){
       sh """
         yarn run coverage
       """
