@@ -34,9 +34,12 @@ stage('Unit tests'){
       sh """
         yarn run coverage
       """
-      sh('tar -cvzf /home/jenkins/reports.tar.gz tests/reports')
-      archiveArtifacts artifacts: '/home/jenkins/reports.tar.gz', fingerprint: true
-      stash name: "reports", includes: "reports.tar.gz"
+      sh """
+        tar -cvzf reports.tar.gz tests/reports
+        cp reports.tar.gz /home/jenkins
+      """
+      archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
+      stash name: "reports", includes: "/home/jenkins/reports.tar.gz"
     }
   }
 }
