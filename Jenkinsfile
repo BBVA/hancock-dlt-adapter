@@ -34,6 +34,10 @@ stage('Unit tests'){
       sh """
         yarn run coverage
       """
+      sh('tar -cvzf reports.tar.gz tests/reports')
+      sh('cp reports.tar.gz /home/jenkins')
+      archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
+      stash name: "reports", includes: "reports.tar.gz"
     }
   }
 }
@@ -60,7 +64,7 @@ nodePipeline{
 
     docker_shuttle_stage()
 
-    // qa_data_shuttle_stage()
+    qa_data_shuttle_stage()
 
     deploy_shuttle_stage(project: "hancock", environment: "develop", askForConfirmation: false)
 
@@ -88,7 +92,7 @@ nodePipeline{
 
     docker_shuttle_stage()
 
-    // qa_data_shuttle_stage()
+    qa_data_shuttle_stage()
 
     // logic_label_shuttle_stage()
 

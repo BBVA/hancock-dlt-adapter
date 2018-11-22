@@ -1,13 +1,12 @@
 const fs = require('fs');
-// const config = require('config');
-// const cfg = config.get('app');
+const config = require('config');
+const cfg = config.get('app');
 
 const Web3 = require('web3');
 
-// console.log(`ws://${cfg.blockchain.ethereum.host}:${cfg.blockchain.ethereum.port}`);
+console.log(`ws://${cfg.blockchain.ethereum.host}:${cfg.blockchain.ethereum.port}`);
 
-//const web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://${cfg.blockchain.ethereum.host}:${cfg.blockchain.ethereum.port}`));
-const web3 = new Web3(new Web3.providers.HttpProvider(`http://localhost:8545`));
+const web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://${cfg.blockchain.ethereum.host}:${cfg.blockchain.ethereum.port}`));
 
 
 web3.eth
@@ -16,24 +15,21 @@ web3.eth
 
     console.log('accounts => \n', accounts);
 
-    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/EIP721.abi', 'utf8'));
-    const bytecode = fs.readFileSync(__dirname + '/contracts/EIP721.bin', 'utf8');
-
-    console.log('bytecode => \n', bytecode);
+    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/ERC20.abi', 'utf8'));
+    const bytecode = fs.readFileSync(__dirname + '/contracts/ERC20.bin', 'utf8');
 
     var contract = new web3.eth.Contract(abi);
     const coinbase = accounts[0];
     // const coinbase = web3.eth.coinbase;
 
-    console.log('coinbase => \n', coinbase);
-
     const tokenSupply = 1000;
-    const tokenName = 'MyNonFungibleToken';
-    const tokenSymbol = 'MNFT';
+    const tokenName = 'Token';
+    const tokenDecimals = 0;
+    const tokenSymbol = 'TKN';
 
     contract.deploy({
       data: bytecode,
-      arguments: []
+      arguments: [tokenSupply, tokenName, tokenDecimals, tokenSymbol]
     })
       .send({
         from: coinbase,

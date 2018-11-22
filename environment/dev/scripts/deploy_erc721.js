@@ -1,7 +1,6 @@
 const fs = require('fs');
 const config = require('config');
 const cfg = config.get('app');
-
 const Web3 = require('web3');
 
 console.log(`ws://${cfg.blockchain.ethereum.host}:${cfg.blockchain.ethereum.port}`);
@@ -15,21 +14,16 @@ web3.eth
 
     console.log('accounts => \n', accounts);
 
-    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/EIP20.abi', 'utf8'));
-    const bytecode = fs.readFileSync(__dirname + '/contracts/EIP20.bin', 'utf8');
+    const abi = JSON.parse(fs.readFileSync(__dirname + '/contracts/ERC721.abi', 'utf8'));
+    const bytecode = fs.readFileSync(__dirname + '/contracts/ERC721.bin', 'utf8');
 
     var contract = new web3.eth.Contract(abi);
     const coinbase = accounts[0];
     // const coinbase = web3.eth.coinbase;
 
-    const tokenSupply = 1000;
-    const tokenName = 'Token';
-    const tokenDecimals = 0;
-    const tokenSymbol = 'TKN';
-
     contract.deploy({
       data: bytecode,
-      arguments: [tokenSupply, tokenName, tokenDecimals, tokenSymbol]
+      arguments: []
     })
       .send({
         from: coinbase,
