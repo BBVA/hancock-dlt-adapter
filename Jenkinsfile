@@ -39,7 +39,7 @@ stage('Unit tests'){
         cp reports.tar.gz /home/jenkins
       """
       archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
-      stash name: "reports", includes: "/home/jenkins/reports.tar.gz"
+      stash name: "reports", includes: "reports.tar.gz"
     }
   }
 }
