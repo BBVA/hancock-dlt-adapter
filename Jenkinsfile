@@ -71,7 +71,7 @@ nodePipeline{
   }
 
   // ---- RELEASE ----
-  if (env.BRANCH_NAME == 'release/*') {
+  if (env.BRANCH_NAME =~ 'release/*') {
 
     try {
       sonar_shuttle_stage()
