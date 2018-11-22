@@ -34,9 +34,8 @@ stage('Unit tests'){
       sh """
         yarn run coverage
       """
-      sh('tar -cvzf reports.tar.gz tests/reports')
-      sh('cp reports.tar.gz /home/jenkins')
-      archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
+      sh('tar -cvzf /home/jenkins/reports.tar.gz tests/reports')
+      archiveArtifacts artifacts: '/home/jenkins/reports.tar.gz', fingerprint: true
       stash name: "reports", includes: "reports.tar.gz"
     }
   }
@@ -88,21 +87,21 @@ nodePipeline{
     
     docs()
 
-    // check_unlocked_in_RC_shuttle_stage()
-
     docker_shuttle_stage()
-
-    qa_data_shuttle_stage()
-
-    // logic_label_shuttle_stage()
+    
+    logic_label_shuttle_stage()
 
     deploy_shuttle_stage(project: "hancock", environment: "qa", askForConfirmation: false)
 
-    // set2rc_shuttle_stage()
+    qa_data_shuttle_stage()
+
+    set2rc_shuttle_stage()
 
     stage ('Functional Tests') {
-      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master'
+      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: ${env.GIT_COMMIT}], [$class: 'StringParameterValue', name: 'VERSION', value: ${env.BRANCH_NAME}]]
     }
+    
+    create_release_from_RC()
 
   }
 
