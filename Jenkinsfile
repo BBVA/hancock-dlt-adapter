@@ -92,8 +92,7 @@ nodePipeline{
 
     docker_shuttle_stage()
     
-    logic_label_shuttle_stage()
-
+    
     deploy_shuttle_stage(project: "hancock", environment: "qa", askForConfirmation: false)
 
     qa_data_shuttle_stage()
@@ -105,6 +104,8 @@ nodePipeline{
     }
     
     create_release_from_RC()
+    
+    logic_label_shuttle_stage()
 
   }
 
