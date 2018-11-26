@@ -23,8 +23,7 @@ export class Ethereum {
 
     const port = config.blockchain.ethereum.port ? ':' + config.blockchain.ethereum.port : '';
 
-    logger.info('port: ' + port);
-    logger.info('rpcUrl: ' + `${config.blockchain.ethereum.protocol}://${config.blockchain.ethereum.host}${port}`);
+    logger.info('Ethereum rpcUrl: ' + `${config.blockchain.ethereum.protocol}://${config.blockchain.ethereum.host}${port}`);
     // data source
     this.engine.addProvider(new RpcSubprovider({
       rpcUrl: `${config.blockchain.ethereum.protocol}://${config.blockchain.ethereum.host}${port}`,
@@ -37,7 +36,7 @@ export class Ethereum {
     });
 
     // start polling for blocks
-    this.engine.start();
+    this.engine.start(logger.info);
 
   }
 }
