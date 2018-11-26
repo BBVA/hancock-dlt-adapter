@@ -98,9 +98,10 @@ nodePipeline{
     qa_data_shuttle_stage()
 
     set2rc_shuttle_stage()
+    
 
     stage ('Functional Tests') {
-      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: env.GIT_COMMIT], [$class: 'StringParameterValue', name: 'VERSION', value: env.BRANCH_NAME]]
+      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: env.GIT_COMMIT], [$class: 'StringParameterValue', name: 'VERSION', value: env.BRANCH_NAME]] , propagate: false
     }
     
     create_release_from_RC()
