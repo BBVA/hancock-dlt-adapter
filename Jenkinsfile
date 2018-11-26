@@ -101,7 +101,12 @@ nodePipeline{
     
 
     stage ('Functional Tests') {
-      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: env.GIT_COMMIT], [$class: 'StringParameterValue', name: 'VERSION', value: env.BRANCH_NAME]] , propagate: false
+    try{
+      build job: '/blockchainhub/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: env.GIT_COMMIT], [$class: 'StringParameterValue', name: 'VERSION', value: env.BRANCH_NAME]] , propagate: true
+      } catch (e) {
+        currentBuild.result = 'UNSTABLE'
+        result = "FAIL" // make sure other exceptions are recorded as failure too
+    }
     }
     
     create_release_from_RC()
