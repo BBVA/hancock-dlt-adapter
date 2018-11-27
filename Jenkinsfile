@@ -28,21 +28,6 @@ def docs() {
   }
 }
 
-def unit_tests() {
-stage('Unit tests'){
-    container('node'){
-      sh """
-        yarn run coverage
-      """
-      sh """
-        tar -cvzf reports.tar.gz tests/reports
-        cp reports.tar.gz /home/jenkins
-      """
-      archiveArtifacts artifacts: 'reports.tar.gz', fingerprint: true
-      stash name: "reports", includes: "reports.tar.gz"
-    }
-  }
-}
 
 nodePipeline{
 
@@ -82,11 +67,14 @@ nodePipeline{
       echo 'Continue with the execution'
     }
 
-    install_dependencies()
+    //install_dependencies()
 
     lint()
 
-    unit_tests()
+    node_unit_tests_shuttle_stage(sh: """yarn cache clean --force
+                                        yarn install
+                                        yarn run coverage
+                                    """)
     
     docs()
 
