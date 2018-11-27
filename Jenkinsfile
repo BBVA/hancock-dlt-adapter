@@ -60,7 +60,7 @@ nodePipeline{
 
     lint()
 
-    unit_tests()
+    node_unit_tests_shuttle_stage()
 
     docs()
 
