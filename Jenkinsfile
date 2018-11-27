@@ -111,7 +111,7 @@ nodePipeline{
     
     create_release_from_RC()
     
-    logic_label_shuttle_stage()
+    logic_label_shuttle_stage(release: env.BUILD_DISPLAY_NAME)
 
   }
 
