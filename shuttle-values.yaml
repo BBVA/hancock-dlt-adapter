@@ -16,5 +16,5 @@ monitoring: true
 # slack_receiver: shuttle
 # slack_channel: alerts
 
-#externalDns: dlt-adapter # https://dlt-adapter-blockchainhub-develop.kickstartteam.es
+#externalDns: dlt-adapter # https://dlt-adapter-hancock-develop.kickstartteam.es
 #SSL: true

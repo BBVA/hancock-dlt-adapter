@@ -61,7 +61,7 @@ An example of configuration of the most important vars:
 
 ### API Docs
 
-Documentation about the API can be found in this [link](https://docs.kickstartteam.es/blockchainhub/kst-hancock-ms-dlt-adapter/docs/api.html)
+Documentation about the API can be found in this [link](https://docs.kickstartteam.es/hancock/kst-hancock-ms-dlt-adapter/docs/api.html)
 
 ### Contribution guidelines
 
