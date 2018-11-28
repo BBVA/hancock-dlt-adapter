@@ -1,14 +1,3 @@
-def install_dependencies() {
-  stage('Install Dependencies'){
-    container('node'){
-      sh """
-        yarn cache clean --force
-        yarn install
-      """
-    }
-  }
-}
-
 def lint() {
   stage('Linter'){
     container('node'){
@@ -45,7 +34,10 @@ nodePipeline{
 
     lint()
 
-    node_unit_tests_shuttle_stage()
+    node_unit_tests_shuttle_stage(sh: """yarn cache clean --force
+                                        yarn install
+                                        yarn run coverage
+                                    """)
 
     docs()
 
