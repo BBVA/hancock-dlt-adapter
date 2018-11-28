@@ -30,8 +30,7 @@ nodePipeline{
       echo 'Continue with the execution'
     }
 
-    install_dependencies()
-
+    
     lint()
 
     node_unit_tests_shuttle_stage(sh: """yarn cache clean --force
@@ -58,8 +57,6 @@ nodePipeline{
       echo 'Sonar shuttle stage crashed!'
       echo 'Continue with the execution'
     }
-
-    //install_dependencies()
 
     lint()
 
