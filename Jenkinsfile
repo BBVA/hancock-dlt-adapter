@@ -75,16 +75,8 @@ nodePipeline{
     qa_data_shuttle_stage()
 
     set2rc_shuttle_stage()
-    
 
-    stage ('Functional Tests') {
-      try{
-        build job: '/hancock/kst-hancock-ms-dlt-adapter-tests/master', parameters: [[$class: 'StringParameterValue', name: 'GIT_COMMIT', value: env.GIT_COMMIT], [$class: 'StringParameterValue', name: 'VERSION', value: env.BRANCH_NAME]]
-      } catch (e) {
-        currentBuild.result = 'UNSTABLE'
-        result = "FAIL" // make sure other exceptions are recorded as failure too
-      }
-    }
+    test_from_rc_shuttle_stage() 
     
     create_release_from_RC()
     
