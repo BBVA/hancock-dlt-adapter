@@ -24,13 +24,7 @@ nodePipeline{
   // ---- DEVELOP ----
   if (env.BRANCH_NAME == 'develop') {
 
-    try {
-      sonar_shuttle_stage()
-    } catch (exc) {
-      echo 'Sonar shuttle stage crashed!'
-      echo 'Continue with the execution'
-    }
-
+    sonar_shuttle_stage()
     
     lint()
 
@@ -52,12 +46,7 @@ nodePipeline{
   // ---- RELEASE ----
   if (env.BRANCH_NAME =~ 'release/*') {
 
-    try {
-      sonar_shuttle_stage()
-    } catch (exc) {
-      echo 'Sonar shuttle stage crashed!'
-      echo 'Continue with the execution'
-    }
+    sonar_shuttle_stage()
 
     lint()
 
