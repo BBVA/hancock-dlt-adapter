@@ -8,8 +8,6 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "bitcoin-core": "^2.0.0",
-    "bitcore-lib": "^0.15.0",
     "body-parser": "^1.15.2",
     "change-case": "^3.0.1",
     "compression": "^1.7.1",
