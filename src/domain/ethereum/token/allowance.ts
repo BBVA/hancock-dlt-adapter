@@ -34,7 +34,7 @@ export async function tokenAllowance(allowanceRequest: IEthereumTokenAllowanceRe
 
     const invokeModel: IEthereumSmartContractInvokeModel = {
       abi: abi.abi,
-      action: 'send',
+      action: 'call',
       from: allowanceRequest.from,
       method: 'allowance',
       params: [allowanceRequest.tokenOwner, allowanceRequest.spender],
@@ -66,7 +66,7 @@ export async function tokenAllowanceByQuery(addressOrAlias: string, allowanceReq
   try {
 
     const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
-      action: 'send',
+      action: 'call',
       from: allowanceRequest.from,
       method: 'allowance',
       params: [allowanceRequest.tokenOwner, allowanceRequest.spender],
