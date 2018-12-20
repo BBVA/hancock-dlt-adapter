@@ -65,7 +65,7 @@ describe('tokenAllowanceDomain', () => {
 
       const invokeModel: IEthereumSmartContractInvokeModel = {
         abi: iEthereumContractDbModel.abi ,
-        action: 'send',
+        action: 'call',
         from: iEthereumERC20AllowanceRequest.from,
         method: 'allowance',
         params: [iEthereumERC20AllowanceRequest.tokenOwner, iEthereumERC20AllowanceRequest.spender],
@@ -144,7 +144,7 @@ describe('tokenAllowanceDomain', () => {
     it('should call invokeByQuery method and return an adapted allowance', async () => {
 
       const invokeModel: IEthereumSmartContractInvokeByQueryRequest = {
-        action: 'send',
+        action: 'call',
         from: iEthereumERC20AllowanceRequest.from,
         method: 'allowance',
         params: [iEthereumERC20AllowanceRequest.tokenOwner, iEthereumERC20AllowanceRequest.spender],
