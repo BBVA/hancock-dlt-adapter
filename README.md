@@ -12,7 +12,7 @@ to then different blockchain implementatations internal schemas.
 Clone the project:
 ```bash
   # Clone the project 
-  git clone ssh://git@bitbucket.kickstartteam.es:7999/bh/kst-hancock-ms-dlt-adapter.git
+  git clone https://github.com/BBVA/hancock-dlt-adapter.git
   cd kst-hancock-ms-dlt-adapter
 ```
 
@@ -61,7 +61,7 @@ An example of configuration of the most important vars:
 
 ### API Docs
 
-Documentation about the API can be found in this [link](https://docs.kickstartteam.es/hancock/kst-hancock-ms-dlt-adapter/docs/api.html)
+Documentation about the API can be found in this [link](https://BBVA.github.io/hancock-dlt-adapter/docs/api.html)
 
 ### Contribution guidelines
 

@@ -21,6 +21,6 @@ describedBy:
           Bad OAuth request (wrong consumer key, bad nonce, expired
           timestamp...). Unfortunately, re-authenticating the user won't help here.
 settings:
-  accessTokenUri: https://kong-hancock-develop.kickstartteam.es/v1/dlt-adapter/oauth2/token
+  accessTokenUri: https://host/v1/dlt-adapter/oauth2/token
   authorizationGrants: [ client_credentials ]
   scopes: [ CLIENT, PROVIDER ]
