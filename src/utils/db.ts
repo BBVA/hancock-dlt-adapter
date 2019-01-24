@@ -4,7 +4,7 @@ import logger from '../utils/logger';
 import config from './config';
 
 // tslint:disable-next-line:variable-name
-export let _client: Db;
+export let _client: Db | undefined;
 
 export const connect = async (): Promise<Db> => {
 
@@ -32,6 +32,9 @@ export const connect = async (): Promise<Db> => {
       logger.info('Connected successfully to server');
 
       _client = mongoClient;
+      _client.on('close', () => {
+        _client = undefined;
+      });
       return _client;
 
     })
