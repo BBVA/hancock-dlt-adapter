@@ -19,6 +19,7 @@ export const __collection__ = {
 // tslint:disable-next-line:variable-name
 export const __client__ = {
   collection: jest.fn().mockResolvedValue(__collection__),
+  on: jest.fn(),
 };
 
 export const connect = jest.fn();
