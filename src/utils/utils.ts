@@ -8,7 +8,7 @@ export function createReply(reply: any, result?: any, data?: any) {
       },
     };
 
-    if (data) { response.data = data; }
+    if (data !== undefined) { response.data = data; }
 
     replyStatus = reply.status(result.statusCode).json(response);
   } else {
