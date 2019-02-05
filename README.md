@@ -1,7 +1,7 @@
 # Hancock Dlt Adapter
 
 Microservice belonging to Hancock's ecosystem which adapt transactions described in a common schema
-to then different blockchain implementatations internal schemas.
+to the different blockchain implementatations' internal schemas.
 
 ### Current blockchains supported
 
@@ -40,8 +40,8 @@ With [docker](https://www.docker.com/):
 
 ### Setting up the service
 
-Once we have built the service, we need to configure a few things before launch it. You can find all environment vars 
-availables to configure the service in `config/custom-environment-variables.yaml`.
+Once we have built the service, we need to configure a few things before launching it. You can find all environment vars 
+available to configure the service in `config/custom-environment-variables.yaml`.
 
 An example of configuration of the most important vars:
 
@@ -65,7 +65,7 @@ Documentation about the API can be found in this [link](https://BBVA.github.io/h
 
 ### Contribution guidelines
 
-If you are thinking in contribute to the project you should know that:
+If you are thinking about contributing to the project, you should know that:
 
 - The code has been written following the [clean architecture principles](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html), as well as [SOLID design principles](https://es.wikipedia.org/wiki/SOLID).
 

@@ -1,6 +1,6 @@
 {
   "name": "kst-lab-hancock-ms-dlt-adapter",
-  "version": "1.0.0",
+  "version": "7.0.3",
   "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
   "authors": [
