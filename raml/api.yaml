@@ -1,0 +1,216 @@
+
+openapi: 3.0.0
+
+info:
+  title: Hancock dlt adapter API
+  version: "7.0.3"
+  description: "DLT Adapter is a web service that abstracts user interactions with DLT networks on a high-level common HTTP REST interface that conveniently provides the user with the specific DLT type adapted transaction that can be easily inspected, signed and personally sent to a DLT network trusted node of the choice of the user. 
+	\n <strong>Current blockchains supported {dlt}</strong> `ethereum`    "
+  contact:
+    name: BBVA Hancock
+    url: https://github.com/BBVA/hancock-dlt-adapter
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers: 
+  - url: https://host/{version}/dlt-adapter
+host: "https://host/{version}/dlt-adapter"
+tags:
+- name: "{dlt}/smartcontracts"
+  description: "All operations about smartcontracts registered in Hancock"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/BBVA/hancock-dlt-adapter"
+- name: "{dlt}/transfers"
+  description: "Adapt a transfer call to the DLT between to address"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/BBVA/hancock-dlt-adapter"
+- name: "{dlt}/balance"
+  description: "Obtain the native cryptocurrency balance of an address"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/BBVA/hancock-dlt-adapter"
+- name: "{dlt}/token"
+  description: "All operations about ERC20 tokens"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/BBVA/hancock-dlt-adapter"
+- name: "Protocol"
+  description: "API to adapt operations to Hancock Protocol"
+
+paths:
+  /{dlt}/smartcontracts:
+    get:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: list of smartcontracts
+      description: Retrieve the list of all smart contracts registered in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of smartcontracts registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smartContractListResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+  /{dlt}/smartcontracts/{address|alias}:
+    get:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Abi of a smartcontract
+      description: Retrieve ABI from registered Smart Contract in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: address|alias
+          in: path
+          description: Address or alias of the smartcontract
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Properties of registered smartcontract
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smartContractResponse'
+        '404':
+          description: Parameter error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'                
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+    delete:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Delete a registered smartcontract
+      description: Delete a registered Smart Contract in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: address|alias
+          in: path
+          description: Address or alias of the smartcontract
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Smartcontract registration deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+components:
+  schemas:
+    genericResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Generic Response Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+      required:
+        - result
+
+    smartContractListResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Registered Smart Contract Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          list: smartcontract
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              alias:
+                type: string
+              abi:
+                type: array
+              required:
+                - address
+                - alias
+                - abi
+      required:
+        - result
+    smartContractResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Registered Smart Contract Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          address:
+            type: string
+          alias:
+            type: string
+          abi:
+            type: array
+          required:
+            - address
+            - alias
+            - abi
