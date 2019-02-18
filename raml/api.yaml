@@ -32,7 +32,10 @@ tags:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
 - name: "{dlt}/token"
-  description: "All operations about ERC20 tokens"
+  description: "All operations about ERC20 tokens 
+  \n 
+  \n All token`s operations about ERC20 tokens can be invoked without {addressAlias} parameter in path, and with smartcontract 
+  address in request form ('smartContractAddress':'') on post calls, or with queryparam (contractAddress='') on get calls"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
@@ -44,7 +47,7 @@ paths:
     get:
       tags:
       - "{dlt}/smartcontracts"
-      operationId: list of smartcontracts
+      operationId: List of smartcontracts
       description: Retrieve the list of all smart contracts registered in Hancock.    
       parameters:
         - name: dlt
@@ -65,13 +68,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/genericResponse'
-  /{dlt}/smartcontracts/{address|alias}:
+                $ref: '#/components/schemas/genericError'
+  /{dlt}/smartcontracts/{addressAlias}:
     get:
       tags:
       - "{dlt}/smartcontracts"
       operationId: Abi of a smartcontract
-      description: Retrieve ABI from registered Smart Contract in Hancock.    
+      description: Retrieve ABI from registered Smart Contract in Hancock. Can be invoked with {addressAlias} parameter in form instead of in path.    
       parameters:
         - name: dlt
           in: path
@@ -79,7 +82,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: address|alias
+        - name: addressAlias
           in: path
           description: Address or alias of the smartcontract
           required: true
@@ -93,17 +96,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/smartContractResponse'
         '404':
-          description: Parameter error
+          description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/genericResponse'                
+                $ref: '#/components/schemas/genericError'                
         '500':
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/genericResponse'
+                $ref: '#/components/schemas/genericError'
     delete:
       tags:
       - "{dlt}/smartcontracts"
@@ -116,7 +119,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: address|alias
+        - name: addressAlias
           in: path
           description: Address or alias of the smartcontract
           required: true
@@ -134,7 +137,870 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/genericError'
+  /{dlt}/smartcontracts/deploy:
+    post:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Adapt deploy smartcontract
+      description: Adapt a Smart Contract deployment transaction.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: "method"
+          in: "formData"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        - name: "params"
+          in: "formData"
+          description: "Params to pass to the method"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        - name: "urlBase"
+          in: "formData"
+          description: "Url where are stored the abi and the bin of the smart contract to invoke"
+          required: true
+          type: "string"
+        - name: "from"
+          in: "formData"
+          description: "Address of the owner"
+          required: true
+          type: "string"                                         
+      responses:
+        '200':
+          description: Deploy success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionDeployResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'
+  /{dlt}/smartcontracts/invoke:
+    post:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Adapt invocation smartcontract
+      description: Adapt a Smart Contract invocation transaction.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: "method"
+          in: "formData"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        - name: "action"
+          in: "formData"
+          description: "Kind of action (send , call)"
+          required: false
+          schema:
+            type: string
+            enum: [send, call]
+        - name: "params"
+          in: "formData"
+          description: "Params to pass to the method"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        - name: "urlBase"
+          in: "formData"
+          description: "Url where are stored the abi and the bin of the smart contract to invoke"
+          required: true
+          type: "string"
+        - name: "from"
+          in: "formData"
+          description: "Address of the owner"
+          required: true
+          type: "string"      
+        - name: "to"
+          in: "formData"
+          description: "Address of the smart contract to invoke"
+          required: true
+          type: "string"   
+      responses:
+        '200':
+          description: Action send to DLT network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionInvokeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'   
+  /{dlt}/smartcontracts/invoke/{addressAlias}:
+    post:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Adapt invocation method of smartcontract
+      description: Adapt transaction that will invoke a method in the registered Smart Contract  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias registered in Hancock of the smartcontract 
+          required: true
+          schema:
+            type: string            
+        - name: "method"
+          in: "formData"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        - name: "action"
+          in: "formData"
+          description: "Kind of action (send , call)"
+          required: false
+          schema:
+            type: string
+            enum: [send, call]
+        - name: "params"
+          in: "formData"
+          description: "Params to pass to the method to invoke in the smart contract"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        - name: "from"
+          in: "formData"
+          description: "Address that invoke the smart contract"
+          required: true
+          type: "string"       
+      responses:
+        '200':
+          description: Action send to DLT network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionInvokeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                 
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+  /{dlt}/smartcontracts/invoke/abi:
+    post:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Adapt invocation method with abi
+      description: Adapt transaction that will invoke a method in the registered Smart Contract with abi in params  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: abi
+          in: formData
+          description: Abi of the smartcontract 
+          required: true
+          schema:
+            type: array            
+        - name: "method"
+          in: "formData"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        - name: "action"
+          in: "formData"
+          description: "Kind of action (send , call)"
+          required: false
+          schema:
+            type: string
+            enum: [send, call]
+        - name: "params"
+          in: "formData"
+          description: "Params to pass to the method to invoke in the smart contract"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        - name: "from"
+          in: "formData"
+          description: "Address that invoke the smart contract"
+          required: true
+          type: "string"  
+        - name: "to"
+          in: "formData"
+          description: "Address of the smart contract to invoke"
+          required: true
+          type: "string"                  
+      responses:
+        '200':
+          description: Action send to DLT network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactionInvokeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                 
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                  
+  /{dlt}/smartcontracts/register:
+    post:
+      tags:
+      - "{dlt}/smartcontracts"
+      operationId: Register smartcontract
+      description: Register a deployed Smart Contract.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: "address"
+          in: "formData"
+          description: "Address of the Smart Contrant in the DLT"
+          required: true
+          schema:
+            type: "string"
+            minLength: 1
+        - name: "alias"
+          in: "formData"
+          description: "Alias to use to register in Hancock"
+          required: true
+          schema:
+            type: "string"
+            minLength: 1            
+        - name: "abi"
+          in: "formData"
+          description: "Abi of the Smart Contract"
+          required: false
+          schema:
+            type: "array"
+            items:                                     
+      responses:
+        '201':
+          description: Successful registration action
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/genericResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'  
+        '409':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'                  
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'    
+  /{dlt}/transfers:
+    post:
+      tags:
+      - "{dlt}/transfers"
+      operationId: Adapt transfer
+      description: Adapt a transfer call to the DLT between two addresses.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: "from"
+          in: "formData"
+          description: "Address of the sender in the DLT"
+          required: true
+          schema:
+            type: "string"
+        - name: "to"
+          in: "formData"
+          description: "Address of the receiver in the DLT"
+          required: true
+          schema:
+            type: "string"               
+        - name: "value"
+          in: "formData"
+          description: "Value of Weis to be transferred"
+          required: true
+          schema:
+            type: "string"
+        - name: "data"
+          in: "formData"
+          description: "Information about the transfer"
+          required: false
+          schema:
+            type: "string"                                          
+      responses:
+        '200':
+          description: Transfer send to mine on DLT network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transferResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'               
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'          
+  /{dlt}/balance:
+    get:
+      tags:
+      - "{dlt}/balance"
+      operationId: Balance
+      description: Obtain the native cryptocurrency balance of an address.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The native cryptocurrency balance of an address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/balanceResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'      
+  /{dlt}/token:
+    get:
+      tags:
+      - "{dlt}/token"
+      operationId: Token list
+      description: Retrieve the list of all ERC20 tokens of Ethereum environment registered in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The list of all token registered in Hancock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/smartContractListResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'     
+  /{dlt}/token/{addressAlias}:
+    delete:
+      tags:
+      - "{dlt}/token"
+      operationId: Delete a registered token
+      description: Unregister the token in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Token registration deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'      
+  /{dlt}/token/{addressAlias}/balanceOf/{address}:
+    get:
+      tags:
+      - "{dlt}/token"
+      operationId: Token balance
+      description: Obtain the native ERC20 token currency balance of an address.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string 
+        - name: address
+          in: path
+          description: Address of the user
+          required: true
+          schema:
+            type: string                    
+      responses:
+        '200':
+          description: Get token balance operation success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/balancetokenResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'        
+  /{dlt}/token/{addressAlias}/metadata:
+    get:
+      tags:
+      - "{dlt}/token"
+      operationId: Token metadata
+      description: Obtain the info associated to the ERC20 Token (name, symbol, decimals and totalSupply).    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string             
+      responses:
+        '200':
+          description: Info associated to the ERC20 Token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadataResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                   
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'     
+  /{dlt}/token/{addressAlias}/transfer:
+    post:
+      tags:
+      - "{dlt}/token"
+      operationId: Adapt token transfer
+      description: Adapt a token ERC20 transfer call to the DLT between two addresses.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string              
+        - name: "from"
+          in: "formData"
+          description: "Address of the sender in the DLT"
+          required: true
+          schema:
+            type: "string"
+        - name: "to"
+          in: "formData"
+          description: "Address of the receiver in the DLT"
+          required: true
+          schema:
+            type: "string"               
+        - name: "value"
+          in: "formData"
+          description: "Value of tokens to be transferred"
+          required: true
+          schema:
+            type: "string"                                      
+      responses:
+        '200':
+          description: Token transfer adapted to send
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transferTokenResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'               
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'            
+  /{dlt}/token/{addressAlias}/transferFrom:
+    post:
+      tags:
+      - "{dlt}/token"
+      operationId: Adapt token transferFrom
+      description: Adapt a token ERC20 transferFrom call to the DLT between two addresses.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string              
+        - name: "from"
+          in: "formData"
+          description: "The address which invoke the method"
+          required: true
+          schema:
+            type: "string"
+        - name: "sender"
+          in: "formData"
+          description: "The address which is transferring the tokens"
+          required: true
+          schema:
+            type: "string"                
+        - name: "to"
+          in: "formData"
+          description: "The address which is receiving the tokens"
+          required: true
+          schema:
+            type: "string"               
+        - name: "value"
+          in: "formData"
+          description: "Value of tokens to be transferred"
+          required: true
+          schema:
+            type: "string"                                      
+      responses:
+        '200':
+          description: Token transfer adapted to send
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transferTokenResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'               
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'         
+  /{dlt}/token/{addressAlias}/approve:
+    post:
+      tags:
+      - "{dlt}/token"
+      operationId: Adapt token approve
+      description: Token ERC20 owner can approve for spender to transfer tokens from the token owner's account.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string              
+        - name: "from"
+          in: "formData"
+          description: "The address which invoke the method"
+          required: true
+          schema:
+            type: "string"
+        - name: "spender"
+          in: "formData"
+          description: "The address which is authorized to transfer the tokens"
+          required: true
+          schema:
+            type: "string"                            
+        - name: "value"
+          in: "formData"
+          description: "Value of tokens to be approved"
+          required: true
+          schema:
+            type: "string"                                      
+      responses:
+        '200':
+          description: Token approve order adapted to send
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transferTokenResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'               
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'           
+  /{dlt}/token/{addressAlias}/allowance:
+    post:
+      tags:
+      - "{dlt}/token"
+      operationId: Token allowance
+      description: Provides the number of tokens allowed to be transferred from a given address by another given address.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+        - name: addressAlias
+          in: path
+          description: Address or alias of the token smartcontract
+          required: true
+          schema:
+            type: string              
+        - name: "from"
+          in: "formData"
+          description: "The address which invoke the method"
+          required: true
+          schema:
+            type: "string"
+        - name: "spender"
+          in: "formData"
+          description: "The address which is allowed to spent the tokens"
+          required: true
+          schema:
+            type: "string"                            
+        - name: "tokenOwner"
+          in: "formData"
+          description: "The address of the owner of the tokens"
+          required: true
+          schema:
+            type: "string"                                      
+      responses:
+        '200':
+          description: Token approve order adapted to send
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alowanceTokenResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'               
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                
+  /protocol/encode:
+    post:
+      tags:
+      - "Protocol"
+      operationId: Encode
+      description: Encode operation data to Hancock Protocol.  
+      consumes:
+        - "application/json"  
+      parameters:
+        - name: action
+          in: formData
+          description: Action to encode 
+          required: true
+          schema:
+            type: string
+            enum: [transfer] 
+        - name: dlt
+          in: formData
+          description: Dlt to send 
+          required: true
+          schema:
+            type: string
+            enum: [ethereum]   
+        - name: body
+          in: formData
+          description: Form with data of action to encode 
+          required: true
+          schema:
+            type: object
+            properties:
+              to:
+                type: string
+              value:
+                type: string                                             
+              data:
+                type: string                                             
+      responses:
+        '200':
+          description: Encode operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/encodeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                   
+  /protocol/decode:
+    post:
+      tags:
+      - "Protocol"
+      operationId: Decode
+      description: Obtein operation decoded.    
+      parameters:
+        - name: code
+          in: formData
+          description: Encode data 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Decode operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/decodeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError'                                                                                                                                                                          
 components:
   schemas:
     genericResponse:
@@ -154,7 +1020,22 @@ components:
             - description
       required:
         - result
-
+    genericError:
+      $schema: 'http://json-schema.org/schema'
+      description: Generic Response Schema
+      type: object
+      properties:
+        error:
+          type: string
+        internalError:
+          type: string
+        message:
+          type: string
+        extendedMessage:
+          type: string
+        required:
+          - error
+          - internalError
     smartContractListResponse:
       $schema: 'http://json-schema.org/schema'
       description: Registered Smart Contract Schema
@@ -214,3 +1095,295 @@ components:
             - address
             - alias
             - abi
+    transactionDeployResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Created Smart Contract Response Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            nonce:
+              type: string
+            from:
+              type: string
+            data:
+              type: string
+            gas:
+              type: string
+            gasPrice:
+              type: string
+      required:
+        - result
+        - data               
+    transactionInvokeResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Invoked Smart Contract Response Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            nonce:
+              type: string
+            from:
+              type: string
+            data:
+              type: string
+            gas:
+              type: string
+            to:
+              type: string
+            gasPrice:
+              type: string
+      required:
+        - result
+        - data            
+    transferResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Transfer response schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            nonce:
+              type: string
+            from:
+              type: string
+            data:
+              type: string
+            gas:
+              type: string
+            to:
+              type: string
+            gasPrice:
+              type: string
+            value:
+              type: string
+            data:
+              type: string              
+      required:
+        - result
+        - data  
+    balanceResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Get balance Response Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          balance:
+            description: "Balance in minimum unit of the cryptocurrency"
+            type: string
+      required:
+        - result
+        - data 
+    balancetokenResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Get balance token Response Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          balance:
+            description: "Token balance for account"
+            type: string
+      required:
+        - result
+        - data         
+    metadataResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Metadata info Schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            symbol:
+              type: string
+            decimals:
+              type: string
+            totalSupply:
+              type: string
+      required:
+        - result
+        - data          
+    transferTokenResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Token response schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            nonce:
+              type: string
+            from:
+              type: string
+            data:
+              type: string
+            gas:
+              type: string
+            to:
+              type: string
+            gasPrice:
+              type: string         
+      required:
+        - result
+        - data           
+    alowanceTokenResponse:            
+      $schema: 'http://json-schema.org/schema'
+      description: Allowance response schema
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          description: Amount of tokens approved
+          type: string       
+      required:
+        - result
+        - data     
+    encodeResponse:
+      $schema: 'http://json-schema.org/schema'
+      description: Protocol Encode Param Model Response
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            qrEncode:
+              type: string
+          required:
+            - qrEncode
+      required:
+        - result      
+    decodeResponse:          
+      $schema: 'http://json-schema.org/schema'
+      description: Protocol Decode Param Model Response
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            code:
+              type: string
+            description:
+              type: string
+          required:
+            - code
+            - description
+        data:
+          type: object
+          properties:
+            action:
+              type: string
+              enum:
+                - transfer
+            body:
+              type: object
+              properties:
+                to:
+                  type: string
+                value:
+                  type: string
+                data:
+                  type: string
+            dlt:
+              type: string
+              enum:
+                - ethereum
+          required:
+            - action
+            - body
+            - dlt
+                    
