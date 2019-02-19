@@ -5,7 +5,7 @@ info:
   title: Hancock dlt adapter API
   version: "7.0.3"
   description: "DLT Adapter is a web service that abstracts user interactions with DLT networks on a high-level common HTTP REST interface that conveniently provides the user with the specific DLT type adapted transaction that can be easily inspected, signed and personally sent to a DLT network trusted node of the choice of the user. 
-	\n <strong>Current blockchains supported {dlt}</strong> `ethereum`    "
+	\n \n <strong>Current blockchains supported {dlt}</strong> `ethereum`    "
   contact:
     name: BBVA Hancock
     url: https://github.com/BBVA/hancock-dlt-adapter
@@ -17,30 +17,30 @@ servers:
 host: "https://host/{version}/dlt-adapter"
 tags:
 - name: "{dlt}/smartcontracts"
-  description: "All operations about smartcontracts registered in Hancock"
+  description: "All operations about smartcontracts registered in Hancock, as well as operations with smartcontract with abi attached."
   externalDocs:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
 - name: "{dlt}/transfers"
-  description: "Adapt a transfer call to the DLT between to address"
+  description: "Adapt a transfer call to the DLT between two addresses."
   externalDocs:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
 - name: "{dlt}/balance"
-  description: "Obtain the native cryptocurrency balance of an address"
+  description: "Obtain the native cryptocurrency balance of an address."
   externalDocs:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
 - name: "{dlt}/token"
-  description: "All operations about ERC20 tokens 
+  description: "All operations about ERC20 tokens, a facility to operate with tokens of ethereum.
   \n 
   \n All token`s operations about ERC20 tokens can be invoked without {addressAlias} parameter in path, and with smartcontract 
-  address in request form ('smartContractAddress':'') on post calls, or with queryparam (contractAddress='') on get calls"
+  address in request form ('smartContractAddress':'') on post calls, or with queryparam (contractAddress='') on get calls."
   externalDocs:
     description: "Find out more"
     url: "https://github.com/BBVA/hancock-dlt-adapter"
 - name: "Protocol"
-  description: "API to adapt operations to Hancock Protocol"
+  description: "API to adapt operations to Hancock Protocol, transform de data operations to a encode protocol to work with qr code."
 
 paths:
   /{dlt}/smartcontracts:
@@ -74,7 +74,7 @@ paths:
       tags:
       - "{dlt}/smartcontracts"
       operationId: Abi of a smartcontract
-      description: Retrieve ABI from registered Smart Contract in Hancock. Can be invoked with {addressAlias} parameter in form instead of in path.    
+      description: Retrieve ABI from registered Smart Contract in Hancock.    
       parameters:
         - name: dlt
           in: path
@@ -143,7 +143,7 @@ paths:
       tags:
       - "{dlt}/smartcontracts"
       operationId: Adapt deploy smartcontract
-      description: Adapt a Smart Contract deployment transaction.  
+      description: Adapt a Smart Contract deployment transaction. Give a binary data to deploy the smartcontract in a dlt network.
       consumes:
         - "application/json"  
       parameters:
@@ -152,31 +152,14 @@ paths:
           description: Dlt to work with 
           required: true
           schema:
-            type: string
-        - name: "method"
-          in: "formData"
-          description: "Method to invoke in the smart contract"
-          required: true
-          schema:
-            type: "string"
-        - name: "params"
-          in: "formData"
-          description: "Params to pass to the method"
-          required: false
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        - name: "urlBase"
-          in: "formData"
-          description: "Url where are stored the abi and the bin of the smart contract to invoke"
-          required: true
-          type: "string"
-        - name: "from"
-          in: "formData"
-          description: "Address of the owner"
-          required: true
-          type: "string"                                         
+            type: string          
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transactionDeployRequest'    
+        description: Deploy request schema to adapt the deploy order  
+        required: true                       
       responses:
         '200':
           description: Deploy success
@@ -209,42 +192,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: "method"
-          in: "formData"
-          description: "Method to invoke in the smart contract"
-          required: true
-          schema:
-            type: "string"
-        - name: "action"
-          in: "formData"
-          description: "Kind of action (send , call)"
-          required: false
-          schema:
-            type: string
-            enum: [send, call]
-        - name: "params"
-          in: "formData"
-          description: "Params to pass to the method"
-          required: false
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        - name: "urlBase"
-          in: "formData"
-          description: "Url where are stored the abi and the bin of the smart contract to invoke"
-          required: true
-          type: "string"
-        - name: "from"
-          in: "formData"
-          description: "Address of the owner"
-          required: true
-          type: "string"      
-        - name: "to"
-          in: "formData"
-          description: "Address of the smart contract to invoke"
-          required: true
-          type: "string"   
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transactionInvokeRequest'    
+        description: Invoke request schema to adapt the invoke order  
+        required: true               
       responses:
         '200':
           description: Action send to DLT network
@@ -283,32 +237,13 @@ paths:
           required: true
           schema:
             type: string            
-        - name: "method"
-          in: "formData"
-          description: "Method to invoke in the smart contract"
-          required: true
-          schema:
-            type: "string"
-        - name: "action"
-          in: "formData"
-          description: "Kind of action (send , call)"
-          required: false
-          schema:
-            type: string
-            enum: [send, call]
-        - name: "params"
-          in: "formData"
-          description: "Params to pass to the method to invoke in the smart contract"
-          required: false
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        - name: "from"
-          in: "formData"
-          description: "Address that invoke the smart contract"
-          required: true
-          type: "string"       
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transactionInvokeRegisterRequest'    
+        description: Invoke request schema to adapt the invoke order  
+        required: true       
       responses:
         '200':
           description: Action send to DLT network
@@ -347,43 +282,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: abi
-          in: formData
-          description: Abi of the smartcontract 
-          required: true
-          schema:
-            type: array            
-        - name: "method"
-          in: "formData"
-          description: "Method to invoke in the smart contract"
-          required: true
-          schema:
-            type: "string"
-        - name: "action"
-          in: "formData"
-          description: "Kind of action (send , call)"
-          required: false
-          schema:
-            type: string
-            enum: [send, call]
-        - name: "params"
-          in: "formData"
-          description: "Params to pass to the method to invoke in the smart contract"
-          required: false
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        - name: "from"
-          in: "formData"
-          description: "Address that invoke the smart contract"
-          required: true
-          type: "string"  
-        - name: "to"
-          in: "formData"
-          description: "Address of the smart contract to invoke"
-          required: true
-          type: "string"                  
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transactionInvokeAbiRequest'    
+        description: Invoke request schema to adapt the invoke order  
+        required: true               
       responses:
         '200':
           description: Action send to DLT network
@@ -424,27 +329,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: "address"
-          in: "formData"
-          description: "Address of the Smart Contrant in the DLT"
-          required: true
-          schema:
-            type: "string"
-            minLength: 1
-        - name: "alias"
-          in: "formData"
-          description: "Alias to use to register in Hancock"
-          required: true
-          schema:
-            type: "string"
-            minLength: 1            
-        - name: "abi"
-          in: "formData"
-          description: "Abi of the Smart Contract"
-          required: false
-          schema:
-            type: "array"
-            items:                                     
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transactionRegisterRequest'    
+        description: Invoke request schema to adapt the invoke order  
+        required: true                                             
       responses:
         '201':
           description: Successful registration action
@@ -484,31 +375,14 @@ paths:
           description: Dlt to work with 
           required: true
           schema:
-            type: string
-        - name: "from"
-          in: "formData"
-          description: "Address of the sender in the DLT"
-          required: true
-          schema:
-            type: "string"
-        - name: "to"
-          in: "formData"
-          description: "Address of the receiver in the DLT"
-          required: true
-          schema:
-            type: "string"               
-        - name: "value"
-          in: "formData"
-          description: "Value of Weis to be transferred"
-          required: true
-          schema:
-            type: "string"
-        - name: "data"
-          in: "formData"
-          description: "Information about the transfer"
-          required: false
-          schema:
-            type: "string"                                          
+            type: string       
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transferRequest'    
+        description: Transfer request schema to adapt the transfer order  
+        required: true                                                 
       responses:
         '200':
           description: Transfer send to mine on DLT network
@@ -708,25 +582,14 @@ paths:
           description: Address or alias of the token smartcontract
           required: true
           schema:
-            type: string              
-        - name: "from"
-          in: "formData"
-          description: "Address of the sender in the DLT"
-          required: true
-          schema:
-            type: "string"
-        - name: "to"
-          in: "formData"
-          description: "Address of the receiver in the DLT"
-          required: true
-          schema:
-            type: "string"               
-        - name: "value"
-          in: "formData"
-          description: "Value of tokens to be transferred"
-          required: true
-          schema:
-            type: "string"                                      
+            type: string                    
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transferTokenRequest'    
+        description: Transfer token request schema to adapt the order  
+        required: true                                               
       responses:
         '200':
           description: Token transfer adapted to send
@@ -766,31 +629,14 @@ paths:
           description: Address or alias of the token smartcontract
           required: true
           schema:
-            type: string              
-        - name: "from"
-          in: "formData"
-          description: "The address which invoke the method"
-          required: true
-          schema:
-            type: "string"
-        - name: "sender"
-          in: "formData"
-          description: "The address which is transferring the tokens"
-          required: true
-          schema:
-            type: "string"                
-        - name: "to"
-          in: "formData"
-          description: "The address which is receiving the tokens"
-          required: true
-          schema:
-            type: "string"               
-        - name: "value"
-          in: "formData"
-          description: "Value of tokens to be transferred"
-          required: true
-          schema:
-            type: "string"                                      
+            type: string                 
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transferfromTokenRequest'    
+        description: Transferfrom token request schema to adapt the order  
+        required: true                                                   
       responses:
         '200':
           description: Token transfer adapted to send
@@ -830,25 +676,14 @@ paths:
           description: Address or alias of the token smartcontract
           required: true
           schema:
-            type: string              
-        - name: "from"
-          in: "formData"
-          description: "The address which invoke the method"
-          required: true
-          schema:
-            type: "string"
-        - name: "spender"
-          in: "formData"
-          description: "The address which is authorized to transfer the tokens"
-          required: true
-          schema:
-            type: "string"                            
-        - name: "value"
-          in: "formData"
-          description: "Value of tokens to be approved"
-          required: true
-          schema:
-            type: "string"                                      
+            type: string                 
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/approveTokenRequest'    
+        description: Approve token request schema to adapt the order  
+        required: true                                               
       responses:
         '200':
           description: Token approve order adapted to send
@@ -888,32 +723,21 @@ paths:
           description: Address or alias of the token smartcontract
           required: true
           schema:
-            type: string              
-        - name: "from"
-          in: "formData"
-          description: "The address which invoke the method"
-          required: true
-          schema:
-            type: "string"
-        - name: "spender"
-          in: "formData"
-          description: "The address which is allowed to spent the tokens"
-          required: true
-          schema:
-            type: "string"                            
-        - name: "tokenOwner"
-          in: "formData"
-          description: "The address of the owner of the tokens"
-          required: true
-          schema:
-            type: "string"                                      
+            type: string               
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/allowanceTokenRequest'    
+        description: Allowance token request schema to adapt the order  
+        required: true                                               
       responses:
         '200':
           description: Token approve order adapted to send
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/alowanceTokenResponse'
+                $ref: '#/components/schemas/allowanceTokenResponse'
         '400':
           description: Bad request
           content:
@@ -931,37 +755,16 @@ paths:
       tags:
       - "Protocol"
       operationId: Encode
-      description: Encode operation data to Hancock Protocol.  
+      description: Encode operation data to Hancock Protocol. Give us a code with all info to generate a qr. 
       consumes:
-        - "application/json"  
-      parameters:
-        - name: action
-          in: formData
-          description: Action to encode 
-          required: true
-          schema:
-            type: string
-            enum: [transfer] 
-        - name: dlt
-          in: formData
-          description: Dlt to send 
-          required: true
-          schema:
-            type: string
-            enum: [ethereum]   
-        - name: body
-          in: formData
-          description: Form with data of action to encode 
-          required: true
-          schema:
-            type: object
-            properties:
-              to:
-                type: string
-              value:
-                type: string                                             
-              data:
-                type: string                                             
+        - "application/json"      
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/encodeRequest'    
+        description: Encode request schema  
+        required: true                                                       
       responses:
         '200':
           description: Encode operation
@@ -980,14 +783,14 @@ paths:
       tags:
       - "Protocol"
       operationId: Decode
-      description: Obtein operation decoded.    
-      parameters:
-        - name: code
-          in: formData
-          description: Encode data 
-          required: true
-          schema:
-            type: string
+      description: Obtain all data about an operation from an encoded string.  
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/decodeRequest'    
+        description: Decode request schema   
+        required: true              
       responses:
         '200':
           description: Decode operation
@@ -1012,30 +815,45 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
             - description
       required:
         - result
+      example:
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
     genericError:
       $schema: 'http://json-schema.org/schema'
       description: Generic Response Schema
       type: object
       properties:
         error:
+          description: "Identification error code"
           type: string
         internalError:
+          description: "Hancock error code"
           type: string
         message:
+          description: "Hancock message"
           type: string
         extendedMessage:
+          description: "Detailed message"
           type: string
-        required:
-          - error
-          - internalError
+      required:
+        - error
+        - internalError
+      example:
+        error: 400 - 500
+        internalError: "HKAD5000X"
+        message: "Call Error"
+        extendedMessage: "Error: Description"
     smartContractListResponse:
       $schema: 'http://json-schema.org/schema'
       description: Registered Smart Contract Schema
@@ -1045,8 +863,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1058,17 +878,33 @@ components:
             type: object
             properties:
               address:
+                description: "smartcontract address"
                 type: string
               alias:
+                description: "alias of smartcontract registered"
                 type: string
               abi:
+                description: "abi of the smartcontract"
                 type: array
-              required:
-                - address
-                - alias
-                - abi
+              abiname:
+                description: "alias of the abi"
+                type: string
+            required:
+              - address
+              - alias
+              - abi
       required:
         - result
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          list:
+            address: "0xcffffffffffffff000000000000000000000000"
+            alias: "smartcontract"
+            abi: [{abi:[]}]
+            abiname: "alias"
     smartContractResponse:
       $schema: 'http://json-schema.org/schema'
       description: Registered Smart Contract Schema
@@ -1078,23 +914,76 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
             - description
         data:
           address:
+            description: "smartcontract address"
             type: string
           alias:
+            description: "alias of smartcontract registered"
             type: string
           abi:
+            description: "abi of the smartcontract"
             type: array
+          abiname:
+            description: "alias of the abi"
+            type: string        
           required:
             - address
             - alias
-            - abi
+            - abi     
+      required:
+        - result
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          address: "0xcffffffffffffff000000000000000000000000"
+          alias: "smartcontract"
+          abi: [{abi:[]}]            
+          abiname: "alias"          
+    transactionDeployRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Deploy request schema to adapt the deploy order
+      type: object
+      properties:
+        method:
+          in: "body"
+          description: "Name of the constructor method of the smartcontract"
+          schema:
+            type: "string"
+        params:
+          in: "body"
+          description: "Params to pass to the constructor of the smartcontract"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        urlBase:
+          in: "body"
+          description: "Url where are stored the abi and the bin of the smart contract to invoke"
+          type: "string"
+        from:
+          in: "body"
+          description: "Address of the owner"
+          type: "string"    
+      required:
+        - method
+        - urlBase
+        - from
+      example:        
+        method: constructor
+        params: ["0xcffffffffffffff000000000000000000000000","2"]
+        urlBase: "http://storage/smartcontract"
+        from: "0xcffffffffffffff000000000000000000000000"                           
     transactionDeployResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Created Smart Contract Response Schema
@@ -1104,8 +993,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1114,18 +1005,73 @@ components:
           type: object
           properties:
             nonce:
+              description: "Counter assigned to transaction"
               type: string
             from:
+              description: "address of the owner"
               type: string
             data:
+              description: "Smartcontract data encoded"
               type: string
             gas:
+              description: "Gas limit assigned"
               type: string
             gasPrice:
+              description: "Gas estimated assigned"
               type: string
       required:
         - result
-        - data               
+        - data      
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          from: "0xcffffffffffffff000000000000000000000001"
+          data: "0x606060405260a060405190810160405280604060405190810160405280600781526020017f637265617465640000000000000000000000000000000000000000000000000081"
+          gasPrice: "0x3b9aca00"
+          nonce: "0x642"
+          gas: "0x5208"         
+    transactionInvokeRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Invoke request schema to adapt the invoke order
+      type: object
+      properties:
+        method:
+          in: "body"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        params:
+          in: "body"
+          description: "Params to pass to the method"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        urlBase:
+          in: "body"
+          description: "Url where are stored the abi and the bin of the smart contract to invoke"
+          required: true
+          type: "string"
+        from:
+          in: "body"
+          description: "Address of the owner"
+          required: true
+          type: "string"     
+        to:
+          in: "body"
+          description: "Address of the smart contract to invoke"
+          required: true
+          type: "string"             
+      example:        
+        method: attest
+        params: ["2"]
+        urlBase: "http://storage/smartcontract"
+        from: "0xcffffffffffffff000000000000000000000000"    
+        to: "0xcffffffffffffff000000000000000000000001"                             
     transactionInvokeResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Invoked Smart Contract Response Schema
@@ -1135,8 +1081,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1145,20 +1093,175 @@ components:
           type: object
           properties:
             nonce:
+              description: "Counter assigned to transaction"
               type: string
             from:
+              description: "address of the owner"
               type: string
             data:
+              description: "Smartcontract data encoded"
               type: string
             gas:
-              type: string
-            to:
+              description: "Gas limit assigned"
               type: string
             gasPrice:
+              description: "Gas estimated assigned"
+              type: string
+            to:
+              description: "address of the smartcontract"
               type: string
       required:
         - result
-        - data            
+        - data       
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          to: "0xcffffffffffffff000000000000000000000000"
+          from: "0xcffffffffffffff000000000000000000000001"
+          data: "transaction"
+          gasPrice: "0x3b9aca00"
+          nonce: "0x642"
+          gas: "0x5208"        
+    transactionInvokeRegisterRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Invoke request schema to adapt the invoke order
+      type: object
+      properties:
+        method:
+          in: "body"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        params:
+          in: "body"
+          description: "Params to pass to the method"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        from:
+          in: "body"
+          description: "Address of the owner"
+          required: true
+          type: "string"             
+      example:        
+        method: attest
+        params: ["2"]
+        from: "0xcffffffffffffff000000000000000000000000"               
+    transactionInvokeAbiRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Invoke request schema to adapt the invoke order
+      type: object
+      properties:
+        method:
+          in: "body"
+          description: "Method to invoke in the smart contract"
+          required: true
+          schema:
+            type: "string"
+        action:
+          in: "body"
+          description: "Kind of action (send , call)"
+          required: false
+          schema:
+            type: string
+            enum: [send, call]
+        params:
+          in: "body"
+          description: "Params to pass to the method"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        abi:
+          in: "body"
+          description: Abi of the smartcontract 
+          required: true
+          schema:
+            type: array    
+        from:
+          in: "body"
+          description: "Address of the owner"
+          required: true
+          type: "string"     
+        to:
+          in: "body"
+          description: "Address of the smart contract to invoke"
+          required: true
+          type: "string"             
+      example:        
+        method: attest
+        action: "call"
+        params: ["2"]
+        abi: [{abi:[]}]
+        from: "0xcffffffffffffff000000000000000000000000"    
+        to: "0xcffffffffffffff000000000000000000000001"  
+    transactionRegisterRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Invoke request schema to adapt the invoke order
+      type: object
+      properties:
+        abi:
+          in: "body"
+          description: Abi of the smartcontract 
+          schema:
+            type: array    
+        alias:
+          in: "body"
+          description: "Alias of the smartcontract"
+          type: "string"     
+        adddres:
+          in: "body"
+          description: "Address of the smartcontract"
+          type: "string"  
+      required:
+        - abi
+        - adddres
+        - alias           
+      example:        
+        abi: [{abi:[]}]
+        alias: "name"
+        adddres: "0xcffffffffffffff000000000000000000000000"         
+    transferRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Transfer request schema
+      type: object
+      properties:
+        from:
+          in: "body"
+          description: "Address of the sender in the DLT"
+          schema:
+            type: "string"
+        to:
+          in: "body"
+          description: "Address of the receiver in the DLT"
+          schema:
+            type: "string"               
+        value:
+          in: "body"
+          description: "Value of Weis to be transferred"
+          schema:
+            type: "string"
+        data:
+          in: "body"
+          description: "Information about the transfer"
+          required: false
+          schema:
+            type: "string"             
+      required:
+        - from
+        - to
+        - value  
+      example: 
+        to: "0xcffffffffffffff000000000000000000000000"
+        from: "0xcffffffffffffff000000000000000000000001"
+        data: "transaction"
+        value: "2"                         
     transferResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Transfer response schema
@@ -1168,8 +1271,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1178,24 +1283,41 @@ components:
           type: object
           properties:
             nonce:
+              description: "Nonce assigned to transaction"
               type: string
             from:
-              type: string
-            data:
+              description: "Address of the sender in the DLT"
               type: string
             gas:
+              description: "Gas value of transaction"
               type: string
             to:
+              description: "Address of the receiver in the DLT"
               type: string
             gasPrice:
+              description: "Gas estimated"
               type: string
             value:
+              description: "Value of Weis to be transferred"
               type: string
             data:
+              description: "Information about the transfer"
               type: string              
       required:
         - result
         - data  
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          to: "0xcffffffffffffff000000000000000000000000"
+          from: "0xcffffffffffffff000000000000000000000001"
+          data: "transaction"
+          value: "2"
+          gasPrice: "0x3b9aca00"
+          nonce: "0x642"
+          gas: "0x5208"          
     balanceResponse:
       $schema: 'http://json-schema.org/schema'
       description: Get balance Response Schema
@@ -1205,8 +1327,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1218,6 +1342,12 @@ components:
       required:
         - result
         - data 
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          balance: "2"        
     balancetokenResponse:
       $schema: 'http://json-schema.org/schema'
       description: Get balance token Response Schema
@@ -1227,8 +1357,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1239,7 +1371,13 @@ components:
             type: string
       required:
         - result
-        - data         
+        - data  
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          balance: "2"                 
     metadataResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Metadata info Schema
@@ -1249,8 +1387,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1259,16 +1399,57 @@ components:
           type: object
           properties:
             name:
+              description: "Token name"
               type: string
             symbol:
+              description: "Symbol of token"
               type: string
             decimals:
+              description: "Decimals defined in smartcontract"
               type: string
             totalSupply:
+              description: "Supply total defined in smartcontract"
               type: string
       required:
         - result
-        - data          
+        - data     
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          name: "Token name"                 
+          symbol: "TKN"
+          decimals: "0"
+          totalSupply: "1000"
+    transferTokenRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Token request schema
+      type: object
+      properties:
+        from:
+          in: "body"
+          description: "Address of the sender in the DLT"
+          schema:
+            type: "string"
+        to:
+          in: "body"
+          description: "Address of the receiver in the DLT"
+          schema:
+            type: "string"               
+        value:
+          in: "body"
+          description: "Value of token to be transfered"
+          schema:
+            type: "string"           
+      required:
+        - from
+        - to
+        - value  
+      example: 
+        to: "0xcffffffffffffff000000000000000000000000"
+        from: "0xcffffffffffffff000000000000000000000001"
+        value: "2"               
     transferTokenResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Token response schema
@@ -1278,8 +1459,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1288,21 +1471,129 @@ components:
           type: object
           properties:
             nonce:
+              description: "Nonce assigned to transaction"
               type: string
             from:
-              type: string
-            data:
+              description: "Address of the sender in the DLT"
               type: string
             gas:
+              description: "Gas value of transaction"
               type: string
             to:
+              description: "Address of the receiver in the DLT"
               type: string
             gasPrice:
-              type: string         
+              description: "Gas estimated"
+              type: string
+            data:
+              description: "Information about the transfer"
+              type: string           
       required:
         - result
-        - data           
-    alowanceTokenResponse:            
+        - data     
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          to: "0xcffffffffffffff000000000000000000000000"
+          from: "0xcffffffffffffff000000000000000000000001"
+          data: "0xa9059cbb000000000000000000000000de8e772f0350e992ddef81bf8f51d94a8ea9216d0000000000000000000000000000000000000000000000000000000000000001"
+          gasPrice: "0x3b9aca00"
+          nonce: "0x642"
+          gas: "0x5208"  
+    transferfromTokenRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Token transferFrom request schema
+      type: object
+      properties:
+        from:
+          in: "body"
+          description: "Address of the sender in the DLT"
+          schema:
+            type: "string"
+        sender:
+          in: "body"
+          description: "Address with enough allowance in the DLT"
+          schema:
+            type: "string"              
+        to:
+          in: "body"
+          description: "Address of the receiver in the DLT"
+          schema:
+            type: "string"               
+        value:
+          in: "body"
+          description: "Value of token to be transfered"
+          schema:
+            type: "string"           
+      required:
+        - from
+        - to
+        - sender
+        - value  
+      example: 
+        to: "0xcffffffffffffff000000000000000000000000"
+        from: "0xcffffffffffffff000000000000000000000001"
+        sender: "0xcffffffffffffff000000000000000000000002"
+        value: "2"               
+    approveTokenRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Allowance request schema
+      type: object
+      properties:
+        from:
+          in: "body"
+          description: "Address of the receiver in the DLT"
+          schema:
+            type: "string"
+        spender:
+          in: "body"
+          description: "Address of the spender in the DLT"
+          schema:
+            type: "string"               
+        value:
+          in: "body"
+          description: "Value of token to be transfered"
+          schema:
+            type: "string"        
+      required:
+        - from
+        - spender
+        - value  
+      example: 
+        to: "0xcffffffffffffff000000000000000000000000"
+        spender: "0xcffffffffffffff000000000000000000000001"
+        tokenOwner: "0xcffffffffffffff000000000000000000000002"              
+    allowanceTokenRequest:            
+      $schema: 'http://json-schema.org/schema'
+      description: Allowance request schema
+      type: object
+      properties:
+        from:
+          in: "body"
+          description: "Address of the receiver in the DLT"
+          schema:
+            type: "string"
+        spender:
+          in: "body"
+          description: "Address of the spender in the DLT"
+          schema:
+            type: "string"               
+        tokenOwner:
+          in: "body"
+          description: "Address of the owner in the DLT"
+          schema:
+            type: "string"           
+      required:
+        - from
+        - spender
+        - tokenOwner  
+      example: 
+        to: "0xcffffffffffffff000000000000000000000000"
+        spender: "0xcffffffffffffff000000000000000000000001"
+        tokenOwner: "0xcffffffffffffff000000000000000000000002"                       
+    allowanceTokenResponse:            
       $schema: 'http://json-schema.org/schema'
       description: Allowance response schema
       type: object
@@ -1311,8 +1602,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1323,6 +1616,24 @@ components:
       required:
         - result
         - data     
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          data: "2"    
+    decodeRequest:
+      $schema: 'http://json-schema.org/schema'
+      description: Protocol Decode Param Model Request
+      type: object
+      properties:
+        code:
+          description: "Encode string with data"
+          type: string
+      required:
+      - code   
+      example: 
+        code: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%220x6c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
     encodeResponse:
       $schema: 'http://json-schema.org/schema'
       description: Protocol Encode Param Model Response
@@ -1332,8 +1643,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1342,11 +1655,56 @@ components:
           type: object
           properties:
             qrEncode:
+              description: "Encode string with data"
               type: string
           required:
             - qrEncode
       required:
         - result      
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          qrEncode: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%220x6c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
+    encodeRequest:          
+      $schema: 'http://json-schema.org/schema'
+      description: Protocol Encode Param Model Request
+      type: object
+      properties:
+        action:
+          description: "Action encoded"
+          type: string
+          enum:
+            - transfer
+        body:
+          type: object
+          properties:
+            to:
+              description: "address"
+              type: string
+            value:
+              description: "value"
+              type: string
+            data:
+              description: "data about transfer"
+              type: string
+        dlt:
+          description: "dlt"
+          type: string
+          enum:
+            - ethereum
+      required:
+        - action
+        - body
+        - dlt           
+      example: 
+        action: "transfer"
+        body:
+          to: "0xcffffffffffffff000000000000000000000000"
+          value: "2"
+          data: "concept"
+        dlt: "Ethereum"             
     decodeResponse:          
       $schema: 'http://json-schema.org/schema'
       description: Protocol Decode Param Model Response
@@ -1356,8 +1714,10 @@ components:
           type: object
           properties:
             code:
+              description: "Api code"
               type: string
             description:
+              description: "Description about the api code"
               type: string
           required:
             - code
@@ -1366,6 +1726,7 @@ components:
           type: object
           properties:
             action:
+              description: "Action encoded"
               type: string
               enum:
                 - transfer
@@ -1373,12 +1734,16 @@ components:
               type: object
               properties:
                 to:
+                  description: "address"
                   type: string
                 value:
+                  description: "value"
                   type: string
                 data:
+                  description: "data about transfer"
                   type: string
             dlt:
+              description: "dlt"
               type: string
               enum:
                 - ethereum
@@ -1386,4 +1751,17 @@ components:
             - action
             - body
             - dlt
+      required:
+        - result              
+      example: 
+        result:
+          code: 20X
+          description: "DLT - Operation successfully requested"
+        data:
+          action: "transfer"
+          body:
+            to: "0xcffffffffffffff000000000000000000000000"
+            value: "2"
+            data: "concept"
+          dlt: "Ethereum"            
                     

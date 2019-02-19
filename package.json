@@ -72,6 +72,7 @@
     "raml2md": "raml2html --theme raml2html-markdown-theme raml/api.raml > documentation/api.md",
     "raml2html": "raml2html raml/api.raml > documentation/api.html",
     "md2html": "generate-md --layout github --input ./README.md --output ./documentation",
-    "docs": "npm run clean:docs && npm run md2html && npm run raml2html"
+    "yamlApi2html": "api2html -o ./documentation/api.html --raw -c raml/logo.png -l http raml/api.yaml",
+    "docs": "npm run clean:docs && npm run md2html && npm run yamlApi2html"
   }
 }
