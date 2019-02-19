@@ -1,11 +1,11 @@
-# Hancock Dlt Adapter
+# Hancock DLT Adapter
 
-Microservice belonging to Hancock's ecosystem which adapt transactions described in a common schema
+Microservice belonging to Hancock's ecosystem, which adapts transactions described in a common schema
 to the different blockchain implementatations' internal schemas.
 
 ## Overview
 
-Hancock is a research product conceived within NDB IoT Lab that provides convenient services to integrate with different DLT networks. We provide simplicity, adaptability and efficiently to develop in any DLT. Hancock can be divided into four main components:
+Hancock is a research product conceived within BBVA New digital business - R&D that provides convenient services to integrate with different DLT networks. We provide simplicity, adaptability and efficiently to develop in any DLT. Hancock can be divided into three main components:
 
 - [DLT Adapter](https://github.com/BBVA/hancock-dlt-adapter) - Keep it simple
 Interface to abstract interaction with different DLT networks.
