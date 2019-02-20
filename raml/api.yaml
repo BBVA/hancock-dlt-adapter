@@ -3,7 +3,7 @@ openapi: 3.0.0
 
 info:
   title: Hancock dlt adapter API
-  version: "7.0.3"
+  version: "7.0.4"
   description: "DLT Adapter is a web service that abstracts user interactions with DLT networks on a high-level common HTTP REST interface that conveniently provides the user with the specific DLT type adapted transaction that can be easily inspected, signed and personally sent to a DLT network trusted node of the choice of the user. 
 	\n \n <strong>Current blockchains supported {dlt}</strong> `ethereum`    "
   contact:
@@ -897,7 +897,7 @@ components:
         - result
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           list:
@@ -943,7 +943,7 @@ components:
         - result
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           address: "0xcffffffffffffff000000000000000000000000"
@@ -1024,7 +1024,7 @@ components:
         - data      
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           from: "0xcffffffffffffff000000000000000000000001"
@@ -1115,7 +1115,7 @@ components:
         - data       
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           to: "0xcffffffffffffff000000000000000000000000"
@@ -1308,7 +1308,7 @@ components:
         - data  
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           to: "0xcffffffffffffff000000000000000000000000"
@@ -1344,7 +1344,7 @@ components:
         - data 
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           balance: "2"        
@@ -1374,7 +1374,7 @@ components:
         - data  
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           balance: "2"                 
@@ -1415,7 +1415,7 @@ components:
         - data     
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           name: "Token name"                 
@@ -1493,7 +1493,7 @@ components:
         - data     
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           to: "0xcffffffffffffff000000000000000000000000"
@@ -1564,7 +1564,7 @@ components:
       example: 
         to: "0xcffffffffffffff000000000000000000000000"
         spender: "0xcffffffffffffff000000000000000000000001"
-        tokenOwner: "0xcffffffffffffff000000000000000000000002"              
+        value: "2"              
     allowanceTokenRequest:            
       $schema: 'http://json-schema.org/schema'
       description: Allowance request schema
@@ -1618,7 +1618,7 @@ components:
         - data     
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           data: "2"    
@@ -1633,7 +1633,7 @@ components:
       required:
       - code   
       example: 
-        code: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%220x6c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
+        code: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%22006c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
     encodeResponse:
       $schema: 'http://json-schema.org/schema'
       description: Protocol Encode Param Model Response
@@ -1663,10 +1663,10 @@ components:
         - result      
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
-          qrEncode: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%220x6c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
+          qrEncode: "hancock://qr?code=%7B%22action%22%3A%22transfer%22%2C%22body%22%3A%7B%22to%22%3A%22006c0a14f7561898b9ddc0c57652a53b2c6665443e%22%2C%22value%22%3A%221%22%2C%22data%22%3A%22concept%22%7D%2C%22dlt%22%3A%22ethereum%22%7D"            
     encodeRequest:          
       $schema: 'http://json-schema.org/schema'
       description: Protocol Encode Param Model Request
@@ -1755,7 +1755,7 @@ components:
         - result              
       example: 
         result:
-          code: 20X
+          code: 200
           description: "DLT - Operation successfully requested"
         data:
           action: "transfer"

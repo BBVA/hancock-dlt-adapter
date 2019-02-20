@@ -1,3 +1,6 @@
+## [7.0.4] - 2019-02-20
+### Documentation
+- Add openapi docs.
 
 ## [7.0.3] - 2019-01-28
 ### Fixed
