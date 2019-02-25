@@ -402,7 +402,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/genericError'          
-  /{dlt}/balance:
+  /{dlt}/balance/{address}:
     get:
       tags:
       - "{dlt}/balance"
@@ -415,6 +415,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: address
+          in: path
+          description: Address of the user
+          required: true
+          schema:
+            type: string  
       responses:
         '200':
           description: The native cryptocurrency balance of an address
