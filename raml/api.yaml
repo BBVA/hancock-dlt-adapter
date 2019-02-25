@@ -459,7 +459,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/genericError'     
+                $ref: '#/components/schemas/genericError'    
+  /{dlt}/token/register:
+    post:
+      tags:
+      - "{dlt}/token"
+      operationId: Token register
+      description: Register a ERC20 token contract of Ethereum environment in Hancock.    
+      parameters:
+        - name: dlt
+          in: path
+          description: Dlt to work with 
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:              
+            schema: 
+              $ref: '#/components/schemas/transferTokenRegister'    
+        description: Transfer token request schema to register
+        required: true   
+      responses:
+        '200':
+          description: 	Successful registration action 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genericError' 
   /{dlt}/token/{addressAlias}:
     delete:
       tags:
@@ -1428,6 +1461,27 @@ components:
           symbol: "TKN"
           decimals: "0"
           totalSupply: "1000"
+    transferTokenRegister:            
+      $schema: 'http://json-schema.org/schema'
+      description: Token request schema
+      type: object
+      properties:
+        address:
+          in: "body"
+          description: "Address of the contract"
+          schema:
+            type: "string"
+        alias:
+          in: "body"
+          description: "Alias of the contract"
+          schema:
+            type: "string"                       
+      required:
+        - address
+        - alias
+      example: 
+        address: "0xcffffffffffffff000000000000000000000000"
+        alias: "TKN" 
     transferTokenRequest:            
       $schema: 'http://json-schema.org/schema'
       description: Token request schema
