@@ -90,7 +90,7 @@ export class TxAdapter extends Subprovider {
           // tslint:disable-next-line:max-line-length
           ? new Promise((resolve, reject) => this.emitPayload({
             method: 'eth_getTransactionCount',
-            params: [address, 'pending'],
+            params: [address, 'latest'],
           }, callbackHandler(resolve, reject)))
           : Promise.resolve(null),
       );
