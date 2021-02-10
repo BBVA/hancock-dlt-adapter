@@ -1,6 +1,6 @@
 {
   "name": "kst-lab-hancock-ms-dlt-adapter",
-  "version": "1.0.1",
+  "version": "7.0.4",
   "description": "DLT adapter to interact with DLT networks",
   "main": "index.js",
   "authors": [
@@ -9,9 +9,9 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "change-case": "^3.0.1",
+    "change-case": "^4.1.2",
     "compression": "^1.7.4",
-    "config": "^3.3.3",
+    "config": "^1.29.2",
     "cors": "^2.8.5",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",
@@ -74,6 +74,8 @@
     "raml2md": "raml2html --theme raml2html-markdown-theme raml/api.raml > documentation/api.md",
     "raml2html": "raml2html raml/api.raml > documentation/api.html",
     "md2html": "generate-md --layout github --input ./README.md --output ./documentation",
-    "docs": "npm run clean:docs && npm run md2html && npm run raml2html"
+    "yamlApi2html": "api2html -o ./documentation/api.html --raw -c raml/logo.png -l http raml/api.yaml",
+    "docs": "npm run clean:docs && npm run md2html && npm run yamlApi2html",
+    "deploy:gh": "push-dir --dir=documentation --branch=gh-pages --cleanup --remote github"
   }
 }
