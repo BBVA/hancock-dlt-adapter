@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-jsonschema": "^1.1.6",
     "express-validator": "^6.9.2",
     "js-yaml": "^4.0.0",
